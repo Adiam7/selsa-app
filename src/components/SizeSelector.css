@@ -1,0 +1,43 @@
+.size-selector {
+  margin-bottom: 1rem;
+}
+
+.selector-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+}
+
+.size-option {
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.875rem;
+  background: white;
+  color: #080b10;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.size-option:hover:not(:disabled) {
+  border-color: #9ca3af;
+}
+
+.size-option.selected {
+  background-color: #050d1f;
+  color: white;
+  border-color: #020814;
+}
+
+.size-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}

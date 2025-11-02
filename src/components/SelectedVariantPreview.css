@@ -1,0 +1,39 @@
+.variant-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.variant-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.variant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.variant-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.variant-details {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.variant-price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2563eb;
+}

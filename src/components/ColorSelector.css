@@ -1,0 +1,50 @@
+/* Color Selector Css File */
+
+.color-selector {
+  margin-bottom: 1rem;
+}
+
+.color-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.color-option {
+  width: 64px;
+  height: 64px;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  object-fit: cover;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.color-option:hover {
+  border-color: #9ca3af;
+}
+
+.color-option.selected {
+  border-color: #0f1011;
+  box-shadow: 0 0 0 2px #a6a6a7;
+  transform: scale(1.05);
+}
+.swatches__item {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.swatches__item.selected {
+  border-color: black;
+  box-shadow: 0 0 0 2px #a6a6a7;
+  transform: scale(1.05);
+}
+
+.swatches__item.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
