@@ -1,0 +1,167 @@
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 100;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Hairline.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Hairline.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 200;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Thin.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Thin.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 300;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Light.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Light.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Regular.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Regular.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Medium.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Medium.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 600;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Semibold.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Semibold.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Bold.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Bold.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Heavy.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Heavy.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 900;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Black.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Black.woff) format("woff")
+}
+
+:root {
+    --font-family: "Lato", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Arial", sans-serif;
+    --font-family-system: "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Arial", sans-serif;
+    --control-radius: 6px;
+    --dvh: 100dvh;
+    --control-main-color-h: 205;
+    --control-main-color-s: 95%;
+    --control-main-color-l: 48%;
+    --control-main-color-b: .48;
+    --control-main-color-a: 1;
+    --color-white-h: 0;
+    --color-white-s: 0%;
+    --color-white-l: 100%;
+    --color-white-b: 1;
+    --color-white-a: 1;
+    --text-muted-color-h: 208;
+    --text-muted-color-s: 17%;
+    --text-muted-color-l: 66%;
+    --text-muted-color-b: .66;
+    --text-muted-color-a: 1;
+    --background-low-color-h: 210;
+    --background-low-color-s: 11%;
+    --background-low-color-l: 11%;
+    --background-low-color-b: .11;
+    --background-low-color-a: 1
+}
+
+.ins-tile--product-browser {
+    position: static;
+    z-index: 3;
+    padding-right: calc(var(--global-tile-padding) * 1px);
+    padding-left:calc(var(--global-tile-padding) * 1px)
+}
+
+.ins-tile--product-browser {
+    padding-right: calc(env(safe-area-inset-right) + var(--global-tile-padding) * 1px);
+    padding-left:calc(env(safe-area-inset-left) + var(--global-tile-padding) * 1px)
+}
+
+.ins-tile--product-browser .ins-tile__wrap {
+    min-height: 650px;
+    width: 100%;
+    max-width: calc(var(--global-tile-max-width) * 1px);
+    margin:var(--computed-tile-margin) auto
+}
+
+.ins-tile--product-browser .sel-size div.sel-productBrowser {
+    padding:0
+}
+
+.ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store * :not(input, button), .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-footer__link, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-header-h4, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-header-h5, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-header-h6 {
+    line-height:calc(8px + 1.15em)
+}
+
+.ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-header-h1, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-header-h2, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-header-h3 {
+    color: hsla(var(--global-title-color-h), var(--global-title-color-s), var(--global-title-color-l), var(--global-title-color-a));
+    font-family: var(--global-title-font-family-stack);
+    line-height:calc(8px + 1.15em)
+}
+
+.ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-footer, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-footer__cell {
+    padding:20px 0 0
+}
+
+.ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-filter__title {
+    line-height:1
+}
+
+.ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .sel-cart__cert, .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-store .review-redactor__terms {
+    line-height:1.2em
+}
+
+.ins-tile--header ~ .ins-tile--product-browser .sel-size div.sel-productBrowser .sel-notices--top {
+    margin-top:calc((var(--header-height, 0) + var(--announcement-bar-height-from-top, 0)) * 1px)
+}
+
+.ins-tile--header ~ .ins-tile--product-browser .sel-size .sel-store .sel-filters--popup .sel-filters__wrap, .ins-tile--header ~ .ins-tile--product-browser .sel-size .sel-store .sel-filters--popup .sel-openable-block__wrap {
+    max-height: calc((var(--vh) - var(--announcement-bar-height, 0)) * 1px);
+    margin-top:calc(var(--announcement-bar-height, 0) * 1px)
+}
+
+.ins-tile--header ~ .ins-tile--product-browser .sel-size .sel-store .sel-filters--popup .sel-filters__top, .ins-tile--header ~ .ins-tile--product-browser .sel-size .sel-store .sel-filters--popup .sel-filter__top {
+    padding-top:20px
+}
+
+#sel-instantsite .ins-tile--header.ins-tile--dark-sidebar {
+    --background-color-h: var(--sidebar-background-color-dark-h);
+    --background-color-s: var(--sidebar-background-color-dark-s);
+    --background-color-l: var(--sidebar-background-color-dark-l);
+    --background-color-b: var(--sidebar-background-color-dark-b);
+    --background-color-a: var(--sidebar-background-color-dark-a)
+}
+
+#sel-instantsite .ins-tile--header.ins-tile--light-sidebar {
+    --background-color-h: var(--sidebar-background-color-light-h);
+    --background-color-s: var(--sidebar-background-color-light-s);
+    --background-color-l: var(--sidebar-background-color-light-l);
+    --background-color-b: var(--sidebar-background-color-light-b);
+    --background-color-a: var(--sidebar-background-color-light-a)
+}
+
+.ins-tile--product-browser:has(.review-panel--visible) {
+    z-index: 14
+}

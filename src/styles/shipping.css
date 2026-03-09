@@ -1,0 +1,470 @@
+/**
+ * Shipping Display Components Styling
+ * 
+ * Comprehensive Tailwind CSS and custom styles for:
+ * - ShippingBreakdown
+ * - ShippingInfo
+ * - ShippingTooltip
+ * - ShippingDisplay
+ * 
+ * Uses Tailwind utilities with custom components for responsive,
+ * accessible, production-grade shipping display UI.
+ */
+
+@layer components {
+  /* ============================================
+     SHIPPING DISPLAY - Main Container
+     ============================================ */
+  .shipping-display {
+    @apply space-y-3 p-4 rounded-xl border border-opacity-8 border-gray-900 bg-gradient-to-br from-gray-50 to-white shadow-none;
+
+    &.loading {
+      @apply animate-pulse;
+    }
+
+    &.error {
+      @apply border-opacity-12 border-red-600 bg-red-50;
+    }
+  }
+
+  /* ============================================
+     SHIPPING BREAKDOWN
+     ============================================ */
+  .shipping-breakdown {
+    @apply space-y-4;
+  }
+
+  .shipping-breakdown-header {
+    @apply pb-3 border-b border-opacity-8 border-gray-900;
+  }
+
+  .shipping-breakdown-title {
+    @apply text-base font-bold text-gray-900 letter-spacing-tight;
+  }
+
+  .shipping-breakdown-description {
+    @apply text-xs text-gray-600 mt-1 font-normal;
+  }
+
+  /* Breakdown Items */
+  .shipping-breakdown-items {
+    @apply space-y-2;
+  }
+
+  .breakdown-items-header {
+    @apply grid grid-cols-12 gap-3 px-2 py-1.5 bg-gray-100 bg-opacity-50 rounded text-xs font-bold text-gray-700 uppercase tracking-wider;
+  }
+
+  .breakdown-item {
+    @apply grid grid-cols-12 gap-3 px-2 py-2 border-b border-gray-100 border-opacity-50 hover:bg-gray-50 transition-colors duration-150;
+
+    &:last-child {
+      @apply border-b-0;
+    }
+
+    &:hover {
+      @apply shadow-none;
+    }
+  }
+
+  .col-category {
+    @apply col-span-4 flex items-center;
+  }
+
+  .col-qty {
+    @apply col-span-2 flex items-center justify-center text-sm font-medium;
+  }
+
+  .col-cost {
+    @apply col-span-3 flex items-center justify-end font-semibold text-green-700;
+  }
+
+  .col-formula {
+    @apply col-span-3 flex items-center justify-end;
+  }
+
+  .category-badge {
+    @apply inline-block px-2 py-0.5 bg-gray-900 bg-opacity-5 text-gray-900 rounded-md text-xs font-semibold border border-opacity-10 border-gray-900;
+  }
+
+  .formula-code {
+    @apply font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 font-normal;
+  }
+
+  /* Breakdown Total */
+  .shipping-breakdown-total {
+    @apply flex justify-between items-center p-3 bg-gradient-to-r from-gray-50 via-white to-gray-50 rounded-lg border border-opacity-8 border-gray-900;
+
+    .total-label {
+      @apply text-sm font-bold text-gray-900;
+    }
+
+    .total-amount {
+      @apply text-lg font-bold text-gray-900;
+    }
+  }
+
+  /* Formula Explanation */
+  .shipping-breakdown-formula {
+    @apply p-2.5 bg-gray-100 bg-opacity-30 rounded-lg border border-opacity-8 border-gray-900 space-y-1.5;
+
+    .formula-label {
+      @apply text-xs font-bold text-gray-900;
+    }
+
+    .formula-display {
+      @apply block font-mono text-xs bg-white bg-opacity-50 px-2 py-1.5 rounded border border-opacity-8 border-gray-900 text-gray-900;
+    }
+
+    .formula-explanation {
+      @apply text-xs text-gray-700 font-normal;
+    }
+  }
+
+  /* ============================================
+     SHIPPING INFO
+     ============================================ */
+  .shipping-info {
+    @apply p-2.5 bg-gray-100 bg-opacity-30 rounded-lg border border-opacity-8 border-gray-900;
+  }
+
+  .shipping-info-main {
+    @apply space-y-2;
+  }
+
+  .shipping-info-header {
+    @apply flex items-center justify-between;
+  }
+
+  .region-indicator {
+    @apply flex items-center gap-2;
+  }
+
+  .region-emoji {
+    @apply text-xl;
+  }
+
+  .region-name {
+    @apply font-bold text-gray-900 text-base;
+  }
+
+  .help-button {
+    @apply flex items-center justify-center w-7 h-7 rounded-full bg-gray-200 bg-opacity-50 text-gray-900 font-bold text-xs hover:bg-opacity-70 transition-colors duration-150 cursor-pointer border border-opacity-8 border-gray-900;
+
+    &:focus {
+      @apply outline-none ring-2 ring-offset-1 ring-gray-900;
+    }
+
+    .help-icon {
+      @apply text-sm;
+    }
+  }
+
+  .region-description {
+    @apply text-xs text-gray-700 leading-relaxed font-normal;
+  }
+
+  /* Region Details */
+  .region-details {
+    @apply mt-2 pt-2 border-t border-opacity-8 border-gray-900 space-y-1;
+  }
+
+  .detail-item {
+    @apply flex justify-between text-xs;
+
+    .detail-label {
+      @apply font-semibold text-gray-700;
+    }
+
+    .detail-value {
+      @apply font-bold text-gray-900;
+    }
+  }
+
+  /* ============================================
+     SHIPPING TOOLTIP - Modal
+     ============================================ */
+  .shipping-tooltip-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-40 flex items-end sm:items-center justify-center z-50 backdrop-blur-sm;
+
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  .shipping-tooltip-modal {
+    @apply bg-white rounded-t-3xl sm:rounded-2xl w-full sm:w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl;
+
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .tooltip-header {
+    @apply sticky top-0 flex items-center justify-between p-4 sm:p-5 border-b border-opacity-8 border-gray-900 bg-white rounded-t-3xl sm:rounded-t-2xl;
+
+    h2 {
+      @apply text-lg sm:text-xl font-bold text-gray-900;
+    }
+  }
+
+  .close-button {
+    @apply w-8 h-8 flex items-center justify-center text-2xl text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-150;
+
+    &:focus {
+      @apply outline-none ring-2 ring-offset-1 ring-gray-900;
+    }
+  }
+
+  .tooltip-content {
+    @apply p-4 sm:p-5 space-y-4;
+  }
+
+  .tooltip-section {
+    @apply space-y-2;
+
+    h3 {
+      @apply text-base font-bold text-gray-900;
+    }
+
+    p {
+      @apply text-gray-700 leading-relaxed text-sm font-normal;
+    }
+  }
+
+  /* Formula Box */
+  .formula-box {
+    @apply p-2.5 bg-gray-100 bg-opacity-40 rounded-lg border border-opacity-8 border-gray-900;
+
+    code {
+      @apply font-mono text-xs text-gray-900 font-bold;
+    }
+  }
+
+  /* Rates Grid */
+  .rates-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-3;
+  }
+
+  .rate-card {
+    @apply p-3 border border-opacity-8 border-gray-900 rounded-lg bg-white hover:shadow-sm transition-shadow duration-150;
+  }
+
+  .rate-header {
+    @apply flex items-center gap-2 mb-2.5 pb-2.5 border-b border-opacity-8 border-gray-900;
+
+    .rate-emoji {
+      @apply text-xl;
+    }
+
+    .rate-title {
+      @apply font-bold text-gray-900 text-sm;
+    }
+  }
+
+  .rate-details {
+    @apply space-y-1.5;
+  }
+
+  .rate-row {
+    @apply flex justify-between text-xs font-normal;
+
+    span {
+      @apply text-gray-700;
+    }
+
+    strong {
+      @apply text-gray-900 font-semibold;
+    }
+  }
+
+  .rate-example {
+    @apply text-xs text-gray-600 font-normal pt-1.5 border-t border-opacity-8 border-gray-900 mt-1.5;
+
+    strong {
+      @apply text-gray-900;
+    }
+  }
+
+  /* Category List */
+  .category-list {
+    @apply space-y-1.5 ml-3;
+
+    li {
+      @apply list-disc text-xs text-gray-700 font-normal;
+
+      strong {
+        @apply text-gray-900;
+      }
+    }
+  }
+
+  /* Benefits List */
+  .benefits-list {
+    @apply space-y-1.5 ml-3;
+
+    li {
+      @apply list-disc text-xs text-gray-700 font-normal;
+
+      strong {
+        @apply text-gray-900;
+      }
+    }
+  }
+
+  /* Example Box */
+  .example-box {
+    @apply p-3 bg-gray-100 bg-opacity-30 border border-opacity-8 border-gray-900 rounded-lg;
+
+    .example-title {
+      @apply font-bold text-gray-900 mb-2 text-xs;
+    }
+  }
+
+  .example-calc {
+    @apply space-y-1.5 font-mono text-xs;
+
+    .calc-line {
+      @apply flex justify-between text-gray-900;
+    }
+
+    .calc-total {
+      @apply flex justify-between pt-1.5 border-t-2 border-opacity-20 border-gray-900 font-bold text-sm text-gray-900;
+    }
+  }
+
+  /* Delivery List */
+  .delivery-list {
+    @apply space-y-1.5 ml-3;
+
+    li {
+      @apply list-disc text-xs text-gray-700 font-normal;
+    }
+  }
+
+  .tooltip-footer {
+    @apply sticky bottom-0 p-4 sm:p-5 border-t border-opacity-8 border-gray-900 bg-white rounded-b-3xl sm:rounded-b-2xl;
+
+    .close-btn {
+      @apply w-full px-4 py-2.5 bg-gray-900 text-white font-bold rounded-lg hover:bg-opacity-90 transition-colors duration-150 text-sm;
+
+      &:focus {
+        @apply outline-none ring-2 ring-offset-2 ring-gray-900;
+      }
+    }
+  }
+
+  /* ============================================
+     LOADING & ERROR STATES
+     ============================================ */
+  .shipping-skeleton {
+    @apply space-y-2;
+
+    .skeleton-line {
+      @apply h-3 bg-gray-200 rounded animate-pulse;
+
+      &:nth-child(2) {
+        @apply w-3/4;
+      }
+
+      &:nth-child(3) {
+        @apply w-1/2;
+      }
+    }
+  }
+
+  .error-message {
+    @apply flex items-start gap-2.5 p-2.5;
+
+    .error-icon {
+      @apply text-lg flex-shrink-0;
+    }
+
+    p {
+      @apply text-xs text-red-700 font-semibold;
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE ADJUSTMENTS
+     ============================================ */
+  @media (max-width: 640px) {
+    .breakdown-items-header,
+    .breakdown-item {
+      @apply grid-cols-8;
+    }
+
+    .col-category {
+      @apply col-span-3 text-xs;
+    }
+
+    .col-qty {
+      @apply col-span-1 text-xs;
+    }
+
+    .col-cost {
+      @apply col-span-2 text-xs;
+    }
+
+    .col-formula {
+      @apply hidden;
+    }
+
+    .shipping-breakdown-total {
+      @apply flex-col items-start gap-1.5;
+
+      .total-label {
+        @apply text-xs;
+      }
+
+      .total-amount {
+        @apply text-base;
+      }
+    }
+
+    .rates-grid {
+      @apply grid-cols-1;
+    }
+
+    .tooltip-content,
+    .tooltip-header,
+    .tooltip-footer {
+      @apply p-4;
+    }
+    
+    .shipping-display {
+      @apply p-3;
+    }
+  }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Ensure animations work on desktop too */
+@media (min-width: 641px) {
+  @keyframes slideUp {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}

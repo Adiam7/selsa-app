@@ -1,0 +1,32 @@
+document.querySelectorAll('.product-option select').forEach(selectElement => {
+    selectElement.addEventListener('change', function() {
+        const selectedOptions = {};
+        document.querySelectorAll('.product-option select').forEach(sel => {
+            selectedOptions[sel.id] = sel.value;
+        });
+
+        // Construct a query string from selected options
+        const queryString = new URLSearchParams(selectedOptions).toString();
+
+        // AJAX call to fetch image URL and file name for the selected options
+        fetch(`/get-option-image/?option_value=${encodeURIComponent(selectedValue)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.image_url) {
+                    document.querySelector('#main-product-image').src = data.image_url;
+                    document.querySelector('#product-image-filename').innerText = data.file_name;
+                } else {
+                    // Optionally reset to a default image and file name if no mapping is found
+                    document.querySelector('#main-product-image').src = "{{ default_image_url }}";
+                    document.querySelector('#product-image-filename').innerText = "default.jpg";
+                }
+            })
+            .catch(err => console.error('Error fetching image:', err));
+    });
+});
+// // Trigger change event on page load to set the initial image
+// document.querySelectorAll('.product-option select').forEach(selectElement => {
+//     selectElement.dispatchEvent(new Event('change'));
+// });
+// // Function to handle the change event for select elements
+// // Function to update the main product image based on selected options

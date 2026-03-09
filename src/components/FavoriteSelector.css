@@ -1,0 +1,37 @@
+/* components/FavoriteSelector.css */
+
+.favorite-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 9999px; /* fully round */
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+}
+
+.favorite-btn:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* blue focus ring */
+}
+
+/* Default non-favorited state */
+.favorite-btn.not-favorited {
+  background-color: transparent;
+  color: #4b5563; /* gray-600 */
+}
+
+/* Favorited state */
+.favorite-btn.favorited {
+  background-color: transparent; /* red-100 */
+  color: #dc2626; /* red-600 */
+}
+
+.favorite-btn.favorited:hover {
+  background-color: #fecaca; /* red-200 */
+}

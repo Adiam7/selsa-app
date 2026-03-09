@@ -77,6 +77,7 @@
   "use client";
 
   import React from "react";
+  import { useTranslation } from "react-i18next";
   import "./SizeSelector.css";
 
   interface SizeOption {
@@ -95,6 +96,7 @@
     selectedSize,
     onSelect,
   }) => {
+    const { t } = useTranslation();
     if (!sizes || sizes.length === 0) return null;
 
     const orderedSizes = [...sizes].sort((a, b) => {
@@ -107,7 +109,7 @@
 
     return (
       <div className="product-option mb-4">
-        <label className="block font-medium mb-1 text-gray-800 ">Size:</label>
+        <label className="block font-medium mb-1 text-gray-800 ">{t('Size')}:</label>
         <div className="flex flex-wrap gap-2 size-options">
           {orderedSizes.map((s, idx) => {
             if (!s.size) return null; // skip invalid sizes
@@ -118,7 +120,7 @@
               <span
                   key={`${s.size}-${idx}`} // ensure unique key
                   role="button"
-                  disabled={isDisabled}
+                  aria-disabled={isDisabled}
                   onClick={() => !isDisabled && onSelect(s.size)}
                   className={`px-3 py-1 rounded-md border text-sm font-medium transition-all size-option
                               ${isSelected ? "selected" : ""}

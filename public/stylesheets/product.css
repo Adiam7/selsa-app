@@ -1,0 +1,250 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+
+/* Carousel Container */
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  max-width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background: var(--bg-color);
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Light & Dark Mode */
+:root {
+  --bg-color: #f9f9f9; /* Light Mode */
+  --text-color: #333; /* Dark text for light mode */
+  --card-bg-color: #fff; /* Light card background */
+  --primary-color: #007bff;
+  --hover-bg-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+  --bg-color: #181818; /* Dark Mode Background */
+  --text-color: #ddd; /* Light text for dark mode */
+  --card-bg-color: #333; /* Dark card background */
+  --primary-color: #4e92f7; /* Lighter blue for dark mode */
+  --hover-bg-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Product Grid */
+.product-container {
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); /* Responsive Grid */
+  gap: 30px;
+  justify-content: center;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Individual Product Card - Transparent Effect */
+.product-item {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+  box-shadow: 0px 8px 30px rgba(239, 235, 235, 0.2); /* Subtle shadow for depth */
+  padding: 15px;
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+/* Apply frosted glass effect on supported browsers */
+@supports (backdrop-filter: blur(10px)) {
+  .product-item {
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+  }
+}
+
+/* Hover Effect - Smooth Lift & Darker Background */
+.product-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 8px 30px rgba(239, 235, 235, 0.3); /* Slightly stronger shadow on hover */
+  background: rgba(255, 255, 255, 0.9); /* Slightly opaque white on hover */
+}
+
+/* Circular Product Image */
+.product {
+  width: 250px;
+  height: 270px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 8px 30px rgba(223, 220, 220, 0.3);
+}
+
+.product img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Image Hover Effect - Slight Zoom */
+.product-item:hover .product img {
+  transform: scale(1.05);
+}
+
+* {box-sizing: border-box;}
+
+.hovercontainer {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+.hovercontainer_category {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+/* Overlay Effect on Product Image */
+.overlay {
+ position: absolute; 
+  bottom: 0; 
+  background: rgb(255, 255, 255); 
+  background: rgb(250, 250, 250);/* Black see-through */
+  color: #151515; 
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  padding: 20px;
+  color: rgb(0, 0, 0);
+  text-shadow: 1px 1px 2px rgb(255, 255, 255), 0 0 25px rgb(255, 255, 255), 0 0 100px rgb(255, 255, 255);
+}
+
+/* Overlay Effect on Product Image -- Image Overlay Title */
+.overlay_category {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(255, 255, 255); 
+  background: rgb(250, 250, 250);/* Black see-through */
+  color: #151515; 
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  padding: 20px;
+  color: rgb(0, 0, 0);
+  text-shadow: 1px 1px 2px rgb(255, 255, 255), 0 0 25px rgb(255, 255, 255), 0 0 100px rgb(255, 255, 255);
+}
+
+/* Show overlay on hover */
+.hovercontainer:hover .overlay {
+  opacity: 0.7;
+}
+
+/* Show overlay on hover */
+.hovercontainer_category:hover .overlay_category {
+  opacity: 0.7;
+}
+
+
+/* Product Name Styling */
+h3 {
+  font-size: 1.3rem;
+  margin-top: 15px;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+/* Add a glow effect to product name on hover for extra style */
+.product-item:hover h3 {
+  text-shadow: 0px 0px 8px rgba(0, 123, 255, 0.7);
+}
+
+/* Animated Buttons */
+.arrowButton {
+  background-color: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, color 0.3s ease-in-out;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.arrowButton:hover {
+  transform: scale(1.1);
+  color: var(--primary-color);
+}
+
+/* Indicator Dots */
+.indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.indicator.active {
+  background-color: var(--primary-color);
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background-color: #0056b3;
+}
+
+/* Mobile & Small Screens */
+@media (max-width: 768px) {
+  .product-container {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  .product {
+    width: 180px;
+    height: 180px;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Dark Mode Button */
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  background-color: #edf1f6;
+}

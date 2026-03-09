@@ -1,6 +1,8 @@
 // components/QuantitySelector.tsx
 import React from "react";
 import { Minus, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import "./QuantitySelector.css";
 
 interface QuantitySelectorProps {
   qty: number;
@@ -15,6 +17,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   min = 1,
   max = 99,
 }) => {
+  const { t } = useTranslation();
   const handleDecrease = () => setQty(Math.max(min, qty - 1));
   const handleIncrease = () => setQty(Math.min(max, qty + 1));
 
@@ -27,10 +30,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
 
   return (
     <div className="product-option mb-4">
-      <label htmlFor="qty" className="block font-medium mb-2 text-gray-800">
-        Quantity:
-      </label>
-
+      <label htmlFor="qty" className="block font-medium mb-2 text-gray-800">{t('Quantity')}:</label>
       <div className="qty-control">
         <button
           type="button"

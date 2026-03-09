@@ -1,0 +1,406 @@
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 100;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Hairline.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Hairline.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 200;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Thin.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Thin.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 300;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Light.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Light.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Regular.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Regular.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Medium.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Medium.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 600;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Semibold.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Semibold.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Bold.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Bold.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Heavy.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Heavy.woff) format("woff")
+}
+
+@font-face {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 900;
+    src: url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Black.woff2) format("woff2"), url(https://d1howb1wwyap5o.cloudfront.net/fonts/lato_v2/Lato-Black.woff) format("woff")
+}
+
+:root {
+    --font-family: "Lato", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Arial", sans-serif;
+    --font-family-system: "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Arial", sans-serif;
+    --control-radius: 6px;
+    --dvh: 100dvh;
+    --control-main-color-h: 205;
+    --control-main-color-s: 95%;
+    --control-main-color-l: 48%;
+    --control-main-color-b: .48;
+    --control-main-color-a: 1;
+    --color-white-h: 0;
+    --color-white-s: 0%;
+    --color-white-l: 100%;
+    --color-white-b: 1;
+    --color-white-a: 1;
+    --text-muted-color-h: 208;
+    --text-muted-color-s: 17%;
+    --text-muted-color-l: 66%;
+    --text-muted-color-b: .66;
+    --text-muted-color-a: 1;
+    --background-low-color-h: 210;
+    --background-low-color-s: 11%;
+    --background-low-color-l: 11%;
+    --background-low-color-b: .11;
+    --background-low-color-a: 1
+}
+
+.ins-tile--text {
+    --title-font-family: var(--global-title-font-family-stack);
+    --title-font-size: var(--global-title-font-size);
+    --title-font-style: normal;
+    --title-font-weight: 700;
+    --subtitle-font-family: var(--global-body-font-family-stack);
+    --subtitle-font-size: var(--global-subtitle-font-size);
+    --subtitle-font-style: normal;
+    --subtitle-font-weight: 400;
+    --description-font-family: var(--global-body-font-family-stack);
+    --description-font-size: var(--global-body-font-size);
+    --description-font-style: normal;
+    --description-font-weight: 400;
+    --title-text-color-h: var(--global-title-color-h);
+    --title-text-color-s: var(--global-title-color-s);
+    --title-text-color-l: var(--global-title-color-l);
+    --title-text-color-b: var(--global-title-color-b);
+    --title-text-color-a: var(--global-title-color-a);
+    --subtitle-text-color-h: var(--global-body-color-h);
+    --subtitle-text-color-s: var(--global-body-color-s);
+    --subtitle-text-color-l: var(--global-body-color-l);
+    --subtitle-text-color-b: var(--global-body-color-b);
+    --subtitle-text-color-a: var(--global-body-color-a);
+    --description-text-color-h: var(--global-body-color-h);
+    --description-text-color-s: var(--global-body-color-s);
+    --description-text-color-l: var(--global-body-color-l);
+    --description-text-color-b: var(--global-body-color-b);
+    --description-text-color-a: var(--global-body-color-a)
+}
+
+.ins-tile--text {
+    background-color: hsla(var(--background-solid-color-h), var(--background-solid-color-s), var(--background-solid-color-l), var(--background-solid-color-a));
+    background-image:linear-gradient(var(--background-gradient-angle), hsla(var(--background-gradient-color-from-h), var(--background-gradient-color-from-s), var(--background-gradient-color-from-l), var(--background-gradient-color-from-a)) 0%, hsla(var(--background-gradient-color-to-h), var(--background-gradient-color-to-s), var(--background-gradient-color-to-l), var(--background-gradient-color-to-a)) 100%)
+}
+
+.ins-tile--text .ins-tile__title {
+    color: hsla(var(--title-text-color-h), var(--title-text-color-s), var(--title-text-color-l), var(--title-text-color-a));
+    font-family: var(--title-font-family), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif;
+    font-style: var(--title-font-style);
+    font-weight: var(--title-font-weight);
+    line-height: min(calc(2em - 4px), calc(.8em + 23px));
+    font-size:calc(var(--title-font-size) * .5 + 8px)
+}
+
+@media screen and (min-width: 500px) {
+    .ins-tiles--500 .ins-tile--text .ins-tile__title {
+        font-size:calc(var(--title-font-size) * .7 + 4.8px)
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text .ins-tile__title {
+        font-size:calc(var(--title-font-size) * 1 + 0px)
+    }
+}
+
+.ins-tile--text .ins-tile__subtitle {
+    color: hsla(var(--subtitle-text-color-h), var(--subtitle-text-color-s), var(--subtitle-text-color-l), var(--subtitle-text-color-a));
+    font-family: var(--subtitle-font-family), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif;
+    font-style: var(--subtitle-font-style);
+    font-weight: var(--subtitle-font-weight);
+    font-size:calc(var(--subtitle-font-size) * .5 + 8px)
+}
+
+@media screen and (min-width: 500px) {
+    .ins-tiles--500 .ins-tile--text .ins-tile__subtitle {
+        font-size:calc(var(--subtitle-font-size) * .7 + 4.8px)
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text .ins-tile__subtitle {
+        font-size:calc(var(--subtitle-font-size) * 1 + 0px)
+    }
+}
+
+.ins-tile--text .ins-tile__description {
+    color: hsla(var(--description-text-color-h), var(--description-text-color-s), var(--description-text-color-l), var(--description-text-color-a));
+    font-family: var(--description-font-family), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif;
+    font-style: var(--description-font-style);
+    font-weight: var(--description-font-weight);
+    font-size:calc(var(--description-font-size) * .5 + 8px)
+}
+
+@media screen and (min-width: 500px) {
+    .ins-tiles--500 .ins-tile--text .ins-tile__description {
+        font-size:calc(var(--description-font-size) * .7 + 4.8px)
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text .ins-tile__description {
+        font-size:calc(var(--description-font-size) * 1 + 0px)
+    }
+}
+
+.ins-tile--text {
+    padding-right: calc(var(--global-tile-padding) * 1px);
+    padding-left:calc(var(--global-tile-padding) * 1px)
+}
+
+.ins-tile--text {
+    padding-right: calc(env(safe-area-inset-right) + var(--global-tile-padding) * 1px);
+    padding-left:calc(env(safe-area-inset-left) + var(--global-tile-padding) * 1px)
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--title-left .ins-tile__wrap {
+        grid-gap: 0 8.0756013746%;
+        grid-template-columns: 30.0687285223% 61.8556701031%;
+        grid-template-rows:auto 1fr
+    }
+}
+
+.ins-tile--text.ins-tile--title-left .ins-tile__title:not(:last-child) {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+@media screen and (max-width: 899px) {
+    .ins-tile--text.ins-tile--title-left .ins-tile__subtitle:not(:last-child) {
+        margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+    }
+}
+
+.ins-tiles:not(.ins-tiles--900) .ins-tile--text.ins-tile--title-left .ins-tile__subtitle:not(:last-child) {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--title-left .ins-tile__description:first-child {
+        grid-column:1/span 2
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--title-left .ins-tile__description {
+        grid-column: 2;
+        grid-row:1/span 2
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__wrap {
+        grid-gap: 0 8.0756013746%;
+        grid-template-columns: 61.8556701031% 30.0687285223%;
+        grid-template-rows:auto 1fr
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__title {
+        grid-column:1/span 2
+    }
+}
+
+.ins-tile--text.ins-tile--subtitle-right .ins-tile__title:not(:last-child) {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__title:nth-last-child(2) {
+        width: 61.8556701031%;
+        margin-right: auto;
+        margin-left:auto
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__subtitle {
+        grid-column: 2;
+        grid-row:2
+    }
+}
+
+@media screen and (max-width: 899px) {
+    .ins-tile--text.ins-tile--subtitle-right .ins-tile__subtitle:not(:last-child) {
+        margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+    }
+}
+
+.ins-tiles:not(.ins-tiles--900) .ins-tile--text.ins-tile--subtitle-right .ins-tile__subtitle:not(:last-child) {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__subtitle:last-child {
+        grid-column: 1/span 2;
+        width: 61.8556701031%;
+        margin-right: auto;
+        margin-left:auto
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__subtitle + .ins-tile__description {
+        grid-column: 1;
+        grid-row: 2;
+        width:100%
+    }
+}
+
+.ins-tile--text.ins-tile--subtitle-right .ins-tile__subtitle:after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 0;
+    padding-top: min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px));
+    border-bottom:1px solid currentColor
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--subtitle-right .ins-tile__description {
+        grid-column: 1/span 2;
+        grid-row: 2;
+        width: 61.8556701031%;
+        margin-right: auto;
+        margin-left:auto
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--one-column .ins-tile__title, .ins-tiles--900 .ins-tile--text.ins-tile--one-column .ins-tile__subtitle, .ins-tiles--900 .ins-tile--text.ins-tile--one-column .ins-tile__description {
+        width: 61.8556701031%;
+        margin:0 auto
+    }
+}
+
+.ins-tile--text.ins-tile--one-column .ins-tile__subtitle:not(:first-child), .ins-tile--text.ins-tile--one-column .ins-tile__description:not(:first-child) {
+    margin-top:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+.ins-tile--text.ins-tile--two-columns .ins-tile__subtitle:not(:first-child) {
+    margin-top:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--two-columns .ins-tile__description {
+        column-gap: 3.4364261168%;
+        column-count:2
+    }
+}
+
+.ins-tile--text.ins-tile--two-columns .ins-tile__description:not(:first-child) {
+    margin-top:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+.ins-tile--text.ins-tile--center .ins-tile__title, .ins-tile--text.ins-tile--center .ins-tile__subtitle, .ins-tile--text.ins-tile--center .ins-tile__description {
+    text-align:center
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--center .ins-tile__title, .ins-tiles--900 .ins-tile--text.ins-tile--center .ins-tile__subtitle, .ins-tiles--900 .ins-tile--text.ins-tile--center .ins-tile__description {
+        width: 61.8556701031%;
+        margin:0 auto
+    }
+}
+
+.ins-tile--text.ins-tile--center .ins-tile__title {
+    grid-row:1
+}
+
+.ins-tile--text.ins-tile--center .ins-tile__title:not(:last-child) {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+.ins-tile--text.ins-tile--center .ins-tile__subtitle {
+    grid-row:3
+}
+
+.ins-tile--text.ins-tile--center .ins-tile__subtitle + .ins-tile__description {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+.ins-tile--text.ins-tile--center .ins-tile__description {
+    grid-row:2
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--description-right .ins-tile__title {
+        width:74.5704467354%
+    }
+}
+
+.ins-tile--text.ins-tile--description-right .ins-tile__title:not(:last-child) {
+    margin-bottom:min(calc(1vw + 10px), calc((var(--global-tile-max-width) * 1px + var(--global-tile-padding) * 2px) * .01 + 10px))
+}
+
+@media screen and (min-width: 900px) {
+    .ins-tiles--900 .ins-tile--text.ins-tile--description-right .ins-tile__description {
+        margin-left:25.4295532646%
+    }
+}
+
+.ins-tile--text .ins-tile__wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: calc(var(--global-tile-max-width) * 1px);
+    margin:var(--computed-tile-margin) auto
+}
+
+.ins-tile--text .ins-tile__title {
+    text-wrap: balance;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    -webkit-hyphenate-limit-after: 4;
+    -webkit-hyphenate-limit-before: 4;
+    hyphenate-limit-chars:10 4 4
+}
+
+.ins-tile--text .ins-tile__title, .ins-tile--text .ins-tile__subtitle, .ins-tile--text .ins-tile__description {
+    grid-column: 1;
+    max-width: 100%;
+    word-wrap: break-word
+}

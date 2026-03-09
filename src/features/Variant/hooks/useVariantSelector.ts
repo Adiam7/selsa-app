@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import type { Variant } from "@/types/printful_product";
+import { getColorHex } from "@/utils/colorMap";
 
 export const useVariantSelector = (variants: Variant[]) => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -27,7 +28,11 @@ export const useVariantSelector = (variants: Variant[]) => {
       if (!v.color) return;
       map.set(v.color, (map.get(v.color) || false) || v.is_available);
     });
-    return Array.from(map.entries()).map(([color, available]) => ({ color, available }));
+    return Array.from(map.entries()).map(([color, available]) => ({ 
+      color, 
+      value: getColorHex(color), // Convert color name to hex code
+      available 
+    }));
   }, [variants]);
 
   // Sizes filtered by selectedColor
@@ -229,7 +234,8 @@ export const useVariantSelector = (variants: Variant[]) => {
     const seen = new Set<string>();
     const items = variants.flatMap((v, idx) => {
       if (!v.files) return [];
-      const variantImages = v.files.map((f) => f.preview_url).slice(1); // skip first
+      const urls = v.files.map((f) => f.preview_url).filter(Boolean);
+      const variantImages = urls.length > 1 ? urls.slice(1) : urls;
       return variantImages
         .filter((url) => {
           if (seen.has(url)) return false;

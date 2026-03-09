@@ -180,7 +180,7 @@ export const useGallery = (product: Product, options?: UseGalleryOptions) => {
         pushUrl(
           imgUrl,
           `variant-${v.id}-${v.color ?? ""}-${v.size ?? ""}-${idx}`,
-          v.id,
+          String(v.id),
           v.color ?? null
         );
       });
@@ -226,7 +226,7 @@ export const useGallery = (product: Product, options?: UseGalleryOptions) => {
   const highlightVariantImage = useCallback(
     (variant: Variant | null) => {
       if (!variant) return;
-      const idx = galleryState.findIndex((g) => g.variantId === variant.id);
+      const idx = galleryState.findIndex((g) => g.variantId === String(variant.id));
       if (idx >= 0) setHighlightedIdx(idx);
     },
     [galleryState]

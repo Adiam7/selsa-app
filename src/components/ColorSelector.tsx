@@ -151,7 +151,11 @@
 // New with swatch
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
+import Image from "next/image";
+import { useTranslation } from "react-i18next";
+import { getColorTranslation } from "@/utils/colorTranslations";
+import { getColorHex } from "@/utils/colorMap";
 import "./ColorSelector.css";
 
 interface ColorOption {
@@ -164,45 +168,73 @@ interface ColorSelectorProps {
   colors: ColorOption[];
   selectedColor: string | null;
   onSelect: (color: string) => void;
+  variantImages?: Record<string, string>; // { color: imageURL }
 }
 
 export const ColorSelector: React.FC<ColorSelectorProps> = ({
   colors,
   selectedColor,
   onSelect,
+  variantImages = {},
 }) => {
+  const { t, i18n } = useTranslation();
+  
+  // Translate selected color for display
+  const displaySelectedColor = useMemo(() => {
+    if (!selectedColor) return null;
+    return getColorTranslation(selectedColor, i18n.language);
+  }, [selectedColor, i18n.language]);
+  
   if (!colors || colors.length === 0) return null;
 
   return (
     <div className="product-option mb-4">
-      <label className="block font-medium mb-1 text-gray-800">Color:</label>
-
+      <label className="block font-medium mb-1 text-gray-800">{t('Color')}:</label>
       <div className="swatches color-gallery flex gap-2 mb-2">
         {colors.map((c, idx) => {
           const isActive = selectedColor === c.color;
           const isDisabled = !c.available;
+          
+          // Translate color name for tooltip
+          const displayColorName = getColorTranslation(c.color, i18n.language);
+          
+          // Use variant image if available, otherwise fallback to hex color
+          const hasImage = variantImages && variantImages[c.color];
+          const colorHex = getColorHex(c.color);
 
           return (
             <button
               key={`${c.color}-${idx}`}
-              title={c.color} // tooltip shows color name
+              title={displayColorName} // Translated tooltip
               onClick={() => !isDisabled && onSelect(c.color)}
               disabled={isDisabled}
               className={`swatches__item ${isActive ? "selected" : ""} ${isDisabled ? "disabled" : ""}`}
               style={{
-                backgroundColor: c.value,       // use the value field
-                border: isActive ? "2px solid black" : "1px solid gray",
-                width: 24,
-                height: 24,
-                borderRadius: "50%",            // circular swatch
+                border: isActive ? "2px solid black" : "1px solid #ddd",
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
                 cursor: isDisabled ? "not-allowed" : "pointer",
                 opacity: isDisabled ? 0.4 : 1,
                 padding: 0,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                overflow: "hidden",
+                backgroundColor: hasImage ? "#fff" : colorHex,
               }}
-            />
+            >
+              {hasImage ? (
+                <Image
+                  src={variantImages[c.color]}
+                  alt={displayColorName}
+                  width={32}
+                  height={32}
+                  className="object-cover w-full h-full"
+                  style={{ borderRadius: "50%" }}
+                />
+              ) : null}
+            </button>
           );
         })}
       </div>

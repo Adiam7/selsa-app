@@ -1,0 +1,280 @@
+// app/shop/[id]/product-view.tsx
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
+import type { Product, Variant } from "@/types/printful_product";
+import { fetchPrintfulProductDetail } from "@/lib/api/printful";
+
+// Currency formatter
+function money(v: number | string | undefined, c?: string) {
+  const num = typeof v === "string" ? Number(v) : v ?? 0;
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: c || "USD",
+  }).format(num);
+}
+
+type GalleryImage = { url: string; placement: string | null; key: string };
+
+function useGallery(product: any) {
+  const initialGallery = useMemo(() => {
+    const gallery: GalleryImage[] = [];
+    const seen = new Set<string>();
+
+    const addImage = (url?: string | null, placement: string | null = null) => {
+      if (!url) return;
+      const u = String(url).trim();
+      if (!u) return;
+      if (!seen.has(u)) {
+        seen.add(u);
+        gallery.push({ url: u, placement, key: `${placement ?? "img"}::${u}` });
+        console.log("✅ Added image:", u, "placement:", placement);
+      } else {
+        console.log("⚠ Skipped duplicate:", u);
+      }
+    };
+
+    console.log("📌 Adding main product image...");
+    addImage(product?.image_url ?? product?.image, "main");
+
+    console.log("📌 Adding product-level mockups...");
+    for (const m of product?.mockups ?? []) {
+      addImage(m?.url ?? m?.preview_url, m?.placement ?? "mockup");
+    }
+
+    console.log("📌 Adding variant-level mockups...");
+    for (const variant of product?.variants ?? []) {
+      for (const file of (variant?.files ?? [])) {
+        if (file?.type !== "mockup") continue;
+        const url = file?.preview_url ?? file?.thumbnail_url ?? file?.url;
+        console.log("🔹 Variant mockup file URL:", url);
+        addImage(url, "mockup");
+      }
+    }
+
+    console.log("📌 Final gallery URLs:", gallery.map((g) => g.url));
+    return gallery;
+  }, [product]);
+
+  const [gallery, setGallery] = useState<GalleryImage[]>(initialGallery);
+
+  useEffect(() => {
+    setGallery(initialGallery);
+  }, [initialGallery]);
+
+  function swapImage(idx: number) {
+    setGallery((g) => {
+      if (!g || idx < 0 || idx >= g.length) return g;
+      const newGallery = [...g];
+      const item = newGallery.splice(idx, 1)[0];
+      newGallery.unshift(item);
+      return newGallery;
+    });
+  }
+
+  return { gallery, swapImage };
+}
+
+export default function ProductView() {
+  const params = useParams();
+  const syncProductId = Number(params?.id);
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!syncProductId) {
+      console.warn("❌ Missing syncProductId, cannot fetch product");
+      return;
+    }
+
+    async function loadProduct() {
+      setLoading(true);
+      try {
+        const data = await fetchPrintfulProductDetail(syncProductId);
+        console.log("🔹 Raw product object:", data);
+        setProduct(data);
+      } catch (err) {
+        console.error("❌ Failed to fetch product:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProduct();
+  }, [syncProductId]);
+
+  const { gallery, swapImage } = useGallery(product);
+
+  if (loading) {
+    return <div className="p-10 text-center text-gray-500">⏳ Loading product...</div>;
+  }
+
+  if (!product || !product.variants || product.variants.length === 0) {
+    return (
+      <div className="p-10 text-center text-gray-500">
+        <p>⚠ Product is syncing from Printful. Please refresh in a moment.</p>
+      </div>
+    );
+  }
+
+  const colors = product.colors ?? [];
+  const sizes = product.sizes ?? [];
+  const [selectedColor, setSelectedColor] = useState(colors[0] ?? "");
+  const [selectedSize, setSelectedSize] = useState(sizes[0] ?? "");
+  const [qty, setQty] = useState(1);
+
+  const variantsByKey = useMemo(() => {
+    const map = new Map<string, Variant>();
+    for (const v of product.variants) {
+      map.set(`${v.color ?? ""}::${v.size ?? ""}`, v);
+    }
+    return map;
+  }, [product.variants]);
+
+  const selectedVariant =
+    variantsByKey.get(`${selectedColor}::${selectedSize}`) ?? null;
+
+  const priceLabel = selectedVariant
+    ? money(selectedVariant.price, selectedVariant.currency)
+    : "";
+
+  const inStock = selectedVariant ? selectedVariant.is_available : true;
+
+  return (
+    <section className="product-detail-container flex flex-col md:flex-row gap-8">
+      {/* LEFT: Images */}
+      <div className="product-images flex flex-col gap-4">
+        <div className="main-image">
+          {gallery[0]?.url ? (
+            <img
+              src={gallery[0].url}
+              alt={`${product.name} - ${gallery[0].placement ?? "image"}`}
+              className="rounded-xl object-cover"
+              width={500}
+              height={500}
+              style={{ aspectRatio: "1 / 1" }}
+            />
+          ) : (
+            <div className="w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
+              No image
+            </div>
+          )}
+        </div>
+
+        {/* Thumbnails */}
+        <div className="image-gallery flex gap-2 flex-wrap">
+          {gallery.map((item, i) => (
+            <button
+              key={item.key}
+              className="relative w-20 h-20 border rounded overflow-hidden"
+              onClick={() => swapImage(i)}
+              aria-label={`Show ${item.placement ?? "image"} as main`}
+            >
+              <img
+                src={item.url}
+                alt={item.placement ?? ""}
+                className="object-cover"
+                width={80}
+                height={80}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* RIGHT: Product Info */}
+      <div className="product_info flex-1 space-y-4">
+        <h1 className="product-title text-2xl font-bold">{product.name}</h1>
+        <p className="product-price text-xl text-primary">{priceLabel}</p>
+
+        {/* Colors */}
+        {colors.length > 0 && (
+          <div className="product-option mb-4">
+            <label className="block font-medium mb-1 text-gray-800">Color:</label>
+            <div className="flex gap-2 flex-wrap">
+              {colors.map((c) => (
+                <button
+                  key={c || "none"}
+                  onClick={() => setSelectedColor(c)}
+                  aria-pressed={selectedColor === c}
+                  className={`px-3 py-2 border rounded ${
+                    selectedColor === c ? "ring-2 ring-black bg-black text-white" : "bg-white"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Sizes */}
+        {sizes.length > 0 && (
+          <div className="product-option mb-4">
+            <label className="block font-medium mb-1 text-gray-800">Size:</label>
+            <div className="flex gap-2 flex-wrap">
+              {sizes.map((s) => (
+                <button
+                  key={s || "none"}
+                  onClick={() => setSelectedSize(s)}
+                  aria-pressed={selectedSize === s}
+                  className={`px-3 py-2 border rounded ${
+                    selectedSize === s ? "ring-2 ring-black bg-black text-white" : "bg-white"
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quantity */}
+        <div className="product-option mb-4">
+          <label htmlFor="qty" className="block font-medium mb-1 text-gray-800">Quantity:</label>
+          <input
+            id="qty"
+            type="number"
+            min={1}
+            value={qty}
+            onChange={(e) => setQty(Math.max(1, Number(e.target.value)))}
+            className="border rounded px-2 py-1 w-20"
+          />
+        </div>
+
+        {/* Stock Status */}
+        <div className={`stock-status mb-2 ${inStock ? "text-green-600" : "text-red-600"}`}>
+          {inStock ? "In Stock" : "Out of Stock"}
+        </div>
+
+        {/* Add to Cart */}
+        <button
+          onClick={async () => {
+            if (!selectedVariant) return;
+            await fetch("/api/cart", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                variant_id: selectedVariant.id,
+                qty,
+              }),
+            });
+          }}
+          disabled={!selectedVariant || !inStock}
+          className="add-to-cart-btn btn btn-primary px-4 py-2 rounded bg-blue-600 text-white flex items-center gap-2 disabled:opacity-50"
+        >
+          Add to Cart
+        </button>
+
+        {/* Description */}
+        {product.description && (
+          <div className="product-description mt-6 overflow-auto">
+            <p>{product.description}</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}

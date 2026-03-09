@@ -1,0 +1,11 @@
+/* Layout utility classes for RootLayout */
+.layout-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-main {
+  flex: 1;
+  margin-top: calc(var(--header-height, 60px) + 20px);
+}

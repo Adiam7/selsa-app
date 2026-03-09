@@ -2,12 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import { ProductImage } from '@/types/product' // adjust path as needed
 
 type ProductGalleryProps = {
-  galleryImages: ProductImage[];
+  galleryImages: string[];
   selectedImageUrl: string;
-  onImageClick: (img: ProductImage) => void;
+  onImageClick: (img: string) => void;
 };
 
 const ProductGallery = ({
@@ -17,14 +16,14 @@ const ProductGallery = ({
 }: ProductGalleryProps) => (
   <div className="image-gallery flex gap-2 flex-wrap">
     {galleryImages.map((img) => (
-      <div key={img.id}>
+      <div key={img}>
         <Image
-          src={img.image}
-          alt={img.alt_text || ""}
+          src={img}
+          alt="Product"
           width={80}
           height={80}
           className={`cursor-pointer border rounded ${
-            img.image === selectedImageUrl ? "ring-2 ring-blue-500" : ""
+            img === selectedImageUrl ? "ring-2 ring-blue-500" : ""
           }`}
           onClick={() => onImageClick(img)}
         />

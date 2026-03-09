@@ -1,0 +1,78 @@
+.variant-matrix {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+}
+
+.matrix-header,
+.matrix-row {
+  display: flex;
+  align-items: center;
+}
+
+.matrix-cell {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  position: relative;
+}
+
+.header-cell {
+  font-weight: 600;
+  background-color: #f9fafb;
+}
+
+.color-label {
+  font-weight: 500;
+  background-color: #f3f4f6;
+  text-align: left;
+  padding-left: 0.75rem;
+}
+
+.variant-cell {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.variant-cell:hover:not(:disabled) {
+  background-color: #e0f2fe;
+}
+
+.variant-cell:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.variant-cell.selected {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  transform: scale(1.03);
+}
+
+/* 🟢 Indicator dots */
+.stock-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.stock-dot.green { background-color: #22c55e; }
+.stock-dot.orange { background-color: #f59e0b; }
+.stock-dot.red { background-color: #ef4444; }
+
+.stock-text {
+  font-size: 0.9rem;
+}

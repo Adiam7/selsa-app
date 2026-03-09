@@ -1,17 +1,22 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ShareProduct = ({ productId, productName }) => {
-  // Dynamic base URL (works in dev and production)
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const { t } = useTranslation();
+  // Use environment variable as fallback for SSR
+  const baseUrl =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_SITE_URL;
+
   const shareUrl = `${baseUrl}/shop/${productId}`;
   const shareTitle = `Check out this product: ${productName}`;
 
   return (
     <div className="mt-6 border-t pt-6" style={{ marginTop: "20px" }}>
-      <p className="mb-4 font-medium text-gray-700">
-        Share this product with your friends:
-      </p>
-
+      <p className="mb-4 font-medium text-gray-700">{t('Share this product with your friends')}:</p>
       <div
         className="social-icons"
         style={{
@@ -39,7 +44,9 @@ const ShareProduct = ({ productId, productName }) => {
 
         {/* WhatsApp */}
         <a
-          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareTitle + " " + shareUrl)}`}
+          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+            shareTitle + " " + shareUrl
+          )}`}
           title="WhatsApp"
           aria-label="WhatsApp"
           target="_blank"
@@ -67,7 +74,9 @@ const ShareProduct = ({ productId, productName }) => {
 
         {/* Facebook */}
         <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            shareUrl
+          )}`}
           title="Facebook"
           aria-label="Facebook"
           target="_blank"

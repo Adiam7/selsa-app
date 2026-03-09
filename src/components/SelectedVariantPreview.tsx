@@ -37,14 +37,14 @@ export const SelectedVariantPreview: React.FC<SelectedVariantPreviewProps> = ({
         />
       )}
       <div className="variant-info">
-        <h4 className="variant-title">Selected Variant</h4>
+        <h4 className="variant-title">{t('Selected Variant')}</h4>
         <p className="variant-details">
-          {color && <span>Color: <strong>{color}</strong></span>}{" "}
-          {size && <span>Size: <strong>{size}</strong></span>}
+          {color && <span>{t('Color:')}<strong>{color}</strong></span>}{" "}
+          {size && <span>{t('Size:')}<strong>{size}</strong></span>}
           
         </p>
         {price && <p className="variant-price">{money(price, "USD")}</p>}
-        {sku && <p className="variant-sku text-gray-500 text-sm">SKU: {sku}</p>}
+        {sku && <p className="variant-sku text-gray-500 text-sm">{t('SKU:')}{sku}</p>}
       </div>
     </div>
   );
