@@ -4,6 +4,7 @@ export type OrderItem = {
   quantity: number;
   price: string; // decimal
   line_total?: string;
+  image_url?: string | null;
   product_name_snapshot?: Record<string, string> | string | null;
   variant_sku?: string | null;
   variant_external_id?: string | null;

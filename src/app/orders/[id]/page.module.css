@@ -1,0 +1,407 @@
+/* Order Detail — Premium Selsa Design System */
+
+.page {
+  padding: 32px 0;
+}
+
+/* ─── Header ─── */
+.headerSection {
+  margin-bottom: 28px;
+}
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.badgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.statusNote {
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+
+/* ─── Error ─── */
+.errorBar {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #991b1b;
+}
+
+/* ─── Grid ─── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Card ─── */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  padding: 20px 24px;
+}
+.cardFull {
+  composes: card;
+  margin-top: 20px;
+}
+.sectionIcon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.sectionTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  margin: 0;
+}
+.itemCount {
+  font-size: 12px;
+  color: #a3a3a3;
+  margin-left: auto;
+}
+
+/* ─── Summary Rows ─── */
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.summaryLabel {
+  font-size: 14px;
+  color: #737373;
+}
+.summaryValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: #525252;
+}
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 2px solid #0a0a0a;
+  margin-top: 4px;
+}
+.totalLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0a0a0a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.totalValue {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0a0a0a;
+  letter-spacing: -0.3px;
+}
+
+/* ─── Payment ─── */
+.payRow {
+  font-size: 14px;
+  color: #525252;
+  margin: 0 0 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.payLabel {
+  color: #737373;
+}
+.docBtns {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.btnDoc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 0;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.btnDoc:hover {
+  border-color: #0a0a0a;
+}
+.btnDoc:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ─── Address ─── */
+.addrName {
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+.addrLine {
+  font-size: 14px;
+  color: #525252;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* ─── Item Rows ─── */
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+.itemRowBorder {
+  border-bottom: 1px solid #f5f5f5;
+}
+.itemImg {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  flex-shrink: 0;
+  position: relative;
+}
+.itemPlaceholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.itemDetails {
+  flex: 1;
+  min-width: 0;
+}
+.itemName {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0a0a0a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.itemMeta {
+  font-size: 13px;
+  color: #a3a3a3;
+  margin: 4px 0 0;
+}
+.itemPrice {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0a0a0a;
+  white-space: nowrap;
+}
+
+/* ─── Actions Grid ─── */
+.actionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+@media (max-width: 768px) {
+  .actionGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Dark Card ─── */
+.darkCard {
+  background: #0a0a0a;
+  border-radius: 12px;
+  padding: 20px 24px;
+  color: #fff;
+}
+.darkTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #a3a3a3;
+  margin: 0 0 14px;
+}
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #fff;
+  background: #171717;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.textarea:focus {
+  border-color: #555;
+}
+.selectDark {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #fff;
+  background: #171717;
+  outline: none;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.labelDark {
+  font-size: 12px;
+  color: #737373;
+  margin: 0 0 6px;
+  display: block;
+}
+.statusText {
+  font-size: 13px;
+  color: #a3a3a3;
+  margin-bottom: 12px;
+}
+
+/* ─── Action Buttons ─── */
+.btnDanger {
+  width: 100%;
+  padding: 11px 0;
+  border-radius: 8px;
+  border: 1px solid #ef4444;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: opacity 0.15s;
+}
+.btnDanger:hover {
+  opacity: 0.85;
+}
+.btnDanger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btnAmber {
+  width: 100%;
+  padding: 11px 0;
+  border-radius: 8px;
+  border: 1px solid #f59e0b;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f59e0b;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: opacity 0.15s;
+}
+.btnAmber:hover {
+  opacity: 0.85;
+}
+.btnAmber:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btnWhite {
+  width: 100%;
+  max-width: 260px;
+  padding: 11px 0;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e5e5;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: opacity 0.15s;
+}
+.btnWhite:hover {
+  border-color: #999;
+}
+.btnWhite:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ─── Return Card (full width) ─── */
+.returnCard {
+  composes: darkCard;
+  grid-column: 1 / -1;
+}
+.returnInner {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.returnLeft {
+  flex: 1 1 200px;
+}
+.returnRight {
+  flex: 2 1 300px;
+}
+
+/* ─── Loading ─── */
+.loadingWrap {
+  padding: 80px 24px;
+  text-align: center;
+}
+.loadingText {
+  font-size: 15px;
+  color: #737373;
+}
+
+/* ─── Status Note Variants ─── */
+.noteWarning {
+  color: #9a3412;
+}
+.noteDanger {
+  color: #9f1239;
+}

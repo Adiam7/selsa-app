@@ -1,17 +1,26 @@
 /**
  * Order Confirmation Page
- * Displays success confirmation after order completion
+ * Premium post-checkout confirmation with Selsa's black & white design system
  */
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { CheckCircle, Package, Truck, Mail, ArrowLeft, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Check, Package, Truck, Mail, ArrowLeft, ChevronRight } from 'lucide-react';
 import { LoadingState } from '@/components/ui/enhanced-feedback';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import Image from 'next/image';
+import styles from './page.module.css';
+
+interface GalleryImage {
+  id: number;
+  image: string;
+  image_url?: string;
+  is_primary: boolean;
+  alt_text?: Record<string, string> | string | null;
+}
 
 interface OrderConfirmation {
   id: number;
@@ -25,9 +34,15 @@ interface OrderConfirmation {
   created_at: string;
   customer_email: string | null;
   shipping_address_snapshot: Record<string, any> | null;
+  billing_address_snapshot?: Record<string, any> | null;
   items: Array<{
     id: number;
-    product?: { name?: string } | null;
+    image_url?: string | null;
+    product?: {
+      name?: string | Record<string, string>;
+      name_display?: string;
+      gallery_images?: GalleryImage[];
+    } | null;
     product_name_snapshot?: Record<string, string> | string | null;
     variant_sku?: string | null;
     quantity: number;
@@ -36,12 +51,37 @@ interface OrderConfirmation {
   }>;
 }
 
+function getItemName(item: OrderConfirmation['items'][0]): string {
+  if (item.product?.name_display) return item.product.name_display;
+  if (item.product?.name) {
+    if (typeof item.product.name === 'string') return item.product.name;
+    return item.product.name.en || Object.values(item.product.name)[0] || 'Product';
+  }
+  if (typeof item.product_name_snapshot === 'string') return item.product_name_snapshot;
+  if (item.product_name_snapshot?.en) return item.product_name_snapshot.en;
+  return item.variant_sku || 'Product';
+}
+
+function getItemImage(item: OrderConfirmation['items'][0]): string | null {
+  // 1. Use the top-level image_url from the serializer (variant → catalog_product chain)
+  if (item.image_url) return item.image_url;
+  // 2. Fallback to gallery_images from product
+  const imgs = item.product?.gallery_images;
+  if (!imgs || imgs.length === 0) return null;
+  const primary = imgs.find(i => i.is_primary) || imgs[0];
+  return primary.image_url || primary.image || null;
+}
+
 export default function OrderConfirmationPage() {
+  return <OrderConfirmationContent embedded={false} />;
+}
+
+export function OrderConfirmationContent({ embedded = false }: { embedded?: boolean }) {
   const params = useParams();
   const router = useRouter();
   const { t } = useTranslation();
   const orderId = params.id as string;
-  
+
   const [order, setOrder] = useState<OrderConfirmation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +92,6 @@ export default function OrderConfirmationPage() {
       setLoading(false);
       return;
     }
-
     fetchOrder();
   }, [orderId]);
 
@@ -60,26 +99,29 @@ export default function OrderConfirmationPage() {
     try {
       setLoading(true);
       setError(null);
-
       const response = await fetch(`/api/orders/${orderId}`);
-      
       if (!response.ok) {
-        if (response.status === 404) {
-          setError('Order not found');
-        } else {
-          setError('Failed to load order details');
-        }
+        setError(response.status === 404 ? 'Order not found' : 'Failed to load order details');
         return;
       }
-
-      const orderData = await response.json();
-      setOrder(orderData);
-    } catch (err) {
+      setOrder(await response.json());
+    } catch {
       setError('Unable to load order details. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+
+  const formatDate = (iso: string) =>
+    new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  const fmt = (v?: string | number | null) => (v == null ? '0.00' : Number(v).toFixed(2));
+
+  const steps = [
+    { num: '01', title: t('Processing your order'), desc: t("We're preparing your items for production.") },
+    { num: '02', title: t('Shipped & on its way'), desc: t("You'll receive a shipping confirmation with tracking info.") },
+    { num: '03', title: t('Delivered'), desc: t('Enjoy your new items from Selsa.') },
+  ];
 
   return (
     <LoadingState
@@ -90,165 +132,178 @@ export default function OrderConfirmationPage() {
       errorTitle="Unable to load order"
     >
       {order && (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto">
-            
-            {/* Success Header */}
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-12 h-12 text-green-600" />
+        <div className={embedded ? styles.pageEmbedded : styles.page}>
+          {/* ───── Top Bar (standalone only) ───── */}
+          {!embedded && (
+            <div className={styles.topBar}>
+              <div className={styles.topBarInner}>
+                <span className={styles.topBarLogo}>SELSA</span>
+                <Link href="/account/orders" className={styles.topBarLink}>
+                  {t('My Orders')}
+                </Link>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {t('Order Confirmed!')}
-              </h1>
-              <p className="text-lg text-gray-600">
-                {t('Thank you for your purchase. Your order #{{orderNumber}} has been successfully placed.', { orderNumber: order.order_number || orderId })}
+            </div>
+          )}
+
+          <div className={styles.container}>
+            {/* ───── Hero ───── */}
+            <div className={styles.hero}>
+              <div className={styles.heroIcon}>
+                <Check size={28} color="#fff" strokeWidth={3} />
+              </div>
+              <h1 className={styles.heroTitle}>{t('Order Confirmed')}</h1>
+              <p className={styles.heroSubtitle}>
+                {t('Thank you for your purchase. Your order')}{' '}
+                <strong className={styles.heroOrderNum}>#{order.order_number || orderId}</strong>{' '}
+                {t('has been placed successfully.')}
               </p>
             </div>
 
-            {/* Order Details Card */}
-            <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    {t('Order Details')}
-                  </h2>
-                  <p className="text-sm text-gray-500">
-                    {t('Order placed on')} {new Date(order.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-gray-900">
-                    ${Number(order.total_amount).toFixed(2)}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {t('Total amount')}
-                  </p>
-                </div>
-              </div>
+            {/* ───── Two-Column Grid ───── */}
+            <div className={styles.grid}>
+              {/* ===== LEFT ===== */}
+              <div className={styles.leftCol}>
+                {/* Items Card */}
+                <div className={styles.card}>
+                  <div className={styles.cardHeader}>
+                    <div className={styles.cardHeaderLeft}>
+                      <Package size={18} color="#0a0a0a" />
+                      <span className={styles.cardHeaderTitle}>{t('Items Ordered')}</span>
+                    </div>
+                    <span className={styles.cardHeaderCount}>
+                      {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                    </span>
+                  </div>
 
-              {/* Order Items */}  
-              <div className="border-t pt-6">
-                <h3 className="font-medium text-gray-900 mb-4">{t('Items Ordered')}</h3>
-                <div className="space-y-3">
-                  {order.items.map((item) => {
-                    const name = item.product?.name
-                      || (typeof item.product_name_snapshot === 'string' ? item.product_name_snapshot : item.product_name_snapshot?.en)
-                      || item.variant_sku
-                      || 'Product';
+                  {order.items.map((item, idx) => {
+                    const name = getItemName(item);
+                    const imgUrl = getItemImage(item);
+                    const isLast = idx === order.items.length - 1;
                     return (
-                      <div key={item.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium text-gray-900">{name}</p>
-                          <p className="text-sm text-gray-500">{t('Quantity:')} {item.quantity}</p>
+                      <div key={item.id} className={`${styles.itemRow} ${isLast ? '' : styles.itemRowBorder}`}>
+                        <div className={styles.itemImage}>
+                          {imgUrl ? (
+                            <Image src={imgUrl} alt={name} fill sizes="64px" style={{ objectFit: 'cover' }} />
+                          ) : (
+                            <div className={styles.itemImagePlaceholder}>
+                              <Package size={24} color="#d4d4d4" />
+                            </div>
+                          )}
                         </div>
-                        <p className="font-medium text-gray-900">
-                          ${item.line_total ? Number(item.line_total).toFixed(2) : (Number(item.price) * item.quantity).toFixed(2)}
-                        </p>
+                        <div className={styles.itemDetails}>
+                          <p className={styles.itemName}>{name}</p>
+                          <p className={styles.itemMeta}>Qty: {item.quantity} × ${fmt(item.price)}</p>
+                        </div>
+                        <span className={styles.itemPrice}>
+                          ${item.line_total ? fmt(item.line_total) : fmt(Number(item.price) * item.quantity)}
+                        </span>
                       </div>
                     );
                   })}
                 </div>
-              </div>
 
-              {/* Shipping Address */}
-              {order.shipping_address_snapshot && (
-                <div className="border-t pt-6 mt-6">
-                  <h3 className="font-medium text-gray-900 mb-3">{t('Shipping Address')}</h3>
-                  <div className="text-sm text-gray-600">
-                    <p>{order.shipping_address_snapshot.full_name}</p>
-                    <p>{order.shipping_address_snapshot.address_line_1}</p>
-                    {order.shipping_address_snapshot.address_line_2 && <p>{order.shipping_address_snapshot.address_line_2}</p>}
-                    <p>{order.shipping_address_snapshot.city}, {order.shipping_address_snapshot.state} {order.shipping_address_snapshot.postal_code}</p>
-                    <p>{order.shipping_address_snapshot.country}</p>
+                {/* Shipping Address */}
+                {order.shipping_address_snapshot && (
+                  <div className={styles.shippingCard}>
+                    <div className={styles.sectionHeader}>
+                      <Truck size={18} color="#0a0a0a" />
+                      <span className={styles.cardHeaderTitle}>{t('Shipping To')}</span>
+                    </div>
+                    <div className={styles.addressLines}>
+                      {order.shipping_address_snapshot.full_name && (
+                        <p className={styles.addressName}>{order.shipping_address_snapshot.full_name}</p>
+                      )}
+                      <p>{order.shipping_address_snapshot.address_line_1}</p>
+                      {order.shipping_address_snapshot.address_line_2 && (
+                        <p>{order.shipping_address_snapshot.address_line_2}</p>
+                      )}
+                      <p>
+                        {order.shipping_address_snapshot.city}, {order.shipping_address_snapshot.state}{' '}
+                        {order.shipping_address_snapshot.postal_code}
+                      </p>
+                      <p>{order.shipping_address_snapshot.country}</p>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
 
-            {/* What's Next Section */}
-            <div className="bg-blue-50 rounded-lg border border-blue-200 p-6 mb-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-4">
-                {t("What's next?")}
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-blue-900">
-                      {t('Order confirmation email sent')}
-                    </p>
-                    <p className="text-blue-700">
-                      {t('Check your email at')} {order.customer_email}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <Package className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-blue-900">
-                      {t('Processing your order')}
-                    </p>
-                    <p className="text-blue-700">
-                      {t("We'll prepare your items for shipping")}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <Truck className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-blue-900">
-                      {t('Shipping notification')}
-                    </p>
-                    <p className="text-blue-700">
-                      {t('Tracking information will be emailed when your order ships')}
-                    </p>
-                  </div>
+                {/* What's Next */}
+                <div className={styles.nextCard}>
+                  <span className={styles.nextCardTitle}>{t('What Happens Next')}</span>
+                  {steps.map((step, i) => (
+                    <div key={i} className={`${styles.step} ${i < 2 ? styles.stepSpacing : ''}`}>
+                      <div className={`${styles.stepCircle} ${i === 0 ? styles.stepCircleActive : styles.stepCircleInactive}`}>
+                        <span className={`${styles.stepNum} ${i === 0 ? styles.stepNumActive : styles.stepNumInactive}`}>
+                          {step.num}
+                        </span>
+                      </div>
+                      <div>
+                        <p className={styles.stepTitle}>{step.title}</p>
+                        <p className={styles.stepDesc}>{step.desc}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
+
+              {/* ===== RIGHT: Sidebar ===== */}
+              <div className={styles.sidebar}>
+                <span className={styles.sidebarLabel}>{t('Order Summary')}</span>
+                <span className={styles.sidebarOrderMeta}>
+                  #{order.order_number || orderId} · {formatDate(order.created_at)}
+                </span>
+
+                <div className={styles.totalsSection}>
+                  {[
+                    { label: 'Subtotal', value: order.subtotal_amount },
+                    { label: 'Shipping', value: order.shipping_amount },
+                    { label: 'Tax', value: order.tax_amount },
+                  ].map((row) => (
+                    <div key={row.label} className={styles.totalsRow}>
+                      <span className={styles.totalsLabel}>{t(row.label)}</span>
+                      <span className={styles.totalsValue}>${fmt(row.value)}</span>
+                    </div>
+                  ))}
+
+                  {order.discount_amount && Number(order.discount_amount) > 0 && (
+                    <div className={styles.totalsRow}>
+                      <span className={styles.totalsLabel}>{t('Discount')}</span>
+                      <span className={styles.totalsValue}>−${fmt(order.discount_amount)}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className={styles.grandTotal}>
+                  <span className={styles.grandTotalLabel}>{t('Total')}</span>
+                  <span className={styles.grandTotalValue}>${fmt(order.total_amount)}</span>
+                </div>
+
+                {order.customer_email && (
+                  <div className={styles.emailNotice}>
+                    <Mail size={16} color="#737373" />
+                    <div>
+                      <p className={styles.emailNoticeLabel}>{t('Confirmation sent to')}</p>
+                      <p className={styles.emailNoticeValue}>{order.customer_email}</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className={styles.sidebarButtons}>
+                  <button className={styles.btnPrimary} onClick={() => router.push(`/account/orders/${orderId}`)}>
+                    {t('Track Order')} <ChevronRight size={16} />
+                  </button>
+                  <button className={styles.btnSecondary} onClick={() => router.push('/shop')}>
+                    {t('Continue Shopping')}
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={() => router.push(`/orders/${orderId}`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <Package className="w-4 h-4 mr-2" />
-                {t('Track Order Status')}
-              </Button>
-              
-              <Button 
-                onClick={() => window.print()}
-                variant="outline"
-                className="border-gray-300"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                {t('Print Receipt')}
-              </Button>
-              
-              <Button 
-                onClick={() => router.push('/shop')}
-                variant="outline"
-                className="border-gray-300"
-              >
-                {t('Continue Shopping')}
-              </Button>
-            </div>
-
-            {/* Back to Orders */}
-            <div className="text-center mt-8">
-              <Link 
-                href="/orders" 
-                className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                {t('View All Orders')}
+            {/* ───── Back ───── */}
+            <div className={styles.backLink}>
+              <Link href="/account/orders" className={styles.backLinkAnchor}>
+                <ArrowLeft size={16} /> {t('View All Orders')}
               </Link>
             </div>
-            
           </div>
         </div>
       )}

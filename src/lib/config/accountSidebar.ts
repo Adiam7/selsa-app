@@ -22,6 +22,7 @@ import {
   CheckCircle,
   HelpCircle,
   Mail,
+  Package,
 } from "lucide-react";
 
 export type UserRole = "admin" | "member" | "guest";
@@ -54,6 +55,13 @@ export const personalSettingsItems: SidebarItem[] = [
     href: "/account/profile",
     icon: User,
     description: "Manage your personal information",
+  },
+  {
+    id: "orders",
+    label: "Orders",
+    href: "/account/orders",
+    icon: Package,
+    description: "View and track your orders",
   },
   {
     id: "security",

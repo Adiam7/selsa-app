@@ -57,6 +57,15 @@ type CreateOrderInput = {
 export type CustomerOrderListFilters = {
   status?: string;
   ordering?: string;
+  page?: number;
+  page_size?: number;
+};
+
+export type PaginatedOrders = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Order[];
 };
 
 export type CheckoutError = Error & {
@@ -105,9 +114,11 @@ export const createOrder = async (
 
 export const getCustomerOrders = async (
   filters: CustomerOrderListFilters = {}
-): Promise<Order[]> => {
+): Promise<PaginatedOrders> => {
   const res = await apiClient.get('/orders/orders/', { params: filters });
-  return res.data.results || res.data;
+  // Support both paginated {results, count, ...} and plain array responses
+  if (res.data.results) return res.data as PaginatedOrders;
+  return { count: res.data.length, next: null, previous: null, results: res.data };
 };
 
 export const getCustomerOrder = async (orderId: number): Promise<Order> => {

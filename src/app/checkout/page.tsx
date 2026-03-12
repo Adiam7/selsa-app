@@ -1029,7 +1029,7 @@ const CheckoutPage = () => {
         trackOrderCompleted(String(order.id), Number(order.total_amount ?? effectiveGrandTotal), cartItemCount);
         
         // Redirect to enhanced confirmation page
-        router.push(`/orders/confirmation/${order.id}`);
+        router.push(`/account/orders/confirmation/${order.id}`);
       }
       
     } catch (error: any) {
@@ -1094,7 +1094,7 @@ const CheckoutPage = () => {
       if (order) {
         orderCompletedRef.current = true;
         trackOrderCompleted(String(order.id), Number(order.total_amount ?? effectiveGrandTotal), cartItemCount);
-        router.push(`/orders/confirmation/${order.id}`);
+        router.push(`/account/orders/confirmation/${order.id}`);
       } else {
         // placeOrder returned null — the hook already showed a toast with the
         // specific error message, but we need to update the UI so the user

@@ -1,0 +1,412 @@
+/* Order Confirmation — Premium Selsa Design System */
+
+.page {
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+.pageEmbedded {
+  background: #fafafa;
+}
+
+/* ─── Top Bar ─── */
+.topBar {
+  background: #0a0a0a;
+  padding: 14px 0;
+}
+.topBarInner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topBarLogo {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: #fff;
+  text-transform: uppercase;
+}
+.topBarLink {
+  font-size: 13px;
+  color: #a3a3a3;
+  text-decoration: none;
+}
+.topBarLink:hover {
+  color: #fff;
+}
+
+/* ─── Container ─── */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ─── Hero ─── */
+.hero {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.heroIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #0a0a0a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.heroTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #0a0a0a;
+  letter-spacing: -0.5px;
+  margin: 0 0 8px;
+}
+.heroSubtitle {
+  font-size: 15px;
+  color: #737373;
+  margin: 0;
+  line-height: 1.6;
+}
+.heroOrderNum {
+  color: #0a0a0a;
+}
+
+/* ─── Two-Column Grid ─── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Card Base ─── */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+
+/* ─── Items Card ─── */
+.cardHeader {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cardHeaderTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #0a0a0a;
+}
+.cardHeaderCount {
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+/* ─── Item Row ─── */
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+}
+.itemRowBorder {
+  border-bottom: 1px solid #f5f5f5;
+}
+.itemImage {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  flex-shrink: 0;
+  position: relative;
+}
+.itemImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.itemDetails {
+  flex: 1;
+  min-width: 0;
+}
+.itemName {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0a0a0a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.itemMeta {
+  font-size: 13px;
+  color: #a3a3a3;
+  margin: 4px 0 0;
+}
+.itemPrice {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0a0a0a;
+  white-space: nowrap;
+}
+
+/* ─── Shipping Card ─── */
+.shippingCard {
+  composes: card;
+  padding: 20px 24px;
+}
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.addressLines {
+  font-size: 14px;
+  color: #525252;
+  line-height: 1.8;
+}
+.addressLines p {
+  margin: 0;
+}
+.addressName {
+  font-weight: 500;
+  color: #0a0a0a;
+}
+
+/* ─── What's Next Card ─── */
+.nextCard {
+  composes: card;
+  padding: 24px;
+}
+.nextCardTitle {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  display: block;
+  margin-bottom: 20px;
+}
+.step {
+  display: flex;
+  gap: 14px;
+}
+.stepSpacing {
+  margin-bottom: 18px;
+}
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.stepCircleActive {
+  background: #0a0a0a;
+}
+.stepCircleInactive {
+  background: #f5f5f5;
+}
+.stepNum {
+  font-size: 12px;
+  font-weight: 700;
+}
+.stepNumActive {
+  color: #fff;
+}
+.stepNumInactive {
+  color: #737373;
+}
+.stepTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 0;
+}
+.stepDesc {
+  font-size: 13px;
+  color: #a3a3a3;
+  margin: 3px 0 0;
+}
+
+/* ─── Right Sidebar (Dark) ─── */
+.sidebar {
+  background: #0a0a0a;
+  border-radius: 12px;
+  padding: 28px 24px;
+  color: #fff;
+  position: sticky;
+  top: 24px;
+}
+.sidebarLabel {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #a3a3a3;
+  display: block;
+  margin-bottom: 6px;
+}
+.sidebarOrderMeta {
+  font-size: 11px;
+  color: #525252;
+  display: block;
+  margin-bottom: 24px;
+}
+.totalsSection {
+  border-top: 1px solid #262626;
+  padding-top: 20px;
+}
+.totalsRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.totalsLabel {
+  font-size: 14px;
+  color: #a3a3a3;
+}
+.totalsValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e5e5e5;
+}
+.grandTotal {
+  border-top: 2px solid #fff;
+  margin-top: 8px;
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.grandTotalLabel {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.grandTotalValue {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* ─── Email Notice ─── */
+.emailNotice {
+  margin-top: 24px;
+  padding: 14px 16px;
+  background: #171717;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.emailNoticeLabel {
+  font-size: 12px;
+  color: #a3a3a3;
+  margin: 0;
+}
+.emailNoticeValue {
+  font-size: 13px;
+  color: #e5e5e5;
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+
+/* ─── Sidebar Buttons ─── */
+.sidebarButtons {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.btnPrimary {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 8px;
+  background: #fff;
+  color: #0a0a0a;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+  transition: opacity 0.15s;
+}
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+.btnSecondary {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #a3a3a3;
+  border: 1px solid #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: border-color 0.15s;
+}
+.btnSecondary:hover {
+  border-color: #555;
+  color: #e5e5e5;
+}
+
+/* ─── Back Link ─── */
+.backLink {
+  text-align: center;
+  margin-top: 48px;
+}
+.backLinkAnchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #737373;
+  text-decoration: none;
+}
+.backLinkAnchor:hover {
+  color: #0a0a0a;
+}
