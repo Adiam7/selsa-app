@@ -23,6 +23,14 @@ export type DashboardStats = {
   avg_satisfaction_score: number;
 };
 
+export type ReportType = "dashboard" | "sales" | "tax" | "inventory" | "customers";
+
+export type ReportTypeInfo = {
+  key: ReportType;
+  label: string;
+  formats: ("csv" | "pdf")[];
+};
+
 export async function getDashboardStats(params?: {
   date_range?: string;
   start_date?: string;
@@ -32,8 +40,14 @@ export async function getDashboardStats(params?: {
   return res.data;
 }
 
+export async function getReportTypes(): Promise<ReportTypeInfo[]> {
+  const res = await apiClient.get("/api/dashboard/report-types/");
+  return res.data.report_types;
+}
+
 export async function exportDashboardReport(params: {
   format: "csv" | "pdf";
+  report_type?: ReportType;
   date_range?: string;
   start_date?: string;
   end_date?: string;

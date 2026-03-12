@@ -96,9 +96,10 @@ export const dashboardAPI = {
     return response.json();
   },
 
-  async exportReport(format: 'csv' | 'pdf', filters?: DashboardFilters): Promise<Blob> {
+  async exportReport(format: 'csv' | 'pdf', filters?: DashboardFilters & { report_type?: string }): Promise<Blob> {
     const queryString = buildQueryParams({
       format,
+      report_type: filters?.report_type,
       ...filters,
     });
 

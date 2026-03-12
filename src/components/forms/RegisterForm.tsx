@@ -1,19 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-
-// Dummy social login functions – replace with real OAuth logic
-const handleGoogleLogin = async () => {
-  alert("Google login clicked – integrate OAuth here");
-};
-
-const handleAppleLogin = async () => {
-  alert("Apple login clicked – integrate OAuth here");
-};
-
-const handleFacebookLogin = async () => {
-  alert("Facebook login clicked – integrate OAuth here");
-};
+import { signIn } from "next-auth/react";
 
 export default function RegisterForm() {
   const { t } = useTranslation();
@@ -22,6 +10,7 @@ export default function RegisterForm() {
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -89,80 +78,48 @@ export default function RegisterForm() {
 
             {/* Social Login Buttons */}
             <div className="flex flex-col gap-3 mb-6">{t('Continue with :')}<div className="mt-3 mb-3">
-                 <Link href="/login"  role="button"
-                         aria-label="Sign Up"
-                         onClick={handleGoogleLogin}
-                         className="ins-control ins-control--button ins-control--outline ins-control--medium ins-control--pill"
-                       passHref>
-                         <div className="ins-control__button">
-                           <div className="ins-control__wrap">
-                             {/* <div className="ins-control__text">  */}
-                                <div className="ins-control__icon"> 
-                                  <img src="/icons/google.svg" alt="Google" className="w-5 h-5" />
-                                </div>
-                             {/* </div> */}
-                           </div>
-                        </div>
-                 </Link>
+                 <button
+                   type="button"
+                   role="button"
+                   aria-label="Sign up with Google"
+                   disabled={oauthLoading !== null}
+                   onClick={async () => {
+                     setOauthLoading("google");
+                     await signIn("google", { callbackUrl: "/" });
+                   }}
+                   className="ins-control ins-control--button ins-control--outline ins-control--medium ins-control--pill"
+                 >
+                   <div className="ins-control__button">
+                     <div className="ins-control__wrap">
+                       <div className="ins-control__icon">
+                         <img src="/icons/google.svg" alt="Google" className="w-5 h-5" />
+                       </div>
+                     </div>
+                   </div>
+                 </button>
               </div>
-              {/* <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="flex items-center justify-center gap-2 px-4 py-3 border rounded hover:bg-gray-100 transition"
-              >Google   
-                <img src="/icons/google.svg" alt="Google" className="w-5 h-5" />
-                
-              </button> */}
-
-              {/* <button
-                type="button"
-                onClick={handleAppleLogin}
-                className="flex items-center justify-center gap-2 px-4 py-3 border rounded hover:bg-gray-100 transition"
-              >Apple   
-                <img src="/icons/apple.svg" alt="Apple" className="w-5 h-5" />
-                
-              </button> */}
               <div className="mt-3 mb-3">
-                 <Link href="/login"  role="button"
-                         aria-label="Sign Up"
-                         onClick={handleGoogleLogin}
-                         className="ins-control ins-control--button ins-control--outline ins-control--medium ins-control--pill"
-                       passHref>
-                         <div className="ins-control__button">
-                           <div className="ins-control__wrap">
-                             <div className="ins-control__text"> 
-                                <div className="ins-control__icon"> 
-                                  <img src="/icons/apple.svg" alt="Apple" className="w-5 h-5" />
-                                </div>
-                             </div>
-                           </div>
+                 <button
+                   type="button"
+                   role="button"
+                   aria-label="Sign up with Apple"
+                   disabled={oauthLoading !== null}
+                   onClick={async () => {
+                     setOauthLoading("apple");
+                     await signIn("apple", { callbackUrl: "/" });
+                   }}
+                   className="ins-control ins-control--button ins-control--outline ins-control--medium ins-control--pill"
+                 >
+                   <div className="ins-control__button">
+                     <div className="ins-control__wrap">
+                       <div className="ins-control__text">
+                         <div className="ins-control__icon">
+                           <img src="/icons/apple.svg" alt="Apple" className="w-5 h-5" />
                          </div>
-                 </Link>
-              </div>
-              {/* <button
-                type="button"
-                onClick={handleFacebookLogin}
-                className="flex items-center justify-center gap-2 px-4 py-3 border rounded hover:bg-gray-100 transition"
-              >Facebook   
-                <img src="/icons/facebook.svg" alt="Facebook" className="w-5 h-5" />
-                
-              </button> */}
-              <div className="mt-3 mb-3">
-                 <Link href="/login"  role="button"
-                         aria-label="Sign Up"
-                         onClick={handleGoogleLogin}
-                         className="ins-control ins-control--button ins-control--outline ins-control--medium ins-control--pill"
-                       passHref>
-                         <div className="ins-control__button">
-                           <div className="ins-control__wrap">
-                             <div className="ins-control__text"> 
-                                <div className="ins-control__icon"> 
-                                  <img src="/icons/facebook.svg" alt="Facebook" className="w-5 h-5" />
-                                </div>
-                             </div>
-                           </div>
-                         </div>
-                 </Link>
+                       </div>
+                     </div>
+                   </div>
+                 </button>
               </div>
             </div>
 

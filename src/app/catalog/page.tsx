@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getFilteredProducts } from '@/lib/api/advanced';
 import type { Product } from '@/types/product';
 import { Metadata } from 'next';
 import styles from './page.module.css';
+import CatalogClient from './CatalogClient';
 
 export const metadata: Metadata = {
   title: 'Catalog',
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 
 export default async function CatalogPage() {
   const t = (key: string) => key;
-  const products = await getFilteredProducts();
+  const result = await getFilteredProducts();
+  const products = result.products;
 
   if (!products || products.length === 0) {
     return (
@@ -34,37 +35,7 @@ export default async function CatalogPage() {
         <h1>{t('Product Catalog')}</h1>
         <p className={styles.subtitle}>{t('Explore our complete collection of products')}</p>
       </div>
-      <div className={styles.productsGrid}>
-        {products.map((product: Product) => (
-          <Link
-            key={product.id || product.printful_id}
-            href={`/product/${product.printful_id || product.id}`}
-            className={styles.productCard}
-          >
-            <div className={styles.productImage}>
-              {product.image_url ? (
-                <img
-                  src={product.image_url}
-                  alt={product.name_display || product.name}
-                  loading="lazy"
-                />
-              ) : (
-                <div className={styles.placeholderImage}>{t('📷')}</div>
-              )}
-            </div>
-            <div className={styles.productInfo}>
-              <h3 className={styles.productName}>{product.name_display || product.name}</h3>
-              {product.category && (
-                <p className={styles.productCategory}>{product.category}</p>
-              )}
-              {product.variants && product.variants[0]?.price && (
-                <p className={styles.productPrice}>{t('$')}{product.variants[0].price.toFixed(2)}
-                </p>
-              )}
-            </div>
-          </Link>
-        ))}
-      </div>
+      <CatalogClient initialProducts={products} />
     </div>
   );
 }

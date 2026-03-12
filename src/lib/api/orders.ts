@@ -1,5 +1,6 @@
 import type { Order } from '@/types/order';
 import { apiClient } from '@/lib/api/client';
+import { getSession } from 'next-auth/react';
 
 export type OrderRecipient = {
   country_code: string;
@@ -82,10 +83,16 @@ export const createOrder = async (
   const base = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
   const url = `${base}/cart/${input.cartId}/checkout/`;
   console.log('[createOrder] cartId=', input.cartId, 'url=', url, 'verification=', JSON.stringify(input.verification)?.slice(0, 200));
+
+  // Get the session token to authenticate the checkout request
+  const session = await getSession();
+  const accessToken = (session?.user as any)?.accessToken;
+
   const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
       ...(input.idempotencyKey ? { 'Idempotency-Key': input.idempotencyKey } : {}),
     },
     credentials: 'include',
@@ -138,7 +145,7 @@ export const cancelCustomerOrder = async (
 
 export const refundCustomerOrder = async (
   orderId: number,
-  reasonCode: "DAMAGED" | "WRONG_ITEM",
+  reasonCode: string,
   reasonText?: string
 ): Promise<Order> => {
   const res = await apiClient.post(`/orders/orders/${orderId}/refund/`, {
@@ -150,13 +157,21 @@ export const refundCustomerOrder = async (
 
 export const requestCustomerReturn = async (
   orderId: number,
-  reasonCode: "DAMAGED" | "WRONG_ITEM",
+  reasonCode: string,
   reasonText?: string
 ): Promise<Order> => {
   const res = await apiClient.post(`/orders/orders/${orderId}/return-request/`, {
     reason_code: reasonCode,
     reason_text: reasonText || '',
   });
+  return res.data;
+};
+
+export const cancelCustomerRequest = async (
+  orderId: number,
+  kind: 'REFUND' | 'RETURN'
+): Promise<Order> => {
+  const res = await apiClient.post(`/orders/orders/${orderId}/cancel-request/`, { kind });
   return res.data;
 };
 

@@ -30,6 +30,9 @@ import { toggleFavorite, removeFavoriteByType } from "@/lib/api/favorites";
 import type { Product, Variant } from "@/types/printful_product";
 import type { CartItem } from "@/types/cart";
 import ShareProduct from "@/components/ShareProduct.js";
+import { ProductReviews } from "@/components/reviews";
+import { useStockPrice } from "@/lib/hooks/useStockPrice";
+import { StockPriceBadge } from "@/components/StockPriceBadge";
 
 
 /** Helper */
@@ -42,7 +45,13 @@ function money(v: number | string | undefined, c?: string) {
 }
 
 
-export default function ProductView({ product }: { product: Product }) {
+export default function ProductView({ product, catalogProductId }: { product: Product; catalogProductId?: number | null }) {
+  // ── Real-time stock & price polling (every 30s) ──
+  const { getVariant: getLiveVariant, changedIds: stockChangedIds, clearChanges: clearStockChanges } = useStockPrice({
+    productId: catalogProductId ?? undefined,
+    intervalMs: 30_000,
+    enabled: !!catalogProductId,
+  });
   const { t, i18n } = useTranslation();
   
   const router = useRouter();
@@ -278,8 +287,17 @@ export default function ProductView({ product }: { product: Product }) {
       router.push(callbackUrl);
     } catch (err: unknown) {
       console.error("Add to cart error:", err);
-      const axiosErr = err as { response?: { data?: { error?: string } } };
-      toast.error(axiosErr?.response?.data?.error || "Failed to add to cart");
+      const axiosErr = err as { response?: { status?: number; data?: { error?: string; code?: string } } };
+      const errCode = axiosErr?.response?.data?.code;
+      const errMsg = axiosErr?.response?.data?.error;
+
+      if (errCode === "out_of_stock" || errCode === "variant_unavailable") {
+        toast.error(errMsg || t("This item is currently out of stock."));
+      } else if (errCode === "insufficient_stock") {
+        toast.error(errMsg || t("Not enough stock available."));
+      } else {
+        toast.error(errMsg || "Failed to add to cart");
+      }
     }
   }, [
     selectedVariant,
@@ -414,6 +432,14 @@ export default function ProductView({ product }: { product: Product }) {
           {inStock ? t('Available (In stock)') : t('Out of Stock')}
         </div>
 
+        {/* Live stock/price updates */}
+        {selectedVariant && (
+          <StockPriceBadge
+            live={getLiveVariant(selectedVariant.id)}
+            displayedPrice={selectedVariant.price}
+          />
+        )}
+
         {/* Add to Cart */}
         <button
           type="button"
@@ -435,6 +461,9 @@ export default function ProductView({ product }: { product: Product }) {
 
         {/* Social Share */}
         <ShareProduct productName={displayName} />
+
+        {/* Customer Reviews */}
+        <ProductReviews productId={catalogProductId ?? null} />
       </div>
     </section>
   );

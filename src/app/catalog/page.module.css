@@ -21,6 +21,58 @@
   color: #666;
 }
 
+/* Layout: sidebar + main grid */
+.catalogLayout {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.resultsMeta {
+  margin-bottom: 16px;
+}
+
+.resultCount {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 100px;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .emptyState {
   text-align: center;
   padding: 80px 20px;
@@ -134,6 +186,15 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .catalogLayout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
   .productsGrid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;

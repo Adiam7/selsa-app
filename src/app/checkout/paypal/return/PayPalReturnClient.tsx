@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { usePlaceOrder } from "@/features/order/hooks/usePlaceOrder";
 import { useCheckoutTracking } from "@/lib/hooks/useAnalytics";
@@ -9,6 +10,7 @@ import { useCheckoutTracking } from "@/lib/hooks/useAnalytics";
 export default function PayPalReturnClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: session, status: authStatus } = useSession();
   const { placeOrder, placingOrder } = usePlaceOrder();
   const { trackOrderCompleted } = useCheckoutTracking();
   const trackedRef = useRef(false);
@@ -80,7 +82,15 @@ export default function PayPalReturnClient() {
           trackOrderCompleted(String(order.id), Number(order.total_amount ?? 0));
         }
         setStatus("success");
-        setMessage("Order placed successfully.");
+        setMessage("Order placed successfully. Redirecting...");
+
+        if (order) {
+          // Guests use standalone confirmation (no AccountLayout auth guard)
+          const confirmPath = authStatus === 'authenticated'
+            ? `/account/orders/confirmation/${order.id}`
+            : `/orders/confirmation/${order.id}`;
+          router.push(confirmPath);
+        }
       } catch (err: any) {
         const msg = err?.message || "Something went wrong";
         setStatus("error");

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { exportDashboardReport, getDashboardStats, type DashboardStats } from "@/lib/api/adminReports";
+import { exportDashboardReport, getDashboardStats, type DashboardStats, type ReportType } from "@/lib/api/adminReports";
 import { getInventorySummary, type InventorySummary } from "@/lib/api/adminInventory";
 import { listSupportTickets, type SupportTicket } from "@/lib/api/supportTooling";
 
@@ -37,7 +37,10 @@ export default function AdminReportsPage() {
   const { success, error: showError } = useToast();
 
   const [dateRange, setDateRange] = useState<string>("month");
+  const [reportType, setReportType] = useState<ReportType>("dashboard");
+  const [exportFormat, setExportFormat] = useState<"csv" | "pdf">("csv");
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -99,26 +102,31 @@ export default function AdminReportsPage() {
     };
   }, [tickets]);
 
-  const exportCsv = async () => {
-    setLoading(true);
+  const handleExport = async () => {
+    setExporting(true);
     setError(null);
     try {
-      const blob = await exportDashboardReport({ format: "csv", date_range: dateRange });
+      const blob = await exportDashboardReport({
+        format: exportFormat,
+        report_type: reportType,
+        date_range: dateRange,
+      });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `dashboard_report_${dateRange}_${new Date().toISOString().slice(0, 10)}.csv`;
+      const ext = exportFormat === "pdf" ? "pdf" : "csv";
+      a.download = `${reportType}_report_${dateRange}_${new Date().toISOString().slice(0, 10)}.${ext}`;
       document.body.appendChild(a);
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-      success(t("Export started."));
+      success(t("Report exported."));
     } catch (err: any) {
       const message = err?.response?.data?.error || err?.message || t("Export failed.");
       setError(message);
       showError(message);
     } finally {
-      setLoading(false);
+      setExporting(false);
     }
   };
 
@@ -130,8 +138,20 @@ export default function AdminReportsPage() {
           <p className="text-sm text-muted-foreground">{t("Sales and operational KPIs across the platform.")}</p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <Select value={reportType} onValueChange={(v) => setReportType(v as ReportType)}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder={t("Report type")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="dashboard">{t("Dashboard Overview")}</SelectItem>
+              <SelectItem value="sales">{t("Sales Report")}</SelectItem>
+              <SelectItem value="tax">{t("Tax Report")}</SelectItem>
+              <SelectItem value="inventory">{t("Inventory Snapshot")}</SelectItem>
+              <SelectItem value="customers">{t("Customer Report")}</SelectItem>
+            </SelectContent>
+          </Select>
           <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-55">
+            <SelectTrigger className="w-36">
               <SelectValue placeholder={t("Date range")} />
             </SelectTrigger>
             <SelectContent>
@@ -141,11 +161,20 @@ export default function AdminReportsPage() {
               <SelectItem value="year">{t("This year")}</SelectItem>
             </SelectContent>
           </Select>
+          <Select value={exportFormat} onValueChange={(v) => setExportFormat(v as "csv" | "pdf")}>
+            <SelectTrigger className="w-24">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="csv">CSV</SelectItem>
+              <SelectItem value="pdf" disabled={reportType === "customers"}>PDF</SelectItem>
+            </SelectContent>
+          </Select>
           <Button onClick={refresh} variant="outline" disabled={loading}>
             {loading ? t("Loading...") : t("Refresh")}
           </Button>
-          <Button onClick={exportCsv} variant="outline" disabled={loading}>
-            {t("Export CSV")}
+          <Button onClick={handleExport} disabled={exporting || loading}>
+            {exporting ? t("Exporting...") : t("Export")}
           </Button>
         </div>
       </div>

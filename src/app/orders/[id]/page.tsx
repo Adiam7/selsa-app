@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Order, OrderItem } from "@/types/order";
 import { getOrder } from "@/features/order/hooks/useOrders";
-import { cancelCustomerOrder, refundCustomerOrder, requestCustomerReturn, downloadOrderInvoice, downloadOrderReceipt } from "@/lib/api/orders";
+import { cancelCustomerOrder, refundCustomerOrder, requestCustomerReturn, cancelCustomerRequest, downloadOrderInvoice, downloadOrderReceipt } from "@/lib/api/orders";
 import { useTranslation } from "react-i18next";
 import { Package, CreditCard, MapPin, FileText, Truck, Download } from "lucide-react";
 import styles from "./page.module.css";
@@ -59,14 +59,14 @@ export default function OrderDetailPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [cancelReason, setCancelReason] = useState("");
-  const [refundReasonCode, setRefundReasonCode] = useState<"DAMAGED" | "WRONG_ITEM">("DAMAGED");
+  const [refundReasonCode, setRefundReasonCode] = useState<string>("DAMAGED");
   const [refundReasonText, setRefundReasonText] = useState("");
-  const [returnReasonCode, setReturnReasonCode] = useState<"DAMAGED" | "WRONG_ITEM">("DAMAGED");
+  const [returnReasonCode, setReturnReasonCode] = useState<string>("DAMAGED");
   const [returnReasonText, setReturnReasonText] = useState("");
 
   const canCancel = useMemo(() => {
     if (!order) return false;
-    return ["CREATED", "PAYMENT_PENDING", "FULFILLMENT_PENDING"].includes(order.status);
+    return ["CREATED", "PAYMENT_PENDING", "PAID", "FULFILLMENT_PENDING", "BACKORDERED", "PAYMENT_FAILED"].includes(order.status);
   }, [order]);
 
   const canRefund = useMemo(() => {
@@ -126,6 +126,14 @@ export default function OrderDetailPage() {
     setActionLoading(true); setActionError(null);
     try { const u = await requestCustomerReturn(order.id, returnReasonCode, returnReasonText || undefined); setOrder(u); setReturnReasonText(""); }
     catch (err: any) { setActionError(err?.message || "Failed to request return."); }
+    finally { setActionLoading(false); }
+  };
+
+  const handleCancelRequest = async (kind: 'REFUND' | 'RETURN') => {
+    if (!order) return;
+    setActionLoading(true); setActionError(null);
+    try { const u = await cancelCustomerRequest(order.id, kind); setOrder(u); }
+    catch (err: any) { setActionError(err?.message || `Failed to cancel ${kind.toLowerCase()} request.`); }
     finally { setActionLoading(false); }
   };
 
@@ -275,10 +283,20 @@ export default function OrderDetailPage() {
         <div className={styles.darkCard}>
           <p className={styles.darkTitle}>{t("Request Refund")}</p>
           {order.active_refund_request && <p className={styles.statusText}>{t("Refund request status:")} {order.active_refund_request.status}</p>}
+          {order.active_refund_request?.status === "REQUESTED" && (
+            <button onClick={() => handleCancelRequest('REFUND')} disabled={actionLoading} className={styles.btnCancelRequest}>
+              {actionLoading ? t("Processing...") : t("Cancel Refund Request")}
+            </button>
+          )}
           <label className={styles.labelDark}>{t("Reason")}</label>
-          <select aria-label={t("Refund reason")} value={refundReasonCode} onChange={(e) => setRefundReasonCode(e.target.value as any)} className={styles.selectDark}>
+          <select aria-label={t("Refund reason")} value={refundReasonCode} onChange={(e) => setRefundReasonCode(e.target.value)} className={styles.selectDark}>
             <option value="DAMAGED">{t("Damaged item")}</option>
             <option value="WRONG_ITEM">{t("Wrong item")}</option>
+            <option value="CHANGED_MIND">{t("Changed mind")}</option>
+            <option value="INCORRECT_SIZE">{t("Incorrect size")}</option>
+            <option value="NOT_AS_DESCRIBED">{t("Not as described")}</option>
+            <option value="LATE_DELIVERY">{t("Late delivery")}</option>
+            <option value="OTHER">{t("Other")}</option>
           </select>
           <textarea placeholder={t("Details (optional)")} value={refundReasonText} onChange={(e) => setRefundReasonText(e.target.value)} rows={2} className={styles.textarea} />
           <button onClick={handleRefund} disabled={!canRefund || actionLoading} className={styles.btnAmber}>
@@ -290,12 +308,22 @@ export default function OrderDetailPage() {
         <div className={styles.returnCard}>
           <p className={styles.darkTitle}>{t("Request Return")}</p>
           {order.active_return_request && <p className={styles.statusText}>{t("Return request status:")} {order.active_return_request.status}</p>}
+          {order.active_return_request?.status === "REQUESTED" && (
+            <button onClick={() => handleCancelRequest('RETURN')} disabled={actionLoading} className={styles.btnCancelRequest}>
+              {actionLoading ? t("Processing...") : t("Cancel Return Request")}
+            </button>
+          )}
           <div className={styles.returnInner}>
             <div className={styles.returnLeft}>
               <label className={styles.labelDark}>{t("Reason")}</label>
-              <select aria-label={t("Return reason")} value={returnReasonCode} onChange={(e) => setReturnReasonCode(e.target.value as any)} className={styles.selectDark}>
+              <select aria-label={t("Return reason")} value={returnReasonCode} onChange={(e) => setReturnReasonCode(e.target.value)} className={styles.selectDark}>
                 <option value="DAMAGED">{t("Damaged item")}</option>
                 <option value="WRONG_ITEM">{t("Wrong item")}</option>
+                <option value="CHANGED_MIND">{t("Changed mind")}</option>
+                <option value="INCORRECT_SIZE">{t("Incorrect size")}</option>
+                <option value="NOT_AS_DESCRIBED">{t("Not as described")}</option>
+                <option value="LATE_DELIVERY">{t("Late delivery")}</option>
+                <option value="OTHER">{t("Other")}</option>
               </select>
             </div>
             <div className={styles.returnRight}>
@@ -306,6 +334,23 @@ export default function OrderDetailPage() {
           <button onClick={handleReturnRequest} disabled={!canRequestReturn || actionLoading} className={styles.btnWhite}>
             {actionLoading ? t("Processing...") : t("Request Return")}
           </button>
+          {order.return_instructions && (
+            <div className={styles.returnInstructionsBox}>
+              <p className={styles.returnInstructionsTitle}>{t("Return Instructions")}</p>
+              <p className={styles.returnInstructionsMsg}>{order.return_instructions.message}</p>
+              {order.return_instructions.address && (
+                <div className={styles.returnInstructionsAddr}>
+                  {order.return_instructions.address.company && <div className={styles.returnInstructionsAddrBold}>{order.return_instructions.address.company}</div>}
+                  {order.return_instructions.address.address_line_1 && <div>{order.return_instructions.address.address_line_1}</div>}
+                  {order.return_instructions.address.address_line_2 && <div>{order.return_instructions.address.address_line_2}</div>}
+                  <div>
+                    {[order.return_instructions.address.city, order.return_instructions.address.state, order.return_instructions.address.postal_code].filter(Boolean).join(', ')}
+                  </div>
+                  {order.return_instructions.address.country && <div>{order.return_instructions.address.country}</div>}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

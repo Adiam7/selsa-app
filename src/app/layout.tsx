@@ -12,6 +12,7 @@ import { FavouritesProvider } from '@/context/FavouritesContext';
 import { BackendStatusAlert } from '@/components/BackendStatusAlert';
 import { RouteAwareFrame } from '@/components/layout/RouteAwareFrame';
 import { LegacyStylesheetManager } from '@/components/layout/LegacyStylesheetManager';
+import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -59,6 +60,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`bg-background text-foreground antialiased ${interClass} layout-root`} suppressHydrationWarning>
+        {/* SEO: Organization + WebSite structured data (once per page) */}
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
         {/* Legacy CSS stylesheets — injected per route via client component */}
         <LegacyStylesheetManager />
         {/* Handle history & reload on back/forward */}

@@ -1,6 +1,7 @@
 // src/app/shop/[id]/page.tsx
 
 import ProductView from "./product-view";
+import ProductStructuredData from "./product-structured-data";
 import { getProduct } from "@/lib/api/api";
 import { getCatalogProductByExternalId } from "@/lib/api/catalog";
 import { Product } from "@/types/printful_product";
@@ -167,7 +168,12 @@ export default async function Page({ params }: Props) {
     }
     const catalogProduct = await res.json();
     const adapted = adaptCatalogProductToShopProduct(catalogProduct);
-    return <ProductView product={adapted} />;
+    return (
+      <>
+        <ProductStructuredData product={adapted} pagePath={`/shop/${id}`} catalogProductId={Number(catalogId)} />
+        <ProductView product={adapted} catalogProductId={Number(catalogId)} />
+      </>
+    );
   }
 
   // 1️⃣ Fetch Printful product
@@ -204,5 +210,10 @@ export default async function Page({ params }: Props) {
   console.log("Combined Product:", combinedProduct);
 
   // 5️⃣ Render
-  return <ProductView product={combinedProduct} />;
+  return (
+    <>
+      <ProductStructuredData product={combinedProduct} pagePath={`/shop/${id}`} catalogProductId={catalogProduct?.id ?? null} />
+      <ProductView product={combinedProduct} catalogProductId={catalogProduct?.id ?? null} />
+    </>
+  );
 }

@@ -24,7 +24,7 @@ export type ReturnRefundRequest = {
     | "REFUND_INITIATED"
     | "REFUNDED"
     | "CANCELLED";
-  reason_code: "DAMAGED" | "WRONG_ITEM";
+  reason_code: "DAMAGED" | "WRONG_ITEM" | "CHANGED_MIND" | "INCORRECT_SIZE" | "NOT_AS_DESCRIBED" | "LATE_DELIVERY" | "OTHER";
   reason_text: string;
   refund_amount?: string | null;
   provider_refund_id?: string;
@@ -72,6 +72,18 @@ export type Order = {
   items: OrderItem[];
   active_refund_request?: ReturnRefundRequest | null;
   active_return_request?: ReturnRefundRequest | null;
+  return_instructions?: {
+    message: string;
+    address?: {
+      company?: string;
+      address_line_1?: string;
+      address_line_2?: string;
+      city?: string;
+      state?: string;
+      postal_code?: string;
+      country?: string;
+    };
+  } | null;
 
   invoice_available?: boolean;
   receipt_available?: boolean;

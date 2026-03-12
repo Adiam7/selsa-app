@@ -16,6 +16,9 @@ import { QuantitySelector } from "@/components/QuantitySelector";
 import "@/components/QuantitySelector.css";
 import { ShoppingBag, Truck, Lock, ShoppingCart, ShoppingBasket, ShoppingCartIcon, CheckCircle2, AlertCircle, ArrowRight, Trash2 } from 'lucide-react';
 import styles from './page.module.css';
+import { useStockPrice } from '@/lib/hooks/useStockPrice';
+import { StockPriceBadge } from '@/components/StockPriceBadge';
+import type { VariantStockPrice } from '@/lib/api/stockPrice';
 
 
 
@@ -27,6 +30,20 @@ export default function CartPage() {
   const [pendingItemIds, setPendingItemIds] = useState<Record<number, boolean>>({});
   const [globalPending, setGlobalPending] = useState(false);
   const [couponCode, setCouponCode] = useState('');
+
+  // ── Real-time stock & price polling for cart items ──
+  const cartVariantIds = useMemo(() => {
+    if (!cart?.items) return [];
+    return cart.items
+      .map((it) => it.variant_detail?.id ?? it.variant?.id)
+      .filter((id): id is number => typeof id === 'number');
+  }, [cart?.items]);
+
+  const { getVariant: getLiveVariant } = useStockPrice({
+    variantIds: cartVariantIds,
+    intervalMs: 30_000,
+    enabled: cartVariantIds.length > 0,
+  });
 
   const total = useMemo(() => {
     if (!cart?.items) return 0;
@@ -199,6 +216,7 @@ export default function CartPage() {
                     onRemove={() => handleRemove(item)}
                     pending={!!pendingItemIds[item.id]}
                     index={index}
+                    liveData={getLiveVariant(item.variant_detail?.id ?? item.variant?.id ?? 0)}
                   />
                 ))}
               </div>
@@ -292,6 +310,7 @@ function CartItemRow({
   onRemove,
   pending,
   index = 0,
+  liveData,
 }: {
   item: CartItemType;
   onIncrease: () => void;
@@ -299,6 +318,7 @@ function CartItemRow({
   onRemove: () => void;
   pending: boolean;
   index?: number;
+  liveData?: VariantStockPrice;
 }) {
   const { t, i18n } = useTranslation();
 
@@ -380,6 +400,9 @@ function CartItemRow({
             )}
           </div>
         )}
+
+        {/* Live stock/price badge */}
+        <StockPriceBadge live={liveData} displayedPrice={price} compact />
 
         {/* Quantity Selector */}
         <div className={styles.quantityControl}>

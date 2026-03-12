@@ -6,7 +6,9 @@ export interface I18nField {
 }
 
 export interface Product {
+  id?: number | string;          // catalog product PK
   printful_id: number;          // maps to PrintfulProduct.printful_id
+  slug?: string;                // URL-friendly slug
   name: string | I18nField;
   name_display?: string;        // Localized display string from API
   description?: string | I18nField | null;

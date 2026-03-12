@@ -129,13 +129,13 @@ export const authOptions: NextAuthOptions = {
 
   // Configure callbacks for custom logic
   callbacks: {
-    async jwt({ token, user }) {
-      // Initial login - set tokens from backend response
-      if (user) {
+    async jwt({ token, user, account }) {
+      // Credentials login — tokens come directly from the backend authorize() response
+      if (user && (!account || account.provider === "credentials")) {
         token.id = user.id;
         token.email = user.email;
-        token.accessToken = (user as any).accessToken; // Backend's JWT token
-        token.refreshToken = (user as any).refreshToken; // Backend's refresh token
+        token.accessToken = (user as any).accessToken;
+        token.refreshToken = (user as any).refreshToken;
         token.role = (user as any).role ?? null;
         token.is_staff = Boolean((user as any).is_staff ?? false);
         token.is_superuser = Boolean((user as any).is_superuser ?? false);
@@ -143,7 +143,49 @@ export const authOptions: NextAuthOptions = {
         return token;
       }
 
-      // Check if we need to refresh
+      // OAuth sign-in — exchange the provider's id_token for Django JWT tokens
+      if (account && (account.provider === "google" || account.provider === "apple")) {
+        try {
+          const backendUrl =
+            process.env.NEXT_PUBLIC_BACKEND_URL ||
+            process.env.BACKEND_URL ||
+            "http://localhost:8000";
+          const res = await fetch(
+            `${backendUrl}/api/accounts/auth/social/`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                provider: account.provider,
+                id_token: account.id_token,
+              }),
+            }
+          );
+
+          if (res.ok) {
+            const data = await res.json();
+            token.id = data.user?.id?.toString() || token.sub;
+            token.email = data.user?.email || (token.email as string);
+            token.accessToken = data.accessToken;
+            token.refreshToken = data.refreshToken;
+            token.role = data.user?.role ?? null;
+            token.is_staff = Boolean(data.user?.is_staff ?? false);
+            token.is_superuser = Boolean(data.user?.is_superuser ?? false);
+            token.plan = data.user?.plan ?? null;
+          } else {
+            console.error(
+              "[AUTH] Social token exchange failed:",
+              res.status,
+              await res.text().catch(() => "")
+            );
+          }
+        } catch (error) {
+          console.error("[AUTH] Social token exchange error:", error);
+        }
+        return token;
+      }
+
+      // Subsequent requests — check if we need to refresh
       if (token.accessToken && token.refreshToken) {
         try {
           const expMs = tryGetJwtExpMs(token.accessToken as string);

@@ -20,13 +20,32 @@ type CreateIntentRequest = {
 };
 
 /**
+ * Currency allow-lists for payment methods that only support specific currencies.
+ * Card-based methods (card, apple-pay, google-pay) work with all currencies.
+ */
+const CURRENCY_RESTRICTIONS: Record<string, Set<string>> = {
+  klarna:             new Set(['eur', 'dkk', 'gbp', 'nok', 'sek', 'czk', 'ron', 'pln', 'chf', 'usd', 'aud', 'cad', 'nzd']),
+  afterpay_clearpay:  new Set(['aud', 'cad', 'gbp', 'nzd', 'eur']),
+  affirm:             new Set(['usd', 'cad']),
+  ideal:              new Set(['eur']),
+  bancontact:         new Set(['eur']),
+  sofort:             new Set(['eur']),
+  giropay:            new Set(['eur']),
+  eps:                new Set(['eur']),
+  sepa_debit:         new Set(['eur']),
+  bacs_debit:         new Set(['gbp']),
+};
+
+/**
  * Maps a preferred payment method identifier (checkout-side) to the
  * Stripe `payment_method_types` values.
  *
- * Returns `null` when `automatic_payment_methods` should be used instead.
+ * Returns `null` when `automatic_payment_methods` should be used instead,
+ * or when the requested method doesn't support the given currency.
  */
 function mapPreferredMethodToStripeTypes(
-  preferred?: string
+  preferred?: string,
+  currency?: string
 ): Stripe.PaymentIntentCreateParams['payment_method_types'] | null {
   if (!preferred) return null;
 
@@ -53,7 +72,24 @@ function mapPreferredMethodToStripeTypes(
     'bacs':             ['bacs_debit'],
   };
 
-  return map[preferred] ?? null;
+  const stripeTypes = map[preferred];
+  if (!stripeTypes) return null;
+
+  // Validate currency compatibility to avoid noisy Stripe API errors
+  if (currency) {
+    const cur = currency.toLowerCase();
+    for (const sType of stripeTypes) {
+      const allowed = CURRENCY_RESTRICTIONS[sType];
+      if (allowed && !allowed.has(cur)) {
+        console.warn(
+          `[Stripe] Skipping ${sType} — currency "${cur}" not supported (allowed: ${[...allowed].join(', ')})`
+        );
+        return null; // fall through to automatic_payment_methods
+      }
+    }
+  }
+
+  return stripeTypes;
 }
 
 export async function POST(request: NextRequest) {
@@ -99,7 +135,7 @@ export async function POST(request: NextRequest) {
     const requestedStripeMethodTypes = (body.stripePaymentMethodTypes || []).filter(Boolean);
     const paymentMethodTypes = requestedStripeMethodTypes.length
       ? requestedStripeMethodTypes
-      : mapPreferredMethodToStripeTypes(preferredPaymentMethod);
+      : mapPreferredMethodToStripeTypes(preferredPaymentMethod, currency);
 
     const paymentMethodOptions: Stripe.PaymentIntentCreateParams['payment_method_options'] =
       (() => {

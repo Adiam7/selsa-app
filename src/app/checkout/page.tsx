@@ -582,13 +582,12 @@ const CheckoutPage = () => {
     }
   }, [calculation, shippingCost, calculationLoading]);
 
-  // ✅ Redirect to login if not authenticated
+  // ✅ Guest checkout supported — pre-fill email from session if available
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      toast.error('Please sign in to proceed with checkout');
-      router.push('/auth/login?callbackUrl=/checkout');
+    if (status === 'authenticated' && session?.user?.email && !formData.email) {
+      setFormData(prev => ({ ...prev, email: session.user?.email || '' }));
     }
-  }, [status, router]);
+  }, [status, session?.user?.email, formData.email]);
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -1028,8 +1027,11 @@ const CheckoutPage = () => {
         orderCompletedRef.current = true;
         trackOrderCompleted(String(order.id), Number(order.total_amount ?? effectiveGrandTotal), cartItemCount);
         
-        // Redirect to enhanced confirmation page
-        router.push(`/account/orders/confirmation/${order.id}`);
+        // Redirect to confirmation page — guests use standalone route (no AccountLayout)
+        const confirmPath = status === 'authenticated'
+          ? `/account/orders/confirmation/${order.id}`
+          : `/orders/confirmation/${order.id}`;
+        router.push(confirmPath);
       }
       
     } catch (error: any) {
@@ -1094,7 +1096,11 @@ const CheckoutPage = () => {
       if (order) {
         orderCompletedRef.current = true;
         trackOrderCompleted(String(order.id), Number(order.total_amount ?? effectiveGrandTotal), cartItemCount);
-        router.push(`/account/orders/confirmation/${order.id}`);
+        // Guests use standalone confirmation (no AccountLayout auth guard)
+        const confirmPath = status === 'authenticated'
+          ? `/account/orders/confirmation/${order.id}`
+          : `/orders/confirmation/${order.id}`;
+        router.push(confirmPath);
       } else {
         // placeOrder returned null — the hook already showed a toast with the
         // specific error message, but we need to update the UI so the user

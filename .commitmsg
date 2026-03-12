@@ -1,0 +1,42 @@
+feat: cancel/refund/return overhaul, reviews, search, SEO, stock polling, guest checkout
+
+Cancel/Refund/Return:
+
+- Expand cancel button to PAID, BACKORDERED, PAYMENT_FAILED statuses
+- Add 5 new reason codes
+- Customer self-cancel for pending requests
+- Return shipping instructions after approval
+- Email notifications on submission
+
+Search and Catalog:
+
+- SearchAutocomplete with debounced server-side suggestions
+- ProductFilters with server-side filtering and sorting
+- CatalogClient with sidebar filters and grid layout
+- Revamped search results page styles
+
+Product Detail:
+
+- Reviews system (list, form, star rating, stats)
+- Real-time stock/price polling (useStockPrice)
+- StockPriceBadge component
+- Product structured data (JSON-LD) for SEO
+
+SEO:
+
+- Organization and WebSite JSON-LD in root layout
+- Product and Breadcrumb JSON-LD on product pages
+
+Auth and Checkout:
+
+- Guest checkout support
+- OAuth social login via NextAuth signIn
+- OAuth token exchange with Django backend
+- Guest confirmation route
+
+Other:
+
+- Analytics events API route
+- Dashboard report types and export
+- Product type with id and slug fields
+- Cart stock error handling
