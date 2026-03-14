@@ -64,7 +64,7 @@ export async function getAdminCustomers(filters: AdminCustomerFilters = {}): Pro
   if (filters.search) params.search = filters.search;
   if (filters.status) params.status = filters.status;
 
-  const response = await apiClient.get("/api/accounts/admin-customers/", { params });
+  const response = await apiClient.get("/accounts/admin-customers/", { params });
   const data = response.data;
 
   if (Array.isArray(data)) {
@@ -81,27 +81,27 @@ export async function getAdminCustomers(filters: AdminCustomerFilters = {}): Pro
 }
 
 export async function getAdminCustomer(customerId: string): Promise<AdminCustomer> {
-  const response = await apiClient.get(`/api/accounts/admin-customers/${customerId}/`);
+  const response = await apiClient.get(`/accounts/admin-customers/${customerId}/`);
   return response.data;
 }
 
 export async function getAdminCustomerOrders(customerId: string): Promise<AdminCustomerOrder[]> {
-  const response = await apiClient.get(`/api/accounts/admin-customers/${customerId}/orders/`);
+  const response = await apiClient.get(`/accounts/admin-customers/${customerId}/orders/`);
   return response.data?.orders || [];
 }
 
 export async function setAdminCustomerStatus(customerId: string, status: string): Promise<AdminCustomer> {
-  const response = await apiClient.post(`/api/accounts/admin-customers/${customerId}/set-status/`, { status });
+  const response = await apiClient.post(`/accounts/admin-customers/${customerId}/set-status/`, { status });
   return response.data;
 }
 
 export async function getAdminCustomerNotes(customerId: string): Promise<AdminCustomerNote[]> {
-  const response = await apiClient.get(`/api/accounts/admin-customers/${customerId}/notes/`);
+  const response = await apiClient.get(`/accounts/admin-customers/${customerId}/notes/`);
   return response.data?.notes || [];
 }
 
 export async function createAdminCustomerNote(customerId: string, payload: { kind?: string; note: string }): Promise<AdminCustomerNote> {
-  const response = await apiClient.post(`/api/accounts/admin-customers/${customerId}/notes/`, payload);
+  const response = await apiClient.post(`/accounts/admin-customers/${customerId}/notes/`, payload);
   return response.data;
 }
 
@@ -110,15 +110,15 @@ export async function updateAdminCustomerNote(
   noteId: number,
   payload: { kind?: string; note?: string }
 ): Promise<AdminCustomerNote> {
-  const response = await apiClient.patch(`/api/accounts/admin-customers/${customerId}/notes/${noteId}/`, payload);
+  const response = await apiClient.patch(`/accounts/admin-customers/${customerId}/notes/${noteId}/`, payload);
   return response.data;
 }
 
 export async function deleteAdminCustomerNote(customerId: string, noteId: number): Promise<void> {
-  await apiClient.delete(`/api/accounts/admin-customers/${customerId}/notes/${noteId}/`);
+  await apiClient.delete(`/accounts/admin-customers/${customerId}/notes/${noteId}/`);
 }
 
 export async function getAdminCustomerTimeline(customerId: string): Promise<AdminCustomerTimelineEvent[]> {
-  const response = await apiClient.get(`/api/accounts/admin-customers/${customerId}/timeline/`);
+  const response = await apiClient.get(`/accounts/admin-customers/${customerId}/timeline/`);
   return response.data?.events || [];
 }

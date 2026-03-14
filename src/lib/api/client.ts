@@ -116,6 +116,11 @@ apiClient.interceptors.request.use(
         config.headers['Authorization'] = `Bearer ${volatileAccessToken}`;
       } else if (session?.user && (session.user as any)?.accessToken) {
         config.headers['Authorization'] = `Bearer ${(session.user as any).accessToken}`;
+      } else if (session?.user) {
+        // Session exists but no accessToken — log for debugging
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[apiClient] Session found but no accessToken. Session user keys:', Object.keys(session.user));
+        }
       }
     } catch (error) {
       // Silently handle session retrieval errors — auth is optional for public endpoints

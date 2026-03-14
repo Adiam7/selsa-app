@@ -1,0 +1,19 @@
+fix: remove duplicate /api prefix, add session guards, cart refresh on order
+
+- Remove /api/ prefix from all apiClient calls (client.ts baseURL already
+  includes it) across admin, support, finance, inventory, staff, customers,
+  products, reports, and auth modules
+- Add useSession() + authenticated guards to all admin pages so API calls
+  wait until the session is ready
+- Clear cart (refreshCart) after successful order placement in checkout,
+  PayPal return, so header badge resets to 0
+- Clear guest_cart_id from localStorage in usePlaceOrder after order success
+- Fix Toast provider: deduplicate "use client", use useRef for unique IDs,
+  memoize useToast return value
+- Refactor useCart to delegate to shared CartContext (single source of truth)
+- Enhance CartContext mutateCart with revalidate option and fetchCart call
+- Add session-token debug warning in apiClient request interceptor (dev only)
+- Fix admin order detail: disable cancel button for terminal statuses,
+  show better error messages from response data
+- Fix admin product edit: section to div wrapper, localT typed as string
+- Remove duplicate SELSA header from checkout auth page

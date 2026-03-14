@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +55,7 @@ const formatMoney = (value?: string | number | null) => {
 };
 
 export default function AdminOrderDetailPage() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const params = useParams();
   const id = params?.id as string | undefined;
@@ -75,6 +77,9 @@ export default function AdminOrderDetailPage() {
   });
   const [cancelReason, setCancelReason] = useState("");
   const [refundReason, setRefundReason] = useState("");
+
+  const TERMINAL_STATUSES = ["CANCELLED", "DELIVERED", "REFUNDED", "PAYMENT_FAILED", "FAILED", "SHIPPED"];
+  const isTerminal = order ? TERMINAL_STATUSES.includes(order.status) : false;
   const [requestAdminNote, setRequestAdminNote] = useState("");
 
   const loadOrder = async () => {
@@ -98,8 +103,9 @@ export default function AdminOrderDetailPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     loadOrder();
-  }, [orderId]);
+  }, [orderId, sessionStatus]);
 
   const handleUpdateStatus = async () => {
     if (!orderId) {
@@ -135,7 +141,7 @@ export default function AdminOrderDetailPage() {
       setOrder(updated);
       setCancelReason("");
     } catch (err: any) {
-      setActionError(err?.message || "Failed to cancel order.");
+      setActionError(err?.response?.data?.error || err?.message || "Failed to cancel order.");
     } finally {
       setActionLoading(false);
     }
@@ -152,7 +158,7 @@ export default function AdminOrderDetailPage() {
       setOrder(updated);
       setRefundReason("");
     } catch (err: any) {
-      setActionError(err?.message || "Failed to refund order.");
+      setActionError(err?.response?.data?.error || err?.message || "Failed to refund order.");
     } finally {
       setActionLoading(false);
     }
@@ -302,9 +308,12 @@ export default function AdminOrderDetailPage() {
               onChange={(event) => setCancelReason(event.target.value)}
               rows={2}
             />
-            <Button onClick={handleCancel} disabled={actionLoading} variant="outline">
+            <Button onClick={handleCancel} disabled={actionLoading || isTerminal} variant="outline">
               {actionLoading ? t("Processing...") : t("Cancel Order")}
             </Button>
+            {isTerminal && (
+              <p className="text-xs text-muted-foreground">{t("Order cannot be cancelled in its current status.")}</p>
+            )}
           </div>
         </div>
 

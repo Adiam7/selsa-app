@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ type SourceFilter = "all" | "local" | "printful";
 type AvailabilityFilter = "all" | "true" | "false";
 
 export default function AdminProductsPage() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const { success, error: showError } = useToast();
 
@@ -62,9 +64,10 @@ export default function AdminProductsPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params, sessionStatus]);
 
   const toggleAvailability = async (product: AdminCatalogProduct) => {
     setLoading(true);

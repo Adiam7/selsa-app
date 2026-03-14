@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   addSupportTicketMessage,
   assignSupportTicket,
@@ -45,6 +46,7 @@ function joinCustomer(ticket: SupportTicket) {
 }
 
 export function SupportTicketsPanel() {
+  const { status: sessionStatus } = useSession();
   const { success, error: showError } = useToast();
 
   const [loading, setLoading] = useState(false);
@@ -108,9 +110,10 @@ export function SupportTicketsPanel() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sessionStatus]);
 
   const selectTicket = async (id: number) => {
     setSelectedId(id);

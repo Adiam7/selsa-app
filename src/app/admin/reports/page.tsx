@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ function toNumber(value: unknown): number {
 }
 
 export default function AdminReportsPage() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const { success, error: showError } = useToast();
 
@@ -72,9 +74,10 @@ export default function AdminReportsPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRange]);
+  }, [dateRange, sessionStatus]);
 
   const supportSummary = useMemo(() => {
     const openTickets = tickets.filter((x) => x.status !== "closed" && x.status !== "resolved");

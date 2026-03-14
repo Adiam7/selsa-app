@@ -24,7 +24,7 @@ export default function StoreMembers() {
 
     async function fetchMembers() {
       try {
-        const res = await apiClient.get(`/api/accounts/stores/${storeId}/members/`);
+        const res = await apiClient.get(`/accounts/stores/${storeId}/members/`);
         setMembers(res.data);
       } catch (err) {
         console.error(err);

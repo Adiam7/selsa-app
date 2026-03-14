@@ -12,7 +12,7 @@ export default function InviteStaffForm({ storeId }: { storeId: string }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const res = await apiClient.post(`/api/accounts/admin-staff/invite/`, {
+      const res = await apiClient.post(`/accounts/admin-staff/invite/`, {
         email,
         store_id: storeId,
         groups: [],

@@ -15,7 +15,7 @@ export default function AcceptInvite() {
 
     async function accept() {
       try {
-        await apiClient.post(`/api/accounts/invites/${token}/accept/`);
+        await apiClient.post(`/accounts/invites/${token}/accept/`);
         setMessage(t('Invite accepted! You can now log in.'));
       } catch (err: any) {
         setMessage(err.response?.data?.detail ? t(err.response.data.detail) : t('Error accepting invite'));

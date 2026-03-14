@@ -36,12 +36,12 @@ export async function getDashboardStats(params?: {
   start_date?: string;
   end_date?: string;
 }): Promise<DashboardStats> {
-  const res = await apiClient.get("/api/dashboard/stats/", { params });
+  const res = await apiClient.get("/dashboard/stats/", { params });
   return res.data;
 }
 
 export async function getReportTypes(): Promise<ReportTypeInfo[]> {
-  const res = await apiClient.get("/api/dashboard/report-types/");
+  const res = await apiClient.get("/dashboard/report-types/");
   return res.data.report_types;
 }
 
@@ -52,7 +52,7 @@ export async function exportDashboardReport(params: {
   start_date?: string;
   end_date?: string;
 }): Promise<Blob> {
-  const res = await apiClient.get("/api/dashboard/export/", {
+  const res = await apiClient.get("/dashboard/export/", {
     params,
     responseType: "blob",
   });

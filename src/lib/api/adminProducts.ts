@@ -106,7 +106,7 @@ export async function listAdminCatalogProducts(params?: {
   ordering?: string;
 }) {
   const resp = await apiClient.get<PaginatedResult<AdminCatalogProduct>>(
-    "/api/catalog/admin-products/",
+    "/catalog/admin-products/",
     { params }
   );
   return resp.data;
@@ -114,14 +114,14 @@ export async function listAdminCatalogProducts(params?: {
 
 export async function setAdminCatalogProductAvailability(productId: number, isAvailable: boolean) {
   const resp = await apiClient.post<AdminCatalogProduct>(
-    `/api/catalog/admin-products/${productId}/set-availability/`,
+    `/catalog/admin-products/${productId}/set-availability/`,
     { is_available: isAvailable }
   );
   return resp.data;
 }
 
 export async function deleteAdminLocalCatalogProduct(productId: number) {
-  await apiClient.delete(`/api/catalog/admin-products/${productId}/delete-local/`);
+  await apiClient.delete(`/catalog/admin-products/${productId}/delete-local/`);
 }
 
 export async function createAdminLocalProduct(payload: {
@@ -190,7 +190,7 @@ export async function createAdminLocalProduct(payload: {
   certification?: { en?: string; ti?: string } | null;
 }) {
   const resp = await apiClient.post<AdminCatalogProduct>(
-    "/api/catalog/admin-products/create-local/",
+    "/catalog/admin-products/create-local/",
     payload
   );
   return resp.data;
@@ -210,7 +210,7 @@ export async function uploadAdminLocalProductImage(productId: number, file: File
   }
 
   const resp = await apiClient.post<AdminCatalogProduct>(
-    `/api/catalog/admin-products/${productId}/upload-image/`,
+    `/catalog/admin-products/${productId}/upload-image/`,
     form
   );
   return resp.data;
@@ -218,7 +218,7 @@ export async function uploadAdminLocalProductImage(productId: number, file: File
 
 export async function getAdminLocalProductDetail(productId: number) {
   const resp = await apiClient.get<AdminLocalProductDetail>(
-    `/api/catalog/admin-products/${productId}/local-detail/`
+    `/catalog/admin-products/${productId}/local-detail/`
   );
   return resp.data;
 }
@@ -285,7 +285,7 @@ export async function updateAdminLocalProduct(productId: number, payload: {
   certification?: { en?: string; ti?: string } | null;
 }) {
   const resp = await apiClient.patch<AdminLocalProductDetail>(
-    `/api/catalog/admin-products/${productId}/update-local/`,
+    `/catalog/admin-products/${productId}/update-local/`,
     payload
   );
   return resp.data;
@@ -293,14 +293,14 @@ export async function updateAdminLocalProduct(productId: number, payload: {
 
 export async function deleteAdminLocalProductImage(productId: number, imageId: number) {
   const resp = await apiClient.delete<AdminLocalProductDetail>(
-    `/api/catalog/admin-products/${productId}/images/${imageId}/`
+    `/catalog/admin-products/${productId}/images/${imageId}/`
   );
   return resp.data;
 }
 
 export async function setAdminLocalProductImagePrimary(productId: number, imageId: number) {
   const resp = await apiClient.post<AdminLocalProductDetail>(
-    `/api/catalog/admin-products/${productId}/images/${imageId}/set-primary/`,
+    `/catalog/admin-products/${productId}/images/${imageId}/set-primary/`,
     {}
   );
   return resp.data;
@@ -308,7 +308,7 @@ export async function setAdminLocalProductImagePrimary(productId: number, imageI
 
 export async function reorderAdminLocalProductImages(productId: number, imageIds: number[]) {
   const resp = await apiClient.post<AdminLocalProductDetail>(
-    `/api/catalog/admin-products/${productId}/images/reorder/`,
+    `/catalog/admin-products/${productId}/images/reorder/`,
     { image_ids: imageIds }
   );
   return resp.data;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,7 @@ const formatDateTime = (value?: string | null) => {
 type DraftLine = { sku: string; counted_quantity: string };
 
 export default function AdminInventoryPage() {
+  const { status: sessionStatus } = useSession();
   const { success, error: showError } = useToast();
 
   const [loading, setLoading] = useState(false);
@@ -96,9 +98,10 @@ export default function AdminInventoryPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sessionStatus]);
 
   const loadHealth = async (level: "low" | "zero" | "negative") => {
     setHealthLevel(level);

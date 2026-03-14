@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 
 import { useToast } from "@/components/Toast";
@@ -38,6 +39,7 @@ const formatDate = (value?: string | null) => {
 };
 
 export default function AdminCustomerDetailPage() {
+  const { status: sessionStatus } = useSession();
   const params = useParams();
   const customerId = String((params as any)?.id || "");
   const { t } = useTranslation();
@@ -234,10 +236,11 @@ export default function AdminCustomerDetailPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     load();
     loadTimeline();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId]);
+  }, [customerId, sessionStatus]);
 
   return (
     <div className="space-y-6">

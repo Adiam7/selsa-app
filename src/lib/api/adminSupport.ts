@@ -42,7 +42,7 @@ export async function supportCustomerLookup(params: {
 
 export async function approveReturnRefundRequest(requestId: number, adminNote?: string) {
   const response = await apiClient.post(
-    `/api/orders/admin-return-refund-requests/${requestId}/approve/`,
+    `/orders/admin-return-refund-requests/${requestId}/approve/`,
     adminNote ? { admin_note: adminNote } : {}
   );
   return response.data;
@@ -50,7 +50,7 @@ export async function approveReturnRefundRequest(requestId: number, adminNote?: 
 
 export async function rejectReturnRefundRequest(requestId: number, adminNote?: string) {
   const response = await apiClient.post(
-    `/api/orders/admin-return-refund-requests/${requestId}/reject/`,
+    `/orders/admin-return-refund-requests/${requestId}/reject/`,
     adminNote ? { admin_note: adminNote } : {}
   );
   return response.data;
@@ -58,7 +58,7 @@ export async function rejectReturnRefundRequest(requestId: number, adminNote?: s
 
 export async function markReturnReceived(requestId: number) {
   const response = await apiClient.post(
-    `/api/orders/admin-return-refund-requests/${requestId}/mark-received/`,
+    `/orders/admin-return-refund-requests/${requestId}/mark-received/`,
     {}
   );
   return response.data;

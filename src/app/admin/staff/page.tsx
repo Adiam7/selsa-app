@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import {
 } from "@/lib/api/adminStaff";
 
 export default function AdminStaffPage() {
+  const { status: sessionStatus } = useSession();
   const { success, error: showError } = useToast();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -61,9 +63,10 @@ export default function AdminStaffPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sessionStatus]);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return staff;

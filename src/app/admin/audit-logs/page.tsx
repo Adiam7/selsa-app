@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,7 @@ function summarizeMetadata(meta: Record<string, any> | null | undefined): string
 }
 
 export default function AdminAuditLogsPage() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const { error: showError } = useToast();
 
@@ -76,9 +78,10 @@ export default function AdminAuditLogsPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void loadOrderLogs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ordersParams]);
+  }, [ordersParams, sessionStatus]);
 
   const ordersTotalPages = Math.max(1, Math.ceil(ordersCount / 25));
 
@@ -122,9 +125,10 @@ export default function AdminAuditLogsPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void loadInventoryEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inventoryParams]);
+  }, [inventoryParams, sessionStatus]);
 
   const inventoryTotalPages = Math.max(1, Math.ceil(inventoryCount / 25));
 

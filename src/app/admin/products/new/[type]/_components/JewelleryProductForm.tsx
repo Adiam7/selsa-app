@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +23,7 @@ type Category = { id: string; name: any; slug: string; path_name_en?: string; pa
 const NONE = "__none__";
 
 export function JewelleryProductForm() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const router = useRouter();
   const { success, error: showError } = useToast();
@@ -69,10 +71,11 @@ export function JewelleryProductForm() {
   }, [sku]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiClient.get("/api/categories/flat/", { params: { include_hidden: true } });
+        const res = await apiClient.get("/categories/flat/", { params: { include_hidden: true } });
         const data = Array.isArray(res.data) ? (res.data as Category[]) : [];
         if (!cancelled) setCategories(data);
       } catch {
@@ -82,7 +85,7 @@ export function JewelleryProductForm() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionStatus]);
 
   useEffect(() => {
     if (categoryId) return;

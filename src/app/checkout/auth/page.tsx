@@ -81,10 +81,6 @@ export default function CheckoutAuthGate() {
     return (
       <div className={styles.page}>
         <div className={styles.maxWidth}>
-          <div className={styles.header}>
-            <span className={styles.logo}>SELSA</span>
-            <p className={styles.headerSub}>Checkout</p>
-          </div>
         </div>
       </div>
     );
@@ -93,13 +89,6 @@ export default function CheckoutAuthGate() {
   return (
     <div className={styles.page}>
       <div className={styles.maxWidth}>
-        {/* Header */}
-        <div className={styles.header}>
-          <Link href="/" className={styles.logo}>
-            SELSA
-          </Link>
-          <p className={styles.headerSub}>Checkout</p>
-        </div>
 
         {/* Two-Column Grid */}
         <div className={styles.grid}>

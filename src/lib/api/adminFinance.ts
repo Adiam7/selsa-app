@@ -112,7 +112,7 @@ export async function getFinanceOverview(params?: {
   start?: string;
   end?: string;
 }): Promise<FinanceOverview> {
-  const res = await apiClient.get("/api/payments/admin-finance/overview/", { params });
+  const res = await apiClient.get("/payments/admin-finance/overview/", { params });
   return res.data;
 }
 
@@ -123,7 +123,7 @@ export async function listProviderEvents(params?: {
   page?: number;
   page_size?: number;
 }): Promise<ProviderEvent[]> {
-  const res = await apiClient.get("/api/payments/admin-provider-events/", { params });
+  const res = await apiClient.get("/payments/admin-provider-events/", { params });
   return unwrapList<ProviderEvent>(res.data);
 }
 
@@ -131,7 +131,7 @@ export async function importProviderEvents(payload: {
   provider: string;
   events: Array<Record<string, any>>;
 }): Promise<{ created: number; updated: number }> {
-  const res = await apiClient.post("/api/payments/admin-provider-events/import/", payload);
+  const res = await apiClient.post("/payments/admin-provider-events/import/", payload);
   return res.data;
 }
 
@@ -140,7 +140,7 @@ export async function listReconciliationRuns(params?: {
   page?: number;
   page_size?: number;
 }): Promise<ReconciliationRun[]> {
-  const res = await apiClient.get("/api/payments/admin-reconciliation-runs/", { params });
+  const res = await apiClient.get("/payments/admin-reconciliation-runs/", { params });
   return unwrapList<ReconciliationRun>(res.data);
 }
 
@@ -149,7 +149,7 @@ export async function runReconciliation(payload: {
   period_start: string;
   period_end: string;
 }): Promise<ReconciliationRun> {
-  const res = await apiClient.post("/api/payments/admin-reconciliation-runs/", payload);
+  const res = await apiClient.post("/payments/admin-reconciliation-runs/", payload);
   return res.data;
 }
 
@@ -159,7 +159,7 @@ export async function listChargebacks(params?: {
   page?: number;
   page_size?: number;
 }): Promise<ChargebackCase[]> {
-  const res = await apiClient.get("/api/payments/admin-chargebacks/", { params });
+  const res = await apiClient.get("/payments/admin-chargebacks/", { params });
   return unwrapList<ChargebackCase>(res.data);
 }
 
@@ -167,7 +167,7 @@ export async function setChargebackStatus(
   caseId: number,
   payload: { status: string; resolution_note?: string; evidence_reference?: string }
 ): Promise<ChargebackCase> {
-  const res = await apiClient.post(`/api/payments/admin-chargebacks/${caseId}/set-status/`, payload);
+  const res = await apiClient.post(`/payments/admin-chargebacks/${caseId}/set-status/`, payload);
   return res.data;
 }
 
@@ -180,7 +180,7 @@ export async function listRefunds(params?: {
   page?: number;
   page_size?: number;
 }): Promise<PaymentRefund[]> {
-  const res = await apiClient.get("/api/payments/admin-refunds/", { params });
+  const res = await apiClient.get("/payments/admin-refunds/", { params });
   return unwrapList<PaymentRefund>(res.data);
 }
 
@@ -191,7 +191,7 @@ export async function createRefund(payload: {
   reason?: string;
   allow_manual?: boolean;
 }): Promise<PaymentRefund> {
-  const res = await apiClient.post("/api/payments/admin-refunds/", payload);
+  const res = await apiClient.post("/payments/admin-refunds/", payload);
   return res.data;
 }
 
@@ -205,6 +205,6 @@ export function buildExportUrl(path: string, params?: Record<string, string | nu
 }
 
 export async function getReconciliationMissingItems(runId: number, params?: { limit?: number }): Promise<ReconciliationMissingItems> {
-  const res = await apiClient.get(`/api/payments/admin-reconciliation-runs/${runId}/missing-items/`, { params });
+  const res = await apiClient.get(`/payments/admin-reconciliation-runs/${runId}/missing-items/`, { params });
   return res.data;
 }

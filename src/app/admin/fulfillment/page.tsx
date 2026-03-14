@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
@@ -227,6 +228,7 @@ interface FulfillmentOrder {
 // ── Main Page ────────────────────────────────────────────────────────────────
 
 export default function AdminFulfillmentPage() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const { success, error: showError } = useToast();
 
@@ -254,15 +256,17 @@ export default function AdminFulfillmentPage() {
   // ── Data fetching ──────────────────────────────────────────────────────────
 
   const refreshPipeline = useCallback(async () => {
+    if (sessionStatus !== 'authenticated') return;
     try {
       const data = await getFulfillmentPipeline();
       setPipeline(data);
     } catch {
       // Silent — pipeline is optional enhancement
     }
-  }, []);
+  }, [sessionStatus]);
 
   const refreshOrders = useCallback(async () => {
+    if (sessionStatus !== 'authenticated') return;
     setLoading(true);
     try {
       const data = await getFulfillmentOrders({ stage, page, pageSize });
@@ -277,7 +281,7 @@ export default function AdminFulfillmentPage() {
     } finally {
       setLoading(false);
     }
-  }, [stage, page, pageSize, showError]);
+  }, [stage, page, pageSize, showError, sessionStatus]);
 
   useEffect(() => {
     void refreshPipeline();

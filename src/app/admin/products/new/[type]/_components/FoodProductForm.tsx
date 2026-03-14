@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { Upload, Utensils } from "lucide-react";
 
@@ -36,6 +37,7 @@ function nameDisplay(name: any): string {
 }
 
 export function FoodProductForm() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const router = useRouter();
   const { success, error: showError } = useToast();
@@ -98,10 +100,11 @@ export function FoodProductForm() {
   }, [sku]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiClient.get("/api/categories/flat/", {
+        const res = await apiClient.get("/categories/flat/", {
           params: { include_hidden: true },
         });
         const data = Array.isArray(res.data) ? (res.data as Category[]) : [];
@@ -113,7 +116,7 @@ export function FoodProductForm() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionStatus]);
 
   const filteredCategories = useMemo(() => {
     const withinFood = categories.filter((c) => {

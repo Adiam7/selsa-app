@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,6 +57,7 @@ const formatDateTime = (value?: string | null) => {
 const PROVIDERS = ["stripe", "paypal"]; // aligned with backend enum values
 
 export default function AdminFinancePage() {
+  const { status: sessionStatus } = useSession();
   const { success, error: showError } = useToast();
 
   const [loading, setLoading] = useState(false);
@@ -145,9 +147,10 @@ export default function AdminFinancePage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sessionStatus]);
 
   useEffect(() => {
     if (!selectedRun) {

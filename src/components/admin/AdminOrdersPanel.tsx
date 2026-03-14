@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import type { Order } from "@/types/order";
@@ -102,6 +103,7 @@ export function AdminOrdersPanel({
 }: AdminOrdersPanelProps) {
   const { success, warning, error: showError } = useToast();
   const { t } = useTranslation();
+  const { status: sessionStatus } = useSession();
   const effectiveStatusOptions = statusOptions && statusOptions.length > 0 ? statusOptions : STATUS_OPTIONS;
   const effectiveBulkActions = allowedBulkActions && allowedBulkActions.length > 0
     ? allowedBulkActions
@@ -203,8 +205,9 @@ export function AdminOrdersPanel({
   }, [initialBulkStatus]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     loadOrders();
-  }, [statusFilter, page, pageSize]);
+  }, [statusFilter, page, pageSize, sessionStatus]);
 
   const totalPages = Math.max(1, Math.ceil(pageInfo.count / pageSize));
   const hasNext = pageInfo.next ? true : page < totalPages;

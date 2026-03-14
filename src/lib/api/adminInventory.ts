@@ -106,7 +106,7 @@ const unwrapPaginated = <T,>(data: any): PaginatedResponse<T> => {
 };
 
 export async function getInventorySummary(): Promise<InventorySummary> {
-  const res = await apiClient.get("/api/inventory/reconciliations/summary/");
+  const res = await apiClient.get("/inventory/reconciliations/summary/");
   return res.data;
 }
 
@@ -114,12 +114,12 @@ export async function listReconciliations(params?: {
   page?: number;
   page_size?: number;
 }): Promise<InventoryReconciliation[]> {
-  const res = await apiClient.get("/api/inventory/reconciliations/", { params });
+  const res = await apiClient.get("/inventory/reconciliations/", { params });
   return unwrapList<InventoryReconciliation>(res.data);
 }
 
 export async function getReconciliation(id: number): Promise<InventoryReconciliation> {
-  const res = await apiClient.get(`/api/inventory/reconciliations/${id}/`);
+  const res = await apiClient.get(`/inventory/reconciliations/${id}/`);
   return res.data;
 }
 
@@ -129,17 +129,17 @@ export async function createReconciliation(payload: {
   parameters?: Record<string, any>;
   lines: Array<{ sku: string; source?: string; counted_quantity: number; metadata?: Record<string, any> }>;
 }): Promise<InventoryReconciliation> {
-  const res = await apiClient.post("/api/inventory/reconciliations/", payload);
+  const res = await apiClient.post("/inventory/reconciliations/", payload);
   return res.data;
 }
 
 export async function applyReconciliation(id: number): Promise<InventoryReconciliation> {
-  const res = await apiClient.post(`/api/inventory/reconciliations/${id}/apply/`, {});
+  const res = await apiClient.post(`/inventory/reconciliations/${id}/apply/`, {});
   return res.data;
 }
 
 export async function exportReconciliationCsv(id: number): Promise<Blob> {
-  const res = await apiClient.get(`/api/inventory/reconciliations/${id}/export/`, {
+  const res = await apiClient.get(`/inventory/reconciliations/${id}/export/`, {
     params: { format: "csv" },
     responseType: "blob",
   });
@@ -152,7 +152,7 @@ export async function listInventoryHealth(params: {
   page?: number;
   page_size?: number;
 }): Promise<InventoryHealthVariant[]> {
-  const res = await apiClient.get("/api/inventory/health/", { params });
+  const res = await apiClient.get("/inventory/health/", { params });
   return unwrapList<InventoryHealthVariant>(res.data);
 }
 
@@ -164,7 +164,7 @@ export async function listInventoryAuditEvents(params: {
   page?: number;
   page_size?: number;
 }): Promise<InventoryAuditEvent[]> {
-  const res = await apiClient.get("/api/inventory/audit-events/", { params });
+  const res = await apiClient.get("/inventory/audit-events/", { params });
   return unwrapList<InventoryAuditEvent>(res.data);
 }
 
@@ -176,7 +176,7 @@ export async function listInventoryAuditEventsPaginated(params: {
   page?: number;
   page_size?: number;
 }): Promise<PaginatedResponse<InventoryAuditEvent>> {
-  const res = await apiClient.get("/api/inventory/audit-events/", { params });
+  const res = await apiClient.get("/inventory/audit-events/", { params });
   return unwrapPaginated<InventoryAuditEvent>(res.data);
 }
 
@@ -186,7 +186,7 @@ export async function listSkuHistory(params: {
   page?: number;
   page_size?: number;
 }): Promise<VariantSkuHistory[]> {
-  const res = await apiClient.get("/api/inventory/sku-history/", { params });
+  const res = await apiClient.get("/inventory/sku-history/", { params });
   return unwrapList<VariantSkuHistory>(res.data);
 }
 
@@ -199,7 +199,7 @@ export async function createInventoryAdjustment(payload: {
   reason?: string;
   metadata?: Record<string, any>;
 }): Promise<{ variant_id: number; sku: string; source: string; stock_quantity: number; updated_at: string | null }> {
-  const res = await apiClient.post("/api/inventory/adjustments/", payload);
+  const res = await apiClient.post("/inventory/adjustments/", payload);
   return res.data;
 }
 
@@ -210,7 +210,7 @@ export async function exportInventoryAuditEventsCsv(params: {
   date_from?: string; // ISO datetime or YYYY-MM-DD
   date_to?: string; // ISO datetime or YYYY-MM-DD
 }): Promise<Blob> {
-  const res = await apiClient.get("/api/inventory/audit-events/export-csv/", {
+  const res = await apiClient.get("/inventory/audit-events/export-csv/", {
     params: { ...params, format: "csv" },
     responseType: "blob",
   });

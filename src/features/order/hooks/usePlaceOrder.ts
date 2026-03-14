@@ -25,6 +25,8 @@ export const usePlaceOrder = () => {
         window.localStorage.removeItem('selsa_checkout_payload');
         window.localStorage.removeItem(`selsa_checkout_idempotency_${cartId}`);
         window.localStorage.removeItem(`selsa_checkout_progress_${cartId}`);
+        // Clear guest cart ID so a fresh cart is created on next visit
+        window.localStorage.removeItem('guest_cart_id');
       }
       // NOTE: Do NOT router.push here — the caller (e.g. handleAutoPlaceOrder
       // in the checkout page) is responsible for the redirect destination.

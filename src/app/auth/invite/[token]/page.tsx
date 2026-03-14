@@ -37,7 +37,7 @@ export default function AcceptInvitePage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await apiClient.post(`/api/accounts/invites/${token}/accept-with-password/`, {
+      const res = await apiClient.post(`/accounts/invites/${token}/accept-with-password/`, {
         password,
         ...(username.trim() ? { username: username.trim() } : {}),
       });

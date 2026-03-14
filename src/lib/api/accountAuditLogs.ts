@@ -23,7 +23,7 @@ export async function listMyAccountAuditLogs(params?: {
   page?: number;
   page_size?: number;
 }): Promise<AccountAuditLogResponse> {
-  const res = await apiClient.get("/api/accounts/me/audit-logs/", { params });
+  const res = await apiClient.get("/accounts/me/audit-logs/", { params });
   const data = res.data;
 
   if (Array.isArray(data)) {

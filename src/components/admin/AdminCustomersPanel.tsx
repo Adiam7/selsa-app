@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,7 @@ const formatMoney = (value?: string | null) => {
 };
 
 export function AdminCustomersPanel() {
+  const { status: sessionStatus } = useSession();
   const { error: showError } = useToast();
   const { t } = useTranslation();
   const [customers, setCustomers] = useState<AdminCustomer[]>([]);
@@ -95,9 +97,10 @@ export function AdminCustomersPanel() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     loadCustomers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageSize, statusFilter]);
+  }, [page, pageSize, statusFilter, sessionStatus]);
 
   const totalPages = Math.max(1, Math.ceil(pageInfo.count / pageSize));
 

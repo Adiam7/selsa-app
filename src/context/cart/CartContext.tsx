@@ -41,7 +41,7 @@ type CartContextType = {
   refreshCart: () => Promise<Cart | null>;
   mutateCart: (
     updater: Cart | ((prev: Cart | null) => Cart | Promise<Cart>),
-    options?: { optimisticData?: Cart | null; rollbackOnError?: boolean }
+    options?: { optimisticData?: Cart | null; revalidate?: boolean; rollbackOnError?: boolean }
   ) => Promise<Cart | null>;
 };
 
@@ -77,13 +77,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const mutateCart = useCallback(
     async (
       updater: Cart | ((prev: Cart | null) => Cart | Promise<Cart>),
-      options?: { optimisticData?: Cart | null; rollbackOnError?: boolean }
+      options?: { optimisticData?: Cart | null; revalidate?: boolean; rollbackOnError?: boolean }
     ) => {
-      const { optimisticData, rollbackOnError = true } = options || {};
+      const { optimisticData, revalidate = true, rollbackOnError = true } = options || {};
       const previous = cart;
 
       try {
-        if (optimisticData) setCart(optimisticData);
+        if (optimisticData !== undefined) {
+          setCart(optimisticData);
+        } else if (typeof updater !== 'function') {
+          setCart(updater as Cart);
+        }
 
         let result: Cart | null;
         if (typeof updater === 'function') {
@@ -93,13 +97,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (result) setCart(result);
+
+        if (revalidate) {
+          await fetchCart();
+        }
+
         return result;
       } catch (err) {
         if (rollbackOnError) setCart(previous);
         throw err;
       }
     },
-    [cart]
+    [cart, fetchCart]
   );
 
   React.useEffect(() => {

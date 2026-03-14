@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ type Category = {
 };
 
 export function BeautyProductForm({ initialSubcategory, hideSelector }: { initialSubcategory?: string; hideSelector?: boolean } = {}) {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const router = useRouter();
   const { success, error: showError } = useToast();
@@ -72,10 +74,11 @@ export function BeautyProductForm({ initialSubcategory, hideSelector }: { initia
   }, [sku]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiClient.get("/api/categories/flat/", { params: { include_hidden: true } });
+        const res = await apiClient.get("/categories/flat/", { params: { include_hidden: true } });
         const data = Array.isArray(res.data) ? (res.data as Category[]) : [];
         if (!cancelled) setCategories(data);
       } catch {
@@ -85,7 +88,7 @@ export function BeautyProductForm({ initialSubcategory, hideSelector }: { initia
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionStatus]);
 
   const filteredCategories = useMemo(() => {
     const withinBeauty = categories.filter((c) => {

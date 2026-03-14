@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { usePlaceOrder } from "@/features/order/hooks/usePlaceOrder";
 import { useCheckoutTracking } from "@/lib/hooks/useAnalytics";
+import { useCart } from "@/features/cart/hooks/useCart";
 
 export default function PayPalReturnClient() {
   const searchParams = useSearchParams();
@@ -13,6 +14,7 @@ export default function PayPalReturnClient() {
   const { data: session, status: authStatus } = useSession();
   const { placeOrder, placingOrder } = usePlaceOrder();
   const { trackOrderCompleted } = useCheckoutTracking();
+  const { refreshCart } = useCart();
   const trackedRef = useRef(false);
   const [status, setStatus] = useState<"processing" | "success" | "error">("processing");
   const [message, setMessage] = useState<string>("Processing PayPal payment...");
@@ -81,6 +83,10 @@ export default function PayPalReturnClient() {
           trackedRef.current = true;
           trackOrderCompleted(String(order.id), Number(order.total_amount ?? 0));
         }
+        
+        // Clear cart state so the header badge resets to 0
+        await refreshCart();
+        
         setStatus("success");
         setMessage("Order placed successfully. Redirecting...");
 

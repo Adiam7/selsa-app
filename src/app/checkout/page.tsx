@@ -85,7 +85,7 @@ const CheckoutPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { cart, loading } = useCart();
+  const { cart, loading, refreshCart } = useCart();
   const { placeOrder, placingOrder } = usePlaceOrder();
   const { calculateCartTotal, calculation, loading: calculationLoading } = useCartCalculation();
   const {
@@ -1027,6 +1027,9 @@ const CheckoutPage = () => {
         orderCompletedRef.current = true;
         trackOrderCompleted(String(order.id), Number(order.total_amount ?? effectiveGrandTotal), cartItemCount);
         
+        // Clear cart state so the header badge resets to 0
+        await refreshCart();
+        
         // Redirect to confirmation page — guests use standalone route (no AccountLayout)
         const confirmPath = status === 'authenticated'
           ? `/account/orders/confirmation/${order.id}`
@@ -1096,6 +1099,10 @@ const CheckoutPage = () => {
       if (order) {
         orderCompletedRef.current = true;
         trackOrderCompleted(String(order.id), Number(order.total_amount ?? effectiveGrandTotal), cartItemCount);
+        
+        // Clear cart state so the header badge resets to 0
+        await refreshCart();
+        
         // Guests use standalone confirmation (no AccountLayout auth guard)
         const confirmPath = status === 'authenticated'
           ? `/account/orders/confirmation/${order.id}`
@@ -1126,7 +1133,7 @@ const CheckoutPage = () => {
     } finally {
       setValidationInProgress(false);
     }
-  }, [cart?.id, buildVerificationPayload, getOrCreateIdempotencyKey, placeOrder, trackOrderCompleted, effectiveGrandTotal, cartItemCount, router, t]);
+  }, [cart?.id, buildVerificationPayload, getOrCreateIdempotencyKey, placeOrder, trackOrderCompleted, effectiveGrandTotal, cartItemCount, router, t, refreshCart]);
 
   // Keep the ref in sync with the latest version of the function
   useEffect(() => {

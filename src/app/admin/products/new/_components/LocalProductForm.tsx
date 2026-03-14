@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,7 @@ export function AdminLocalProductForm(props: {
   const { title, subtitle, defaultCategorySlug, skuPrefix, cancelHref, afterCreateHref } = props;
 
   const { t } = useTranslation();
+  const { status: sessionStatus } = useSession();
   const router = useRouter();
   const { success, error: showError } = useToast();
 
@@ -84,10 +86,11 @@ export function AdminLocalProductForm(props: {
   }, [sku, skuPrefix, defaultCategorySlug]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiClient.get("/api/categories/flat/", {
+        const res = await apiClient.get("/categories/flat/", {
           params: { include_hidden: true },
         });
         const data = Array.isArray(res.data) ? (res.data as Category[]) : [];
@@ -99,7 +102,7 @@ export function AdminLocalProductForm(props: {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionStatus]);
 
   useEffect(() => {
     if (!defaultCategorySlug) return;

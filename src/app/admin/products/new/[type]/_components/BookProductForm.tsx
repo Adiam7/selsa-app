@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { Book, BookOpen, Upload } from "lucide-react";
 
@@ -36,6 +37,7 @@ function nameDisplay(name: any): string {
 }
 
 export function BookProductForm() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const router = useRouter();
   const { success, error: showError } = useToast();
@@ -117,10 +119,11 @@ export function BookProductForm() {
   const canCreate = useMemo(() => enRequiredOk && tiRequiredOk, [enRequiredOk, tiRequiredOk]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiClient.get("/api/categories/flat/", {
+        const res = await apiClient.get("/categories/flat/", {
           params: { include_hidden: true },
         });
         const data = Array.isArray(res.data) ? (res.data as Category[]) : [];
@@ -132,7 +135,7 @@ export function BookProductForm() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionStatus]);
 
   useEffect(() => {
     if (categoryId) return;

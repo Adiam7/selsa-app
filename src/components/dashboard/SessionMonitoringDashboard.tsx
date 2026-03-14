@@ -84,6 +84,7 @@ interface PerformanceMetrics {
 
 export function SessionMonitoringDashboard() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [metrics, setMetrics] = useState<DashboardMetrics>({
     totalSessions: 0,
     activeSessions: 0,
@@ -91,8 +92,12 @@ export function SessionMonitoringDashboard() {
     errorCount: 0,
     averageSessionDuration: 0,
     conversionRate: 0,
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: '',
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [errors, setErrors] = useState<ErrorSummary>({
@@ -212,7 +217,7 @@ export function SessionMonitoringDashboard() {
       <CardHeader className="border-b">
         <CardTitle className="text-3xl">{t('Session Monitoring Dashboard')}</CardTitle>
         <CardDescription>
-          {t('Last updated:')} {new Date(metrics.lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          {t('Last updated:')} {mounted && metrics.lastUpdated ? new Date(metrics.lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}
         </CardDescription>
         <CardAction>
           <div className="flex flex-wrap items-center justify-end gap-2">

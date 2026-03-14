@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
@@ -50,11 +51,12 @@ function resolveImageUrl(url: string | null | undefined): string {
 }
 
 export default function AdminEditProductPage() {
+  const { status: sessionStatus } = useSession();
   const { t } = useTranslation();
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const { success, error: showError } = useToast();
-  const localT = (k: string, opts?: any) => t(k, { lng: activeLang, ...opts });
+  const localT = (k: string, opts?: any): string => t(k, { lng: activeLang, ...opts }) as string;
 
   const productId = useMemo(() => Number(params?.id), [params?.id]);
 
@@ -144,10 +146,11 @@ export default function AdminEditProductPage() {
   const canSave = useMemo(() => enRequiredOk && tiRequiredOk, [enRequiredOk, tiRequiredOk]);
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiClient.get("/api/categories/flat/", { params: { include_hidden: true } });
+        const res = await apiClient.get("/categories/flat/", { params: { include_hidden: true } });
         const data = Array.isArray(res.data) ? (res.data as Category[]) : [];
         if (!cancelled) setCategories(data);
       } catch {
@@ -157,7 +160,7 @@ export default function AdminEditProductPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionStatus]);
 
   const filteredCategories = useMemo(() => {
     const pt = detail?.product_type;
@@ -272,9 +275,10 @@ export default function AdminEditProductPage() {
   };
 
   useEffect(() => {
+    if (sessionStatus !== 'authenticated') return;
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId]);
+  }, [productId, sessionStatus]);
 
   // debug: log when detail updates so tests can confirm render path
   useEffect(() => {
@@ -956,6 +960,6 @@ export default function AdminEditProductPage() {
           ) : null}
         </CardContent>
       </Card>
-    </section>
+    </div>
   );
 }

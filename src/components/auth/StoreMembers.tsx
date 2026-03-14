@@ -25,7 +25,7 @@ export default function StoreMembers({ storeId }: Props) {
   useEffect(() => {
     async function fetchMembers() {
       try {
-        const res = await apiClient.get(`/api/accounts/stores/${storeId}/members/`);
+        const res = await apiClient.get(`/accounts/stores/${storeId}/members/`);
         setMembers(res.data);
       } catch (err: any) {
         if (err.response?.status === 401) {

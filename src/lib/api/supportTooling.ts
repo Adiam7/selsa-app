@@ -55,19 +55,19 @@ export type SupportAgent = {
 };
 
 export async function listSupportAgents(): Promise<SupportAgent[]> {
-  const res = await apiClient.get("/api/support/agents/");
+  const res = await apiClient.get("/support/agents/");
   const data = res.data;
   return data?.items || [];
 }
 
 export async function listSupportTickets(): Promise<SupportTicket[]> {
-  const res = await apiClient.get("/api/support/tickets/");
+  const res = await apiClient.get("/support/tickets/");
   // DRF pagination may wrap results
   return Array.isArray(res.data) ? res.data : res.data?.results || [];
 }
 
 export async function getSupportTicket(ticketId: number): Promise<SupportTicket> {
-  const res = await apiClient.get(`/api/support/tickets/${ticketId}/`);
+  const res = await apiClient.get(`/support/tickets/${ticketId}/`);
   return res.data;
 }
 
@@ -81,52 +81,52 @@ export async function createSupportTicket(payload: {
   priority?: SupportTicket["priority"];
   tags?: string[];
 }): Promise<SupportTicket> {
-  const res = await apiClient.post("/api/support/tickets/", payload);
+  const res = await apiClient.post("/support/tickets/", payload);
   return res.data;
 }
 
 export async function addSupportTicketMessage(ticketId: number, payload: { body: string; is_internal?: boolean }) {
-  const res = await apiClient.post(`/api/support/tickets/${ticketId}/messages/`, payload);
+  const res = await apiClient.post(`/support/tickets/${ticketId}/messages/`, payload);
   return res.data as SupportMessage;
 }
 
 export async function setSupportTicketStatus(ticketId: number, status: SupportTicket["status"]): Promise<SupportTicket> {
-  const res = await apiClient.post(`/api/support/tickets/${ticketId}/status/`, { status });
+  const res = await apiClient.post(`/support/tickets/${ticketId}/status/`, { status });
   return res.data;
 }
 
 export async function setSupportTicketTags(ticketId: number, tags: string[]): Promise<SupportTicket> {
-  const res = await apiClient.post(`/api/support/tickets/${ticketId}/tags/`, { tags });
+  const res = await apiClient.post(`/support/tickets/${ticketId}/tags/`, { tags });
   return res.data;
 }
 
 export async function claimSupportTicket(ticketId: number): Promise<SupportTicket> {
-  const res = await apiClient.post(`/api/support/tickets/${ticketId}/claim/`, {});
+  const res = await apiClient.post(`/support/tickets/${ticketId}/claim/`, {});
   return res.data;
 }
 
 export async function assignSupportTicket(ticketId: number, assignedToId: string | null): Promise<SupportTicket> {
-  const res = await apiClient.post(`/api/support/tickets/${ticketId}/assign/`, { assigned_to_id: assignedToId });
+  const res = await apiClient.post(`/support/tickets/${ticketId}/assign/`, { assigned_to_id: assignedToId });
   return res.data;
 }
 
 export async function listSupportMacros(): Promise<SupportMacro[]> {
-  const res = await apiClient.get("/api/support/macros/");
+  const res = await apiClient.get("/support/macros/");
   return Array.isArray(res.data) ? res.data : res.data?.results || [];
 }
 
 export async function createSupportMacro(payload: { title: string; body: string; is_active?: boolean }): Promise<SupportMacro> {
-  const res = await apiClient.post("/api/support/macros/", payload);
+  const res = await apiClient.post("/support/macros/", payload);
   return res.data;
 }
 
 export async function listSupportTags(): Promise<SupportTag[]> {
-  const res = await apiClient.get("/api/support/tags/");
+  const res = await apiClient.get("/support/tags/");
   return Array.isArray(res.data) ? res.data : res.data?.results || [];
 }
 
 export async function createSupportTag(payload: { name: string }): Promise<SupportTag> {
-  const res = await apiClient.post("/api/support/tags/", payload);
+  const res = await apiClient.post("/support/tags/", payload);
   return res.data;
 }
 
@@ -137,6 +137,6 @@ export async function submitContactIntake(payload: {
   subject?: string;
   message: string;
 }): Promise<{ ticket_id: number }> {
-  const res = await apiClient.post("/api/support/contact/", payload);
+  const res = await apiClient.post("/support/contact/", payload);
   return res.data;
 }
