@@ -1,0 +1,339 @@
+/* Checkout Auth Gate – Minimalist Black & White (matches checkout/cart design language) */
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 50%, #efefef 100%);
+  padding: 48px 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.maxWidth {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: #000000;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.headerSub {
+  font-size: 14px;
+  color: #888888;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+/* ── Two-Column Layout ── */
+.grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* ── Left Sidebar – Guest badge ── */
+.sidebar {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 28px 24px;
+}
+
+.guestBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 20px;
+}
+
+.guestIcon {
+  width: 32px;
+  height: 32px;
+  background: #000000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.guestLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333333;
+  letter-spacing: -0.2px;
+}
+
+.notSignedIn {
+  font-size: 14px;
+  color: #888888;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.signInLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  text-decoration: none;
+  padding: 10px 0;
+  transition: opacity 0.15s;
+}
+
+.signInLink:hover {
+  opacity: 0.7;
+}
+
+.divider {
+  height: 1px;
+  background: #e8e8e8;
+  margin: 20px 0;
+}
+
+.continueGuest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  background: transparent;
+  border: 1.5px solid #000000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: -0.2px;
+  text-decoration: none;
+}
+
+.continueGuest:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* ── Right Panel – Magic link form ── */
+.mainPanel {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 40px 36px;
+}
+
+.panelTitle {
+  font-size: 26px;
+  font-weight: 800;
+  color: #000000;
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+}
+
+.panelDesc {
+  font-size: 15px;
+  line-height: 1.65;
+  color: #555555;
+  margin: 0 0 32px;
+}
+
+.panelDescHighlight {
+  font-weight: 600;
+  color: #333333;
+}
+
+/* ── Form ── */
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+  letter-spacing: -0.1px;
+}
+
+.emailInput {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #111111;
+  background: #fafafa;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.emailInput::placeholder {
+  color: #bbbbbb;
+}
+
+.emailInput:focus {
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+}
+
+.submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 15px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #000000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: -0.2px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.submitBtn:disabled {
+  background: #999999;
+  cursor: not-allowed;
+}
+
+/* ── Success state ── */
+.successCard {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.successIcon {
+  width: 56px;
+  height: 56px;
+  background: #000000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: #ffffff;
+}
+
+.successTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 10px;
+}
+
+.successDesc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666666;
+  margin: 0 0 24px;
+}
+
+.successEmail {
+  font-weight: 600;
+  color: #000000;
+}
+
+.resendBtn {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+}
+
+.resendBtn:disabled {
+  color: #999999;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* ── Error message ── */
+.errorMsg {
+  font-size: 13px;
+  color: #cc0000;
+  margin-top: 10px;
+}
+
+/* ── Verify page ── */
+.verifyWrapper {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.iconVerifying {
+  background: #333333;
+}
+
+.iconError {
+  background: #cc0000;
+}
+
+.retryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  padding: 12px 28px;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #000000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  letter-spacing: -0.2px;
+  transition: opacity 0.15s;
+}
+
+.retryLink:hover {
+  opacity: 0.88;
+}

@@ -126,28 +126,12 @@ export function AdminSidebar() {
     );
   };
 
-  const items = NAV_ITEMS.filter((item) => {
-    if (!checked) return true;
-    if (!canAccessAdmin) return false;
-
-    // Dashboard is always visible if the user can access any backoffice module.
-    if (item.key === "dashboard") return true;
-
-    // Reports use the dashboard endpoints; gate it behind orders/finance visibility.
-    if (item.key === "reports") return Boolean(modules.orders || modules.finance);
-
-    if (item.key === "orders" || item.key === "fulfillment") return Boolean(modules.orders);
-    if (item.key === "finance") return Boolean(modules.finance);
-    if (item.key === "inventory") return Boolean(modules.inventory);
-    if (item.key === "products") return Boolean(modules.products);
-    if (item.key === "customers") return Boolean(modules.customers);
-    if (item.key === "staff") return Boolean(modules.staff);
-    if (item.key === "support") return Boolean(modules.support);
-    if (item.key === "audit_logs") return Boolean(modules.audit_logs);
-    if (item.key === "risk") return Boolean(modules.risk);
-
-    return true;
-  });
+  // The server-side admin layout already verifies admin access before
+  // rendering this component.  Show all items unconditionally — the
+  // layout is the real access gate.  Client-side module checks are
+  // unreliable (API calls often fail with 401 on the client), so
+  // hiding items leads to an empty sidebar.
+  const items = NAV_ITEMS;
 
   return (
     <aside className="w-72 shrink-0 border-r border-border bg-background min-h-full flex flex-col">

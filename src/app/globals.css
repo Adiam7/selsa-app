@@ -1,3 +1,7 @@
+/* Declare legacy layer FIRST so it has lowest cascade priority.
+   Order: legacy < (Tailwind layers: theme, base, components, utilities) */
+@layer legacy;
+
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
@@ -117,21 +121,41 @@
 	body {
 		@apply bg-background text-foreground;
 	}
-
 	/*
-	  Admin pages should follow the app's shadcn/Tailwind theme tokens.
-	  The legacy website stylesheet globally styles <a> using CSS variables.
-	  In admin scope we force those variables to monochrome and ensure links inherit text color.
-	*/
-	.admin-scope {
-		--link-color-h: 0;
-		--link-color-s: 0%;
-		--link-color-l: 0%;
-		--link-color-a: 1;
+	 * Neutralise the legacy `*` line-height / transition inside admin pages.
+	 * `@layer base` beats `@layer legacy` in cascade priority while still
+	 * losing to `@layer utilities`, so Tailwind utilities keep working.
+	 */
+	.admin-scope *,
+	.admin-scope *::before,
+	.admin-scope *::after {
+		line-height: inherit;
+		transition: revert;
 	}
+}
 
-	.admin-scope a:not([data-slot='button']),
-	.admin-scope a:not([data-slot='button']):visited {
-		color: inherit !important;
-	}
+/*
+ * Admin-scope link color fix.
+ * Ensures links in admin area use inherited text color
+ * instead of legacy link-color or browser default blue.
+ */
+.admin-scope {
+	--link-color-h: 0;
+	--link-color-s: 0%;
+	--link-color-l: 0%;
+	--link-color-a: 1;
+}
+.admin-scope a:not([data-slot='button']),
+.admin-scope a:not([data-slot='button']):visited {
+	color: inherit !important;
+}
+
+/*
+ * Remove excess gap between header and admin body.
+ * When the site chrome (header/footer) wraps the admin layout,
+ * the admin-scope top padding creates a large visible gap.
+ */
+.ins-tiles--main > .admin-scope {
+	padding-top: 0;
+	margin-top: 0;
 }

@@ -125,13 +125,77 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
+
+    // Magic-link (passwordless) sign-in via token from email
+    CredentialsProvider({
+      id: "magic-link",
+      name: "Magic Link",
+      credentials: {
+        token: { label: "Token", type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.token) {
+          throw new Error("Token required");
+        }
+
+        try {
+          const backendUrl =
+            process.env.NEXT_PUBLIC_BACKEND_URL ||
+            process.env.BACKEND_URL ||
+            "http://localhost:8000";
+
+          const response = await fetch(
+            `${backendUrl}/api/accounts/auth/magic-link/verify/`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token: credentials.token }),
+            },
+          );
+
+          if (!response.ok) {
+            const data = await response.json().catch(() => null);
+            throw new Error(data?.error || "Invalid or expired link");
+          }
+
+          const data = await response.json();
+          const user = data.user;
+          if (!user) {
+            throw new Error("No user data in response");
+          }
+
+          const accessToken =
+            data.accessToken || data.access_token || data.token || null;
+          const refreshToken =
+            data.refreshToken || data.refresh_token || data.refresh || null;
+
+          return {
+            id: user.id?.toString() || user.email,
+            email: user.email,
+            name: user.username || user.email.split("@")[0],
+            image: null,
+            accessToken,
+            refreshToken,
+            role: null,
+            is_staff: Boolean(user.is_staff ?? false),
+            is_superuser: Boolean(user.is_superuser ?? false),
+            plan: null,
+          };
+        } catch (error) {
+          console.error("Magic-link auth error:", error);
+          throw new Error(
+            `Authentication failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          );
+        }
+      },
+    }),
   ],
 
   // Configure callbacks for custom logic
   callbacks: {
     async jwt({ token, user, account }) {
-      // Credentials login — tokens come directly from the backend authorize() response
-      if (user && (!account || account.provider === "credentials")) {
+      // Credentials login (email/password or magic-link) — tokens come directly from the backend authorize() response
+      if (user && (!account || account.provider === "credentials" || account.provider === "magic-link")) {
         token.id = user.id;
         token.email = user.email;
         token.accessToken = (user as any).accessToken;

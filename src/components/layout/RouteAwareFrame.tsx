@@ -14,9 +14,9 @@ export function RouteAwareFrame({
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "";
-  const isAdminRoute = pathname.startsWith("/admin");
-  const isAdminDashboard = pathname === "/admin/dashboard" || pathname.startsWith("/admin/dashboard/");
-  const shouldShowSiteChrome = !isAdminRoute || isAdminDashboard;
+
+  // Always show header/footer — including on admin pages.
+  const shouldShowSiteChrome = true;
 
   const Wrapper: any = shouldShowSiteChrome ? "main" : "div";
 

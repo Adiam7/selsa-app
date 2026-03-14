@@ -10,6 +10,7 @@ import { addToCart as addToCartAPI } from '@/lib/api/cart';
 import { name_option } from '@/lib/utils/utils';
 import { getColorTranslation } from '@/utils/colorTranslations';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import type { Cart as CartType, CartItem as CartItemType } from '@/types/cart';
 import { QuantitySelector } from "@/components/QuantitySelector";
@@ -27,6 +28,7 @@ export default function CartPage() {
   const { t } = useTranslation();
   const { cart, loading, mutate, refreshCart } = useCart();
   const router = useRouter();
+  const { status: authStatus } = useSession();
   const [pendingItemIds, setPendingItemIds] = useState<Record<number, boolean>>({});
   const [globalPending, setGlobalPending] = useState(false);
   const [couponCode, setCouponCode] = useState('');
@@ -264,7 +266,7 @@ export default function CartPage() {
                 {/* Buttons */}
                 <div className={styles.flexColumn}>
                   <button
-                    onClick={() => router.push('/checkout')}
+                    onClick={() => router.push(authStatus === 'authenticated' ? '/checkout' : '/checkout/auth')}
                     disabled={globalPending}
                     className={styles.checkoutButton}
                   >

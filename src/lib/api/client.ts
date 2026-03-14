@@ -155,16 +155,19 @@ apiClient.interceptors.response.use(
           return apiClient(originalRequest);
         }
 
-        // 3) No session available, redirect to login
-        await signOut({ redirect: false });
-        if (typeof window !== 'undefined') {
-          window.location.href = '/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname);
-        }
+        // 3) No session available — the user is a guest (never signed in).
+        //    Do NOT redirect to login; let the error propagate so callers
+        //    (e.g. checkout page) can handle it gracefully with .catch().
         return Promise.reject(error);
       } catch (refreshError) {
-        await signOut({ redirect: false });
-        if (typeof window !== 'undefined') {
-          window.location.href = '/auth/login';
+        // Refresh itself failed. If a session existed before, it's truly
+        // expired — sign out and redirect. If no session, just propagate.
+        const currentSession = await getSession().catch(() => null);
+        if (currentSession) {
+          await signOut({ redirect: false });
+          if (typeof window !== 'undefined') {
+            window.location.href = '/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname);
+          }
         }
         return Promise.reject(refreshError);
       }

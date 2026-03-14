@@ -133,18 +133,6 @@ export function OrderConfirmationContent({ embedded = false }: { embedded?: bool
     >
       {order && (
         <div className={embedded ? styles.pageEmbedded : styles.page}>
-          {/* ───── Top Bar (standalone only) ───── */}
-          {!embedded && (
-            <div className={styles.topBar}>
-              <div className={styles.topBarInner}>
-                <span className={styles.topBarLogo}>SELSA</span>
-                <Link href="/account/orders" className={styles.topBarLink}>
-                  {t('My Orders')}
-                </Link>
-              </div>
-            </div>
-          )}
-
           <div className={styles.container}>
             {/* ───── Hero ───── */}
             <div className={styles.hero}>

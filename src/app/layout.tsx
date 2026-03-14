@@ -55,6 +55,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/*
+          Establish `@layer legacy` FIRST so it has the lowest cascade priority.
+          Tailwind v4's build strips it from globals.css, so we declare it here
+          (SSR-rendered, before the compiled CSS `<link>` tags).
+          Layer order becomes: legacy < properties < theme < base < components < utilities
+        */}
+        <style dangerouslySetInnerHTML={{ __html: '@layer legacy;' }} />
         {/* Meta tags */}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

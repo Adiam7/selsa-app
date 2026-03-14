@@ -9,36 +9,6 @@
   background: #fafafa;
 }
 
-/* ─── Top Bar ─── */
-.topBar {
-  background: #0a0a0a;
-  padding: 14px 0;
-}
-.topBarInner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.topBarLogo {
-  font-family: Georgia, serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 4px;
-  color: #fff;
-  text-transform: uppercase;
-}
-.topBarLink {
-  font-size: 13px;
-  color: #a3a3a3;
-  text-decoration: none;
-}
-.topBarLink:hover {
-  color: #fff;
-}
-
 /* ─── Container ─── */
 .container {
   max-width: 960px;

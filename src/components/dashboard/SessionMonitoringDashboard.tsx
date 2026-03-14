@@ -212,7 +212,7 @@ export function SessionMonitoringDashboard() {
       <CardHeader className="border-b">
         <CardTitle className="text-3xl">{t('Session Monitoring Dashboard')}</CardTitle>
         <CardDescription>
-          {t('Last updated:')} {new Date(metrics.lastUpdated).toLocaleTimeString()}
+          {t('Last updated:')} {new Date(metrics.lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
         </CardDescription>
         <CardAction>
           <div className="flex flex-wrap items-center justify-end gap-2">
@@ -423,7 +423,7 @@ function LogsTab({
                     <Badge variant="outline">{log.category.toUpperCase()}</Badge>
                   </div>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {new Date(log.timestamp).toLocaleTimeString()}
+                    {new Date(log.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </span>
                 </div>
                 <p className="mt-2 text-foreground">{log.message}</p>
@@ -476,7 +476,7 @@ function ErrorsTab({ errors }: { errors: ErrorSummary }) {
                     <span className="font-semibold text-foreground">{error.message}</span>
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    {new Date(error.timestamp).toLocaleTimeString()}
+                    {new Date(error.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </span>
                 </div>
                 {error.stackTrace && (
