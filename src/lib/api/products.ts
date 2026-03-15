@@ -40,7 +40,8 @@ export async function getProductById(id: string): Promise<Product | null> {
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   
   if (!API_BASE_URL) {
-    throw new Error("NEXT_PUBLIC_API_BASE_URL is not defined");
+    console.error('NEXT_PUBLIC_API_BASE_URL is not defined — product page will fail');
+    return null;
   }
 
   try {

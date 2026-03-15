@@ -1,11 +1,13 @@
 // src/app/api/cart/guest-create/route.ts
 import { NextResponse } from 'next/server';
 
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
 export async function POST() {
  
 
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/cart/guest-create/`, {
+    const res = await fetch(`${BACKEND_URL}/cart/guest-create/`, {
       method: 'POST',
     });
 

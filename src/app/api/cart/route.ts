@@ -1,6 +1,8 @@
 // src/app/api/cart/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
 // src/api/cart/route.ts (✅ FETCH GUEST CART)
 export async function GET(req: NextRequest) {
   
@@ -12,7 +14,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/cart/guest/?cart_id=${cartId}`, {
+    const res = await fetch(`${BACKEND_URL}/cart/guest/?cart_id=${cartId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ export async function POST(request: NextRequest) {
     console.log("🟢 POST /api/cart body:", body);
 
     // Example: send to backend
-    const res = await fetch(`${process.env.BACKEND_URL}/cart`, {
+    const res = await fetch(`${BACKEND_URL}/cart`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

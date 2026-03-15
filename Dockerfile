@@ -1,52 +1,49 @@
 # Stage 1: Builder
-# Use a Node.js image to build the application
-FROM node:18-alpine as builder
-
-# Set the working directory
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install pnpm
 RUN npm install -g pnpm
 
-# Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the application's code
 COPY . .
 
-# Build the Next.js application
+# NEXT_PUBLIC_* vars must be available at build time for inlining
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG NEXT_PUBLIC_BACKEND_URL
+ARG NEXT_PUBLIC_SITE_URL
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_ENABLE_SENTRY=false
+ARG NEXT_PUBLIC_SENTRY_DSN
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_ENABLE_SENTRY=$NEXT_PUBLIC_ENABLE_SENTRY
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+
 RUN pnpm build
 
 
-# Stage 2: Final Image
-# Use a smaller Node.js image for the final image
-FROM node:18-alpine
-
-# Set the working directory
+# Stage 2: Final Image (standalone output)
+FROM node:20-alpine
 WORKDIR /app
 
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# Copy built assets from the builder stage
+# Copy only the standalone output + static + public
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Switch to the non-root user
 USER nextjs
-
-# Expose the port the app runs on
 EXPOSE 3000
 
-# Define the command to run the application
-CMD ["pnpm", "start"]
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+CMD ["node", "server.js"]
 
-# Healthcheck to ensure the application is running
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD [ "wget", "-q", "--spider", "http://localhost:3000" ]
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD ["wget", "-q", "--spider", "http://localhost:3000"]

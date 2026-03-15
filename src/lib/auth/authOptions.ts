@@ -5,7 +5,11 @@ import { verifyPassword } from "@/lib/auth/password-utils";
 import { getUserByEmail } from "@/lib/db/users";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET || "your-secret-key-change-this-in-production",
+  secret: (() => {
+    const s = process.env.NEXTAUTH_SECRET;
+    if (!s) throw new Error("NEXTAUTH_SECRET environment variable is required");
+    return s;
+  })(),
   session: {
     strategy: "jwt",
   },

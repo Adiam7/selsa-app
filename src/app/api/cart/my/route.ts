@@ -5,6 +5,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
 
@@ -13,7 +15,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/cart/my/`, {
+    const res = await fetch(`${BACKEND_URL}/cart/my/`, {
       method: 'GET',
       headers: {
         Authorization: authHeader,

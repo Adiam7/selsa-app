@@ -1,6 +1,6 @@
 // selsa-frontend/src/lib/api/api.ts
 
-const API_BASE = process.env.BACKEND_URL;
+const API_BASE = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 export async function getProduct(productId: string, revalidate = 300) {
   const res = await fetch(`${API_BASE}/api/printful/products/${productId}/`, {

@@ -2,7 +2,7 @@
 
 export async function mergeGuestCart(guestCartId: string, token: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cart/merge-cart/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/merge-cart/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

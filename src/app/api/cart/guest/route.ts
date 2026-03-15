@@ -1,6 +1,8 @@
 // src/app/api/cart/guest/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
 export async function GET(req: NextRequest) {
   const cartId = req.nextUrl.searchParams.get('cart_id');
 
@@ -9,7 +11,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/cart/guest/?cart_id=${cartId}`, {
+    const res = await fetch(`${BACKEND_URL}/cart/guest/?cart_id=${cartId}`, {
       headers: {
         'Content-Type': 'application/json',
       },
