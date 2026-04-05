@@ -2,6 +2,7 @@
 
 import { Category } from "@/types/category";
 import { API_BASE_URL } from './client';
+import { getCurrentLanguage } from '@/utils/fetchWithLanguage';
 
 const API_BASE = API_BASE_URL;
 
@@ -47,13 +48,17 @@ function withTrailingSlash(url: string): string {
 //     return [];
 //   }
 // }
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(lang?: string): Promise<Category[]> {
   const endpoint = `${withTrailingSlash(API_BASE)}categories/top-level/`;
+  const language = lang || getCurrentLanguage();
 
   try {
     const response = await fetch(endpoint, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept-Language": language,
+      },
       cache: "no-store",
     });
 
@@ -78,11 +83,15 @@ export async function getCategories(): Promise<Category[]> {
 /**
  * ✅ Get a single category (including children)
  */
-export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+export async function getCategoryBySlug(slug: string, lang?: string): Promise<Category | null> {
   const endpoint = `${withTrailingSlash(API_BASE)}categories/${slug}/`;
+  const language = lang || getCurrentLanguage();
 
   try {
-    const response = await fetch(endpoint, { cache: "no-store" });
+    const response = await fetch(endpoint, {
+      cache: "no-store",
+      headers: { "Accept-Language": language },
+    });
     if (!response.ok) {
       return null;
     }
@@ -99,13 +108,18 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
 export async function getProductsByCategorySlug(
   slug: string,
   page = 1,
-  limit = 60
+  limit = 60,
+  lang?: string
 ) {
   const offset = (page - 1) * limit;
   const endpoint = `${withTrailingSlash(API_BASE)}products/?category_slug=${slug}&limit=${limit}&offset=${offset}`;
+  const language = lang || getCurrentLanguage();
 
   try {
-    const response = await fetch(endpoint, { cache: "no-store" });
+    const response = await fetch(endpoint, {
+      cache: "no-store",
+      headers: { "Accept-Language": language },
+    });
     if (!response.ok) {
       return { results: [], count: 0 };
     }

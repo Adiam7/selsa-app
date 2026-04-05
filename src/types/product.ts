@@ -15,11 +15,20 @@ export interface Product {
   description_display?: string;
   category?: string | null;
   image_url?: string | null;    // main product image
+  default_image?: string | null; // fallback product image
   colors: string[];
   sizes: string[];
   gallery: string[];            // unique image URLs
   variants: Variant[];
   mockups: Mockup[];            // right now just { url }
+  source?: string;              // e.g. 'local' | 'printful'
+  external_product_id?: number | string | null;
+  is_new?: boolean;
+  is_trending?: boolean;
+  discount?: number | null;
+  rating?: number | null;
+  review_count?: number;
+  stock_status?: 'high' | 'low' | 'out';
 }
 
 export interface Variant {

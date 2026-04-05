@@ -1,12 +1,15 @@
 // src/app/Home/coming_soon/page.tsx
+'use client';
 import React from "react";
 import Link from "next/link";
+import { useTranslation } from 'react-i18next';
 
 export const ComingTile: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div
       role="region"
-      aria-label="coming..."
+      aria-label={t('comingSoon.title')}
       className="ins-tile ins-tile--cta ins-tile--banner-left ins-tile--has-image"
       id="tile-call-to-action-K4VQrq"
     >
@@ -96,15 +99,15 @@ export const ComingTile: React.FC = () => {
           <div className="ins-tile__body">
 
             <div className="ins-tile__body-inner ">
-              <h2 className="ins-tile__title">Coming...</h2>
+              <h2 className="ins-tile__title">{t('comingSoon.title')}</h2>
               <div
                 role="heading"
                 aria-level={2}
                 className="ins-tile__description ins-tile__format ins-tile-wrap "
               >
-                Bright colors and creative design. <br />
-                Discover our new collection. <br />
-                Meeting new items. <br />
+                {t('comingSoon.line1')} <br />
+                {t('comingSoon.line2')} <br />
+                {t('comingSoon.line3')} <br />
                 
                 ንዝመጽእ... <br />
                 ድሙቕ ሕብርታትን ፈጠራዊ ዲዛይንን። <br />
@@ -121,7 +124,7 @@ export const ComingTile: React.FC = () => {
                 >
                   <div className="ins-control__button">
                     <div className="ins-control__wrap">
-                      <div className="ins-control__text">Shop now</div>
+                      <div className="ins-control__text">{t('Shop Now')}</div>
                     </div>
                   </div>
                 </Link>
@@ -133,3 +136,7 @@ export const ComingTile: React.FC = () => {
     </div>
   );
 };
+
+export default function ComingSoonPage() {
+  return <ComingTile />;
+}

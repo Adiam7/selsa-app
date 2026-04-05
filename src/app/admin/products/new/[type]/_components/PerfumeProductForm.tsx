@@ -32,7 +32,7 @@ export function PerfumeProductForm({
   setScentNotesTi,
 }: Props) {
   const { t } = useTranslation();
-  const localT = (k: string, opts?: any) => t(k, { lng: activeLang, ...opts });
+  const localT = (k: string, opts?: any): string => String(t(k, { lng: activeLang, ...opts }));
 
   return (
     <div className="grid gap-6 md:grid-cols-2 md:gap-x-10" data-testid="perfume-form">

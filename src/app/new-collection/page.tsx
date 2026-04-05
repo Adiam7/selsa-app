@@ -1,15 +1,16 @@
-// components/NewCollectionTile.tsx
 'use client';
 
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from 'react-i18next';
 
 export const NewCollectionTile: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <section
       role="region"
-      aria-label="New Collection"
+      aria-label={t('newCollection.title')}
       className="ins-tile ins-tile--cta ins-tile--story-left ins-tile--has-image ins-tile--same-prev-background"
       id="tile-call-to-action-UjrnSs"
     >
@@ -64,13 +65,13 @@ export const NewCollectionTile: React.FC = () => {
 
         <div className="ins-tile__body">
           <div className="ins-tile__body-inner">
-            <h2 className="ins-tile__title">New Collection</h2>
+            <h2 className="ins-tile__title">{t('newCollection.title')}</h2>
             <p
               className="ins-tile__description ins-tile__format"
               role="heading"
               aria-level={2}
             >
-              "Soft, comfy, and stylish: the perfect blend of comfort and fashion."
+              {t('newCollection.quote')}
               <br />
               <em>
                 "ልስሉስ፡ ምቹእን ቅዲ ዘለዎን፡ ምትሕውዋስ ምቾትን ፋሽንን ብሓንሳብ።"
@@ -84,7 +85,7 @@ export const NewCollectionTile: React.FC = () => {
                 passHref>
                   <div className="ins-control__button">
                     <div className="ins-control__wrap">
-                      <div className="ins-control__text">Shop Now</div>
+                      <div className="ins-control__text">{t('Shop Now')}</div>
                     </div>
                   </div>
                 
@@ -96,3 +97,7 @@ export const NewCollectionTile: React.FC = () => {
     </section>
   );
 };
+
+export default function NewCollectionPage() {
+  return <NewCollectionTile />;
+}

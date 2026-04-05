@@ -19,4 +19,5 @@ export interface Category {
   tree_id?: number;
   level?: number;
   children?: Category[]; // 👈 added so frontend can access subcategories
+  ancestors?: { slug: string; name_display: string }[];
 }

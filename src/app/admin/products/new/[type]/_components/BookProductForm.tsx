@@ -56,7 +56,7 @@ export function BookProductForm() {
   const [descriptionTi, setDescriptionTi] = useState("");
 
   const [activeLang, setActiveLang] = useState<"en" | "ti">("en");
-  const localT = (key: string, opts?: any) => t(key, { lng: activeLang, ...opts });
+  const localT = (key: string, opts?: any): string => String(t(key, { lng: activeLang, ...opts }));
   const [showTiMissing, setShowTiMissing] = useState(false);
 
   const [isbn, setIsbn] = useState("");

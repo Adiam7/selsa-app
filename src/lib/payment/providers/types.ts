@@ -31,11 +31,11 @@ export type PaymentMethodType =
   | 'faster-payments' // UK instant payments
   | 'klarna-uk';      // UK BNPL
 
-export type PaymentProvider = 'stripe' | 'paypal' | 'adyen' | 'mollie' | 'amazon' | 'klarna';
+export type PaymentProviderName = 'stripe' | 'paypal' | 'adyen' | 'mollie' | 'amazon' | 'klarna';
 
 export interface PaymentMethodConfig {
   id: PaymentMethodType;
-  provider: PaymentProvider;
+  provider: PaymentProviderName;
   name: string;
   icon: string;
   regions: PaymentRegion[];

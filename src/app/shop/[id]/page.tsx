@@ -80,7 +80,7 @@ function adaptCatalogProductToShopProduct(catalog: CatalogProduct): Product {
     return {
       id: Number(v?.id),
       name: catalog?.name ?? catalog?.name_display ?? "Product",
-      name_display: v?.product_name_display ?? catalog?.name_display,
+      name_display: (v as any)?.product_name_display ?? catalog?.name_display,
       sku: v?.sku ?? null,
       price: Number(v?.price ?? catalog?.price ?? 0) || 0,
       image_url: variantImageUrl ?? fallbackImage,
@@ -135,7 +135,7 @@ export async function generateMetadata({ params }: Props) {
     }
   } else {
     const product: Product = await getProduct(id, 900);
-    title = product?.name ?? "Product";
+    title = product?.name_display ?? String(product?.name) ?? "Product";
     img = product?.image_url ?? product?.mockups?.[0]?.url;
   }
 

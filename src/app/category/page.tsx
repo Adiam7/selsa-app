@@ -8,36 +8,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getCategories } from '@/lib/api/categories';
 import { getSafeCategoryImageUrl } from '@/lib/utils/utils';
-import { getCategoryAnalytics, getTrendingProducts, prefetchProductData } from '@/lib/api/advanced';
 import { ArrowLeft } from 'lucide-react';
 import styles from './page.module.css';
 import { useTranslation } from 'react-i18next';
 import type { Category } from '@/types/category';
+import i18n from '@/i18n';
 
 export default function CategoryPage() {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
-  const [analytics, setAnalytics] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const currentLang = i18n.language || 'en';
 
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
-        await prefetchProductData();
-        
-        const results = await Promise.allSettled([
-          getCategories(),
-          getCategoryAnalytics(),
-        ]);
-
-        if (results[0].status === 'fulfilled') {
-          setCategories(results[0].value || []);
-        }
-        if (results[1].status === 'fulfilled') {
-          setAnalytics(results[1].value || []);
-        }
+        const data = await getCategories(currentLang);
+        setCategories(data || []);
       } catch (err) {
         console.error('Error fetching category data:', err);
         setError('Failed to load categories');
@@ -47,7 +36,7 @@ export default function CategoryPage() {
     }
 
     fetchData();
-  }, []);
+  }, [currentLang]);
 
   if (loading) {
     return (
@@ -102,14 +91,14 @@ export default function CategoryPage() {
                 <div className={styles.imageWrapper}>
                   <Image
                     src={getSafeCategoryImageUrl(category)}
-                    alt={category.name_display || category.name}
+                    alt={category.name_display || String(category.name)}
                     width={260}
                     height={260}
                     priority={false}
                     className={styles.image}
                   />
                   {/* <div className={styles.imageOverlay}></div> */}
-                  {level === 'top' && <div className={styles.overlayTitle}>{category.name_display || category.name}</div>}
+                  {level === 'top' && <div className={styles.overlayTitle}>{category.name_display || String(category.name)}</div>}
                 </div>
                 <div className={`${styles.info} ${level === 'sub' ? styles.subCategoryInfo : level === 'leaf' ? styles.leafCategoryInfo : ''}`}>
                   {/* <h3 className={`${styles.name} ${level === 'top' ? styles.topCategoryName : level === 'sub' ? styles.subCategoryName : styles.leafCategoryName}`}>

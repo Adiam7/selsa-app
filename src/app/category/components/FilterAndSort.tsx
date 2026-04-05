@@ -36,7 +36,7 @@ export const FilterAndSort: React.FC<FilterAndSortProps> = ({
   const handleSortChange = useCallback(
     (sortBy: FilterOptions['sortBy']) => {
       setFilters((prev) => ({ ...prev, sortBy }));
-      onSortChange?.(sortBy);
+      if (sortBy) onSortChange?.(sortBy);
       onFilterChange?.({ ...filters, sortBy });
     },
     [filters, onFilterChange, onSortChange]
@@ -103,13 +103,13 @@ export const FilterAndSort: React.FC<FilterAndSortProps> = ({
         <div className={styles.filterSection}>
           <h4 className={styles.filterSectionTitle}>{t('Sort By')}</h4>
           <div className={styles.sortOptions}>
-            {[
+            {([
               { value: 'popular', label: '⭐ Popular' },
               { value: 'new', label: '🆕 Newest' },
               { value: 'price-low', label: '💰 Price: Low to High' },
               { value: 'price-high', label: '💎 Price: High to Low' },
               { value: 'rating', label: '⭐ Top Rated' },
-            ].map((option) => (
+            ] as const).map((option) => (
               <button
                 key={option.value}
                 className={`${styles.sortOption} ${

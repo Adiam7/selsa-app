@@ -6,6 +6,7 @@
 import { Product } from '@/types/product';
 import { Category } from '@/types/category';
 import { API_BASE_URL } from './client';
+import { getCurrentLanguage } from '@/utils/fetchWithLanguage';
 
 const API_BASE = API_BASE_URL;
 
@@ -43,7 +44,7 @@ export async function getAutocompleteSuggestions(query: string): Promise<Autocom
   try {
     const response = await fetch(
       `${API_BASE}/catalog/products/autocomplete/?q=${encodeURIComponent(query.trim())}`,
-      { cache: "no-store" }
+      { cache: "no-store", headers: { 'Accept-Language': getCurrentLanguage() } }
     );
     if (!response.ok) return [];
     return await response.json();
@@ -72,8 +73,12 @@ export async function searchItems(query: string): Promise<SearchResult[]> {
     const [productRes, categoryRes] = await Promise.all([
       fetch(`${API_BASE}/catalog/products/?search=${encodeURIComponent(query.trim())}&is_available=true`, {
         cache: "no-store",
+        headers: { 'Accept-Language': getCurrentLanguage() },
       }),
-      fetch(`${API_BASE}/categories/top-level/`, { cache: "no-store" }),
+      fetch(`${API_BASE}/categories/top-level/`, {
+        cache: "no-store",
+        headers: { 'Accept-Language': getCurrentLanguage() },
+      }),
     ]);
 
     const productsData = await productRes.json().catch(() => ({ results: [] }));
@@ -168,10 +173,12 @@ export async function getCategoryAnalytics(): Promise<CategoryAnalytics[]> {
   try {
     const categories = await fetch(`${API_BASE}/categories/top-level/`, {
       cache: "no-store",
+      headers: { 'Accept-Language': getCurrentLanguage() },
     }).then(r => r.json()).catch(() => []);
 
     const products = await fetch(`${API_BASE}/catalog/products/`, {
       cache: "no-store",
+      headers: { 'Accept-Language': getCurrentLanguage() },
     }).then(r => r.json()).catch(() => []);
 
     if (!Array.isArray(categories)) return [];
@@ -219,6 +226,7 @@ export async function getTrendingProducts(limit = 10): Promise<Product[]> {
   try {
     const products = await fetch(`${API_BASE}/catalog/products/`, {
       cache: "no-store",
+      headers: { 'Accept-Language': getCurrentLanguage() },
     }).then(r => r.json()).catch(() => []);
 
     if (!Array.isArray(products)) return [];
@@ -263,6 +271,7 @@ export async function syncWishlistWithAPI(items: WishlistItem[], token?: string)
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
@@ -287,6 +296,7 @@ export async function getAPIWishlist(token: string): Promise<WishlistItem[]> {
   try {
     const response = await fetch(`${API_BASE}/wishlist/`, {
       headers: {
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
       cache: "no-store",
@@ -312,8 +322,8 @@ export async function getAPIWishlist(token: string): Promise<WishlistItem[]> {
 export async function prefetchProductData(): Promise<void> {
   try {
     await Promise.all([
-      fetch(`${API_BASE}/catalog/products/`, { cache: "no-store" }),
-      fetch(`${API_BASE}/categories/top-level/`, { cache: "no-store" }),
+      fetch(`${API_BASE}/catalog/products/`, { cache: "no-store", headers: { 'Accept-Language': getCurrentLanguage() } }),
+      fetch(`${API_BASE}/categories/top-level/`, { cache: "no-store", headers: { 'Accept-Language': getCurrentLanguage() } }),
     ]);
   } catch (error) {
     console.error('Prefetch error');
@@ -331,6 +341,7 @@ export async function getProductsPaginated(page: number = 1, limit: number = 20)
   try {
     const response = await fetch(`${API_BASE}/catalog/products/?page=${page}&limit=${limit}`, {
       cache: "no-store",
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
 
     if (!response.ok) {
@@ -393,6 +404,7 @@ export async function getFilterFacets(): Promise<FilterFacets> {
   try {
     const response = await fetch(`${API_BASE}/catalog/products/filter-options/`, {
       cache: "no-store",
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
     if (!response.ok) throw new Error("Failed to fetch facets");
     return await response.json();
@@ -449,6 +461,7 @@ export async function getFilteredProducts(
 
     const response = await fetch(`${API_BASE}/catalog/products/?${params.toString()}`, {
       cache: "no-store",
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
 
     if (!response.ok) {

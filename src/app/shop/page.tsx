@@ -16,14 +16,7 @@ export const metadata: Metadata = {
 function getLowestVariantPrice(variants: CatalogProductVariant[] = []) {
   if (!variants || variants.length === 0) return 0;
   const prices = variants.map((v: CatalogProductVariant) => {
-    const candidate =
-      v.price ??
-      v.retail_price ??
-      (v.price && typeof v.price === "object"
-        ? v.price.amount ?? v.price.value ?? 0
-        : v.price) ??
-      v.price_usd ??
-      0;
+    const candidate = v.price ?? v.retail_price ?? v.price_usd ?? 0;
     return Number(candidate) || 0;
   });
   const min = Math.min(...prices);

@@ -6,6 +6,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { useSearch } from '../context/SearchContext';
 import styles from '../styles/page.module.css';
 
@@ -232,7 +233,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                       <>
                         <div className={styles.searchResultImage}>
                           {result.image && (
-                            <img src={result.image} alt={result.name_display || result.name} />
+                            <Image src={result.image} alt={result.name_display || result.name} width={64} height={64} />
                           )}
                         </div>
                         <div className={styles.searchResultContent}>

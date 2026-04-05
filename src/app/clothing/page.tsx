@@ -1,13 +1,16 @@
 // components/ClothingCTA.tsx
+'use client';
 import React from "react";
 import Link from "next/link";
+import { useTranslation } from 'react-i18next';
 
 export const ClothingCTA: React.FC = () => {
+  const { t } = useTranslation();
   return (
     
     <section
       role="region"
-      aria-label="Clothing"
+      aria-label={t('clothing.title')}
       id="tile-call-to-action-NrWbGx"
       className="relative flex flex-col md:flex-row items-stretch overflow-hidden bg-white"
     >
@@ -40,7 +43,7 @@ export const ClothingCTA: React.FC = () => {
 
       <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-12 text-left">
         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Clothing
+          {t('clothing.title')}
         </h2>
 
         <div
@@ -49,7 +52,7 @@ export const ClothingCTA: React.FC = () => {
           className="text-lg md:text-xl text-gray-800 mb-6"
         >
           <p className="mb-2">
-            Introducing our latest collection: a curated selection of seasonal fashion trends to elevate your style game.
+            {t('clothing.description')}
           </p>
           <p>
             ናይ ወቕታዊ ዝመጹ ትሕስቶ ምልላይ፡ ቅዲ ስታይክኩም ልዕል ንምባል ዝተዳለወ ምርጫ ፋሽን ትረንድስ።
@@ -63,7 +66,7 @@ export const ClothingCTA: React.FC = () => {
                 passHref>
                   <div className="ins-control__button">
                     <div className="ins-control__wrap">
-                      <div className="ins-control__text">Shop Now</div>
+                      <div className="ins-control__text">{t('Shop Now')}</div>
                     </div>
                   </div>
                 
@@ -73,3 +76,7 @@ export const ClothingCTA: React.FC = () => {
     </section>
   );
 };
+
+export default function ClothingPage() {
+  return <ClothingCTA />;
+}

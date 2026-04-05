@@ -80,7 +80,7 @@ export function OrderConfirmationContent({ embedded = false }: { embedded?: bool
   const params = useParams();
   const router = useRouter();
   const { t } = useTranslation();
-  const orderId = params.id as string;
+  const orderId = params?.id as string;
 
   const [order, setOrder] = useState<OrderConfirmation | null>(null);
   const [loading, setLoading] = useState(true);
@@ -126,7 +126,7 @@ export function OrderConfirmationContent({ embedded = false }: { embedded?: bool
   return (
     <LoadingState
       loading={loading}
-      error={error}
+      error={error ?? undefined}
       retry={fetchOrder}
       loadingMessage="Loading your order confirmation..."
       errorTitle="Unable to load order"

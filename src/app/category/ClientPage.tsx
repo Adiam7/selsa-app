@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import styles from './page.module.css';
 import ProductBadges from './components/ProductBadges';
-import QuickViewModal from './components/QuickViewModal';
+import dynamic from 'next/dynamic';
+const QuickViewModal = dynamic(() => import('./components/QuickViewModal'), { ssr: false });
 import FilterAndSort, { FilterOptions } from './components/FilterAndSort';
 import SkeletonLoader from './components/SkeletonLoader';
 
@@ -136,7 +137,7 @@ export const ClientCategoryPage: React.FC<ClientCategoryPageProps> = ({
       {/* Quick View Modal */}
       <QuickViewModal
         isOpen={isModalOpen}
-        product={selectedProduct}
+        product={selectedProduct as any}
         onClose={handleModalClose}
         onAddToCart={handleAddToCart}
         onAddToFavorites={handleAddToFavorites}

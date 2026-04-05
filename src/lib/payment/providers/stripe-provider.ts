@@ -43,7 +43,7 @@ export class StripeProvider implements PaymentProvider {
 
   constructor(secretKey: string, options?: Stripe.StripeConfig) {
     this.stripe = new Stripe(secretKey, {
-      apiVersion: '2023-10-16',
+      apiVersion: '2023-10-16' as any,
       ...options
     });
   }
@@ -126,7 +126,7 @@ export class StripeProvider implements PaymentProvider {
         success: intent.status === 'succeeded',
         paymentIntentId: intent.id,
         requiresAction: intent.status === 'requires_action',
-        actionUrl: intent.next_action?.redirect_to_url?.url,
+        actionUrl: intent.next_action?.redirect_to_url?.url ?? undefined,
         error: intent.status === 'requires_payment_method' ? 'Payment failed' : undefined
       };
 
@@ -179,7 +179,7 @@ export class StripeProvider implements PaymentProvider {
    * Get Stripe payment method types for our payment method
    */
   private getStripePaymentMethodTypes(paymentMethod: PaymentMethodType): string[] {
-    const methodMap: Record<PaymentMethodType, string[]> = {
+    const methodMap: Partial<Record<PaymentMethodType, string[]>> = {
       'card': ['card'],
       'apple-pay': ['card'], // Apple Pay is handled by Payment Request API
       'google-pay': ['card'], // Google Pay is handled by Payment Request API

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Check, X, Loader2 } from 'lucide-react';
@@ -10,6 +10,14 @@ import styles from '../page.module.css';
 type Status = 'verifying' | 'success' | 'error';
 
 export default function MagicLinkVerifyPage() {
+  return (
+    <Suspense fallback={<div className={styles.page}><div className={styles.maxWidth}><Loader2 size={28} className="animate-spin" /></div></div>}>
+      <MagicLinkVerifyContent />
+    </Suspense>
+  );
+}
+
+function MagicLinkVerifyContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams?.get('token');

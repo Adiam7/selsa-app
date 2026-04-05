@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     const stripeProvider = createStripeProvider();
 
     // Prepare enhanced metadata
-    const enhancedMetadata = {
+    const enhancedMetadata: Record<string, string> = {
       paymentMethod,
       customerCountry,
       customerEmail: customerEmail || '',
@@ -386,7 +386,7 @@ function getNextStepsForPaymentMethod(method: PaymentMethodType): string[] {
  * Get payment method specific requirements
  */
 function getPaymentMethodRequirements(method: PaymentMethodType): string[] {
-  const requirements: Record<PaymentMethodType, string[]> = {
+  const requirements: Partial<Record<PaymentMethodType, string[]>> = {
     'ideal': ['Dutch bank account', 'Online banking access'],
     'bancontact': ['Belgian bank account', 'Card reader or Bancontact app'],
     'sofort': ['German or Austrian bank account', 'Online banking credentials'],

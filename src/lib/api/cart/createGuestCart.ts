@@ -1,4 +1,6 @@
 // lib/api/cart/createGuestCart.ts
+import { getCurrentLanguage } from '@/utils/fetchWithLanguage';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : '/api');
 
 export async function createGuestCart(): Promise<string | null> {
@@ -7,6 +9,7 @@ export async function createGuestCart(): Promise<string | null> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": getCurrentLanguage(),
       },
       credentials: "include", // Include cookies to maintain Django session
     });

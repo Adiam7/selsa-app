@@ -108,7 +108,7 @@ export default function AccountPage() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">{t('Continue with :')}<Link
               href="/auth/login"
               className="flex items-center justify-center gap-2 px-6 py-3 border rounded hover:bg-gray-100"
-            >{t('Google')}<img src="/icons/google.svg" alt="Google" className="w-5 h-5" />
+            >{t('Google')}<Image src="/icons/google.svg" alt="Google" width={20} height={20} />
               <br/>
             </Link>
 
@@ -122,7 +122,7 @@ export default function AccountPage() {
             <Link
               href="/auth/login"
               className="flex items-center justify-center gap-2 px-6 py-3 border rounded hover:bg-gray-100"
-            >{t('Facebook')}<img src="/icons/facebook.svg" alt="Facebook" className="w-5 h-5" />
+            >{t('Facebook')}<Image src="/icons/facebook.svg" alt="Facebook" width={20} height={20} />
               <br/>
             </Link>
           </div>

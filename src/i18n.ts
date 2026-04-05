@@ -17,9 +17,10 @@ const resources = {
 // Initialize i18n
 if (!i18n.isInitialized) {
   i18n
-    .use(HttpApi)
+    .use(HttpApi as any)
     .use(LanguageDetector)
     .use(initReactI18next)
+    // @ts-expect-error — cookieName exists at runtime but is missing from DetectorOptions type
     .init({
       resources,
       fallbackLng: 'en',
@@ -29,8 +30,9 @@ if (!i18n.isInitialized) {
         escapeValue: false,
       },
       detection: {
-        order: ['localStorage', 'querystring', 'cookie', 'navigator', 'htmlTag', 'path', 'subdomain'],
-        caches: ['localStorage'],
+        order: ['localStorage', 'cookie', 'querystring', 'navigator', 'htmlTag', 'path', 'subdomain'],
+        caches: ['localStorage', 'cookie'],
+        cookieName: 'i18nextLng',
       },
       react: {
         useSuspense: false, // Prevents SSR issues

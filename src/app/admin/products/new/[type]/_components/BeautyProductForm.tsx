@@ -39,7 +39,7 @@ export function BeautyProductForm({ initialSubcategory, hideSelector }: { initia
   const { t } = useTranslation();
   const router = useRouter();
   const { success, error: showError } = useToast();
-  const localT = (key: string, opts?: any) => t(key, { lng: activeLang, ...opts });
+  const localT = (key: string, opts?: any): string => String(t(key, { lng: activeLang, ...opts }));
 
   const NONE = "__none__";
 

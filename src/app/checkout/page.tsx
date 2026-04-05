@@ -17,7 +17,9 @@ import { Shield, Truck, Lock, Check, ChevronRight, AlertCircle } from 'lucide-re
 import { ShippingDisplay } from '@/components/checkout';
 import { getDisplayName } from '@/utils/i18nDisplay';
 import { ShippingDisplayData } from '@/types/shipping';
-import StripePaymentForm, { isStripeMethod, type SupportedStripeMethod } from '@/components/StripePaymentForm';
+import dynamic from 'next/dynamic';
+const StripePaymentForm = dynamic(() => import('@/components/StripePaymentForm'), { ssr: false });
+import { isStripeMethod, type SupportedStripeMethod } from '@/components/StripePaymentForm';
 import { useCheckoutTracking } from '@/lib/hooks/useAnalytics';
 import { postCheckoutSignal } from '@/lib/api/growth';
 import { validateCartBeforeCheckout, handleOutOfStockItems, handlePriceChanges, handleSessionExpiry, withRetry, isNetworkError } from '@/lib/validation/inventory';
@@ -1925,7 +1927,7 @@ const CheckoutPage = () => {
                       ) : (
                         <ActionButton
                           onClick={handlePlaceOrderWithValidation}
-                          variant="success"
+                          variant="primary"
                           size="lg"
                           className={`${styles.primaryButton} mt-4`}
                         >

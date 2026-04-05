@@ -1,11 +1,13 @@
 // src/lib/api/products.ts
 import { Product } from '@/types/product';
 import { API_BASE_URL } from './client';
+import { getCurrentLanguage } from '@/utils/fetchWithLanguage';
 
 export async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/products/products/`, {
       next: { revalidate: 60 }, // ISR support
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
     if (!res.ok) throw new Error('Failed to fetch products');
     const data = await res.json();
@@ -17,7 +19,9 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductById(id: string): Promise<Product | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/products/by-id/${id}/`);
+    const res = await fetch(`${API_BASE_URL}/products/by-id/${id}/`, {
+      headers: { 'Accept-Language': getCurrentLanguage() },
+    });
     if (!res.ok) return null;
 
     const product: Product = await res.json();
@@ -47,6 +51,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}/`, {
       next: { revalidate: 60 }, // optional ISR caching in Next.js 13+
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
 
     if (!res.ok) {
@@ -68,6 +73,7 @@ export async function getAllProductSlugs(): Promise<{ slug: string }[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/products`, {
       next: { revalidate: 3600 },
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
 
     if (!res.ok) return [];
@@ -85,7 +91,9 @@ export async function getAllProductSlugs(): Promise<{ slug: string }[]> {
 // src/lib/api.ts -->   getRelatedProducts in API
 export async function getRelatedProducts(slug: string): Promise<Product[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}/related/`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${slug}/related/`, {
+      headers: { 'Accept-Language': getCurrentLanguage() },
+    });
     if (!res.ok) return [];
     const data = await res.json();
     if (Array.isArray(data)) return data;
@@ -102,6 +110,7 @@ export async function getProductsByCategory(slug: string) {
   try {
     const res = await fetch(`${API_BASE_URL}/categories/${slug}`, {
       cache: "no-store", // Always get fresh data
+      headers: { 'Accept-Language': getCurrentLanguage() },
     });
 
     if (!res.ok) {

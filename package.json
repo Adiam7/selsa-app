@@ -26,6 +26,8 @@
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.2.5",
     "@fontsource-variable/ibm-plex-sans": "^5.2.5",
+    "@fontsource-variable/noto-sans-ethiopic": "^5.2.7",
+    "@fontsource-variable/noto-serif-ethiopic": "^5.2.9",
     "@fontsource-variable/playfair-display": "^5.2.5",
     "@fontsource-variable/roboto-flex": "^5.2.5",
     "@fontsource-variable/syne": "^5.2.5",
@@ -70,6 +72,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^16.2.2",
     "@playwright/test": "^1.58.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
@@ -85,6 +88,7 @@
     "eslint": "^9.27.0",
     "eslint-config-next": "15.3.2",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.4.0",
     "husky": "^9.1.7",
     "identity-obj-proxy": "^3.0.0",

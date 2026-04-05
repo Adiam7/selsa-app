@@ -10,7 +10,7 @@ import { getPaymentMethodsForRegion, PAYMENT_METHOD_CONFIGS } from './config';
 const GEO_API_URL = 'https://ipapi.co/json/';
 
 // Country code to region mapping
-const COUNTRY_TO_REGION: Record<string, PaymentRegion> = {
+export const COUNTRY_TO_REGION: Record<string, PaymentRegion> = {
   // Netherlands
   'NL': 'netherlands',
   

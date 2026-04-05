@@ -1,6 +1,7 @@
 import './globals.css';
 import './layout.css';
-
+import '@fontsource-variable/noto-sans-ethiopic';
+import '@fontsource-variable/noto-serif-ethiopic';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -8,6 +9,7 @@ import Script from 'next/script';
 import Providers from '@/components/Providers'; 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import LangSync from '@/components/LangSync';
 import { FavouritesProvider } from '@/context/FavouritesContext';
 import { BackendStatusAlert } from '@/components/BackendStatusAlert';
 import { RouteAwareFrame } from '@/components/layout/RouteAwareFrame';
@@ -46,6 +48,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      'en': SITE_URL,
+      'ti': SITE_URL,
+    },
   },
 };
 
@@ -67,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`bg-background text-foreground antialiased ${interClass} layout-root`} suppressHydrationWarning>
+        <LangSync />
         {/* SEO: Organization + WebSite structured data (once per page) */}
         <OrganizationJsonLd />
         <WebSiteJsonLd />

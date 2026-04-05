@@ -6,6 +6,7 @@
 'use client';
 
 import React, { ReactNode } from 'react';
+import Image from 'next/image';
 import { useScrollReveal, getAnimationDelay } from '../lib/animationHelpers';
 import styles from '../styles/page.module.css';
 
@@ -154,7 +155,7 @@ export const ParallaxImage: React.FC<{
         } as React.CSSProperties
       }
     >
-      <img src={src} alt={alt} className={styles.parallaxImage} />
+      <Image src={src} alt={alt} className={styles.parallaxImage} fill style={{ objectFit: 'cover' }} />
     </div>
   );
 };

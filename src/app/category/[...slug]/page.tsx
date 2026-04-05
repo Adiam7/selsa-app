@@ -2,6 +2,7 @@
 
 import CategoryClient from "./CategoryClient";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { Category } from "@/types/category";
 import styles from "../page.module.css";
 import ProductBadges from "../components/ProductBadges";
@@ -41,10 +42,14 @@ export default async function CategoryPage(props: Props) {
   const limit = 60;
 
   try {
+    // Read user's language preference from cookie (set by i18next)
+    const cookieStore = await cookies();
+    const lang = cookieStore.get('i18nextLng')?.value || 'en';
 
     // 1️⃣ Fetch the category itself
     const categoryRes = await fetch(`${API_BASE_URL}/categories/${fullSlugPath}/`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
+      headers: { "Accept-Language": lang },
     });
     
 
@@ -76,7 +81,10 @@ export default async function CategoryPage(props: Props) {
     //   (currentPage - 1) * limit
     // }`;
 
-    const productsRes = await fetch(productsUrl, { next: { revalidate: 60 } });
+    const productsRes = await fetch(productsUrl, {
+      cache: "no-store",
+      headers: { "Accept-Language": lang },
+    });
 
 
     if (!productsRes.ok) {

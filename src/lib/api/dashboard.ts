@@ -1,5 +1,6 @@
 import type { DashboardStats, Order, Product, DashboardCharts, DashboardFilters } from '@/features/dashboard/types';
 import { getSession } from 'next-auth/react';
+import { getCurrentLanguage } from '@/utils/fetchWithLanguage';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 const DASHBOARD_BASE = `${API_BASE}/dashboard`;
@@ -15,6 +16,7 @@ async function getAuthHeaders() {
   return {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     'Content-Type': 'application/json',
+    'Accept-Language': getCurrentLanguage(),
   } as Record<string, string>;
 }
 

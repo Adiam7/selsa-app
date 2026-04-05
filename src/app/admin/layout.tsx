@@ -2,6 +2,14 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { authOptions } from "@/lib/auth";
+import { pageMetadata } from "@/lib/metadata";
+
+export const metadata = pageMetadata({
+  title: 'Admin',
+  description: 'Selsa admin dashboard',
+  path: '/admin',
+  noIndex: true,
+});
 
 function backendBaseUrl(): string {
   return (

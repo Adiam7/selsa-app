@@ -8,10 +8,17 @@
 
 const API_BASE = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
+function getCurrentLanguage(): string {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('i18nextLng') || 'en';
+  }
+  return 'en';
+}
+
 export async function getProduct(productId: string, revalidate = 300) {
   const res = await fetch(`${API_BASE}/api/printful/products/${productId}/`, {
     next: { revalidate },
-    headers: { Accept: "application/json" },
+    headers: { Accept: "application/json", 'Accept-Language': getCurrentLanguage() },
   });
 
   if (!res.ok) {
@@ -38,7 +45,9 @@ export async function getProduct(productId: string, revalidate = 300) {
 
 
 export async function fetchStore(storeId: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/${storeId}/`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores/${storeId}/`, {
+    headers: { 'Accept-Language': getCurrentLanguage() },
+  });
 
   if (!res.ok) {
     const errText = await res.text();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { signIn } from "next-auth/react";
 
@@ -92,7 +93,7 @@ export default function RegisterForm() {
                    <div className="ins-control__button">
                      <div className="ins-control__wrap">
                        <div className="ins-control__icon">
-                         <img src="/icons/google.svg" alt="Google" className="w-5 h-5" />
+                         <Image src="/icons/google.svg" alt="Google" width={20} height={20} />
                        </div>
                      </div>
                    </div>
@@ -114,7 +115,7 @@ export default function RegisterForm() {
                      <div className="ins-control__wrap">
                        <div className="ins-control__text">
                          <div className="ins-control__icon">
-                           <img src="/icons/apple.svg" alt="Apple" className="w-5 h-5" />
+                           <Image src="/icons/apple.svg" alt="Apple" width={20} height={20} />
                          </div>
                        </div>
                      </div>

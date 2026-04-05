@@ -26,7 +26,10 @@ export default function Header() {
   useEffect(() => {
     setMounted(true);
     if (typeof window !== 'undefined' && window.localStorage) {
-      setCurrentLang(localStorage.getItem('i18nextLng') || 'en');
+      const lang = localStorage.getItem('i18nextLng') || 'en';
+      setCurrentLang(lang);
+      // Sync cookie for server-side language detection
+      document.cookie = `i18nextLng=${lang};path=/;max-age=31536000;SameSite=Lax`;
     }
   }, []);
   const handleLanguageSwitch = () => {
@@ -34,6 +37,7 @@ export default function Header() {
       const current = localStorage.getItem('i18nextLng');
       const newLang = current === 'ti' ? 'en' : 'ti';
       localStorage.setItem('i18nextLng', newLang);
+      document.cookie = `i18nextLng=${newLang};path=/;max-age=31536000;SameSite=Lax`;
       console.log('Switched language to:', newLang);
       window.location.reload();
     }
@@ -41,8 +45,22 @@ export default function Header() {
 
   return (
     <header className="ins-tile ins-tile--header ins-tile--left-logo-compact ins-tile--has-opacity ins-tile--full-opacity ins-tile--light-sidebar" role="banner" id="tile-header-fcHJMd">
-      
-        
+        <style>{`
+          #tile-header-fcHJMd {
+            --background-color-a: 0;
+            --background-color-b: 0;
+            --background-color-h: 0;
+            --background-color-l: 0%;
+            --background-color-s: 0%;
+            --menu-and-icons-font-size: 16px;
+            --menu-and-icons-font-style: normal;
+            --menu-and-icons-font-weight: 400;
+          }
+          .ins-tile {
+            --header-height-desktop: 70;
+            --header-height-mobile: 60;
+          }
+        `}</style>
         <div className="ins-header">
           <div className="ins-header__wrap">
             <div className="ins-header__inner">
@@ -94,32 +112,13 @@ export default function Header() {
                     </nav>
                   </div>
                 </div>
-                <style>{`
-                    #tile-header-fcHJMd {
-                      --background-color-a: 0;
-                      --background-color-b: 0;
-                      --background-color-h: 0;
-                      --background-color-l: 0%;
-                      --background-color-s: 0%;
-                      --menu-and-icons-font-size: 16px;
-                      --menu-and-icons-font-style: normal;
-                      --menu-and-icons-font-weight: 400;
-                    }
-                    .ins-tile {
-                      --header-height-desktop: 70;
-                      --header-height-mobile: 60;
-                    }
-                  `}</style>
-                <div className="ins-tile__wrap ins-tile__animated ins-header__right">
-                    {/* Language Switcher */}
-                    {mounted && (
-                      <div style={{ position: 'relative', top: 8, right: 16, zIndex: 1000 }}>
-                        <button onClick={handleLanguageSwitch} style={{ background: 'none', border: 'none', color: '#0070f3', cursor: 'pointer', fontWeight: 600 }}>
-                          {currentLang === 'ti' ? 'English' : 'ትግርኛ'}
-                        </button>
-                      </div>
-                    )}
                 <div className="ins-header__right">
+                  {/* Language Switcher */}
+                  {mounted && (
+                    <button onClick={handleLanguageSwitch} className="ins-header__icon" style={{ background: 'none', border: 'none', color: '#0070f3', cursor: 'pointer', fontWeight: 600 }}>
+                      {currentLang === 'ti' ? 'English' : 'ትግርኛ'}
+                    </button>
+                  )}
                   <Link 
                     href="/catalog/search" 
                     className="ins-header__icon ins-header__icon--search" 
@@ -262,7 +261,6 @@ export default function Header() {
             </div>
           </div>
         </div>
-      </div>
     </header>
   );
 }

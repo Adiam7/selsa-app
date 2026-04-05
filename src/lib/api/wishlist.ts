@@ -6,6 +6,7 @@
 import { Product } from '@/types/product';
 import { getSession } from 'next-auth/react';
 import { API_BASE_URL } from './client';
+import { getCurrentLanguage } from '@/utils/fetchWithLanguage';
 
 const API_BASE = API_BASE_URL;
 
@@ -52,6 +53,7 @@ export async function getWishlist(userId?: string): Promise<WishlistResponse> {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         ...(token && { 'Authorization': `Bearer ${token}` }),
       },
       next: { revalidate: 30 }, // Cache for 30 seconds
@@ -91,6 +93,7 @@ export async function addToWishlist(productId: string): Promise<WishlistItem | n
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({ product_id: productId }),
@@ -127,6 +130,7 @@ export async function removeFromWishlist(productId: string): Promise<boolean> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({ product_id: productId }),
@@ -174,6 +178,7 @@ export async function clearWishlist(): Promise<boolean> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
     });
@@ -208,6 +213,7 @@ export async function syncWishlistWithBackend(localFavorites: string[]): Promise
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({ product_ids: localFavorites }),
@@ -244,6 +250,7 @@ export async function shareWishlist(): Promise<{ share_token: string; share_url:
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
     });
@@ -271,7 +278,10 @@ export async function getSharedWishlist(shareToken: string): Promise<WishlistRes
   try {
     const response = await fetch(`${API_BASE}/wishlist/shared/${shareToken}/`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
+      },
       next: { revalidate: 60 },
     });
 
@@ -318,6 +328,7 @@ export async function getWishlistStats(): Promise<{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getCurrentLanguage(),
         'Authorization': `Bearer ${token}`,
       },
       next: { revalidate: 60 },

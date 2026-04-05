@@ -120,7 +120,105 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		text-rendering: optimizeLegibility;
+		font-feature-settings: "kern" 1;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 	}
+
+	/* ── Heading hierarchy (fluid) ────────────────────────── */
+	h1 {
+		font-size: clamp(1.5rem, 4vw, 2rem);
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -0.02em;
+	}
+	h2 {
+		font-size: clamp(1.25rem, 3vw, 1.5rem);
+		font-weight: 600;
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+	}
+	h3 {
+		font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+		font-weight: 600;
+		line-height: 1.4;
+	}
+	h4 {
+		font-size: 1.125rem;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	/* ── Tigrinya (Geʽez script) typography ──────────────── */
+	:lang(ti) {
+		font-family:
+			"Noto Sans Ethiopic Variable",
+			"Noto Sans Ethiopic",
+			"Abyssinica SIL",
+			ui-sans-serif,
+			system-ui,
+			sans-serif;
+		letter-spacing: -0.01em;
+		word-spacing: normal;
+		line-height: 1.4;
+		/* Geʽez glyphs render visually smaller than Latin at the same font-size */
+		font-size: 1.05em;
+	}
+
+	:lang(ti) h1 {
+		letter-spacing: -0.015em;
+		line-height: 1.15;
+	}
+	:lang(ti) h2 {
+		letter-spacing: -0.01em;
+		line-height: 1.25;
+	}
+	:lang(ti) h3,
+	:lang(ti) h4 {
+		line-height: 1.35;
+	}
+
+	/* Tigrinya words are longer — prevent button/nav overflow */
+	:lang(ti) button,
+	:lang(ti) [role="button"],
+	:lang(ti) nav a {
+		white-space: normal;
+		word-break: keep-all;
+		overflow-wrap: break-word;
+	}
+
+	/* Constrain long-form text width for readability */
+	:lang(ti) p,
+	:lang(en) p {
+		max-width: 70ch;
+	}
+
+	/* ── Tigrinya serif for long-form / editorial content ── */
+	.prose-ti {
+		font-family:
+			"Noto Serif Ethiopic Variable",
+			"Noto Serif Ethiopic",
+			"Abyssinica SIL",
+			ui-serif,
+			Georgia,
+			serif;
+		line-height: 1.6;
+		font-size: 1.05em;
+	}
+
+	/* ── Dark mode: boost Ethiopic text contrast ────────── */
+	.dark :lang(ti) {
+		-webkit-text-stroke: 0.3px;
+	}
+	.dark :lang(ti) body,
+	.dark :lang(ti) p,
+	.dark :lang(ti) span,
+	.dark :lang(ti) a,
+	.dark :lang(ti) li {
+		font-weight: 450;
+	}
+
 	/*
 	 * Neutralise the legacy `*` line-height / transition inside admin pages.
 	 * `@layer base` beats `@layer legacy` in cascade priority while still

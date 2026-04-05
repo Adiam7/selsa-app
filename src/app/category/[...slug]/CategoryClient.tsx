@@ -45,20 +45,22 @@ export default function CategoryClient({
           <Link href="/">{t('Home')}</Link>
           <span>/</span>
           <Link href="/shop">{t('Store')}</Link>
-          {slugArray.map((s, i) => {
-            const path = `/category/${slugArray.slice(0, i + 1).join("/")}`;
+          {category.ancestors?.map((ancestor, i) => {
+            const path = `/category/${[...category.ancestors!.slice(0, i + 1).map(a => a.slug)].join("/")}`;
             return (
               <React.Fragment key={i}>
                 <span>/</span>
-                <Link href={path}>{decodeURIComponent(s)}</Link>
+                <Link href={path}>{ancestor.name_display}</Link>
               </React.Fragment>
             );
           })}
+          <span>/</span>
+          <span>{category.name_display || (typeof category.name === 'string' ? category.name : category.name?.en || '')}</span>
         </nav>
 
         {/* Render subcategories grid */}
         <div className="grid grid-cols-4 gap-6 product-container">
-          {category.children.map((child: Category) => {
+          {category.children?.map((child: Category) => {
             const childSlug = [...slugArray, child.slug].join('/');
             const displayName = child.name_display || (typeof child.name === 'string' ? child.name : child.name?.en || 'Untitled');
             
@@ -132,15 +134,17 @@ export default function CategoryClient({
         <Link href="/">{t('Home')}</Link>
         <span>/</span>
         <Link href="/shop">{t('Store')}</Link>
-        {slugArray.map((s, i) => {
-          const path = `/category/${slugArray.slice(0, i + 1).join("/")}`;
+        {category.ancestors?.map((ancestor, i) => {
+          const path = `/category/${[...category.ancestors!.slice(0, i + 1).map(a => a.slug)].join("/")}`;
           return (
             <React.Fragment key={i}>
               <span>/</span>
-              <Link href={path}>{decodeURIComponent(s)}</Link>
+              <Link href={path}>{ancestor.name_display}</Link>
             </React.Fragment>
           );
         })}
+        <span>/</span>
+        <span>{category.name_display || (typeof category.name === 'string' ? category.name : category.name?.en || '')}</span>
       </nav>
 
       {/* Products grid */}

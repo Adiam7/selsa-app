@@ -49,7 +49,7 @@ export function FoodProductForm() {
   const [categoryId, setCategoryId] = useState<string>("");
 
   const [activeLang, setActiveLang] = useState<"en" | "ti">("en");
-  const localT = (k: string, opts?: any) => t(k, { lng: activeLang, ...opts });
+  const localT = (k: string, opts?: any): string => String(t(k, { lng: activeLang, ...opts }));
 
   const [nameEn, setNameEn] = useState("");
   const [nameTi, setNameTi] = useState("");

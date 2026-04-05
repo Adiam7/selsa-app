@@ -109,7 +109,7 @@ export default function IntroPage() {
       </div>
 
       <div className="ins-tile__wrap ins-tile__animated ">
-        <div role="heading" aria-level="2" className="ins-tile__tagline ">
+        <div role="heading" aria-level={2} className="ins-tile__tagline ">
           We got a ...
         </div>
 

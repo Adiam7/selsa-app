@@ -1,12 +1,15 @@
 // app/about/page.tsx
+'use client';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function AboutPage() {
+  const { t } = useTranslation();
   return (
 
     <section
       role="region"
-      aria-label="Hey!"
+      aria-label={t('about.title')}
       id="tile-text-H2KtzB"
       className="ins-tile ins-tile--text ins-tile--fullscreen-bottom-right ins-tile--adaptive"
     >
@@ -49,7 +52,7 @@ export default function AboutPage() {
        </style>
 
       <div className="ins-tile__wrap ins-tile__animated">
-        <h2 className="ins-tile__title ins-tile__animated">Hey!</h2>
+        <h2 className="ins-tile__title ins-tile__animated">{t('about.title')}</h2>
         <h3
           role="heading"
           aria-level={2}
@@ -61,19 +64,15 @@ export default function AboutPage() {
         <div className="ins-tile__description ins-tile__format
           ins-tile__description--adaptive ">
           <p>
-            Welcome to our online store <strong>Selsa</strong>. If you are a fan of shopping,
-            especially t-shirts, come check out our store!
+            {t('about.welcome')}
           </p>
 
           <p>
-            Every model in our shop is unique. Our items are well designed, better quality, and
-            comfortable to wear—and extra affordable. We try to stay unique and stylish. We’re
-            improving our stuff every day.
+            {t('about.unique')}
           </p>
 
           <p>
-            We try to come up with things that satisfy everyone. Items can also be the result of
-            collaborations with family, friends, and teams.
+            {t('about.collab')}
           </p>
 
           <hr className="my-6 border-gray-300" />

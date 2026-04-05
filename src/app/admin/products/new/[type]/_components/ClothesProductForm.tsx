@@ -59,7 +59,7 @@ export function ClothesProductForm() {
   const [images, setImages] = useState<File[]>([]);
 
   const [activeLang, setActiveLang] = useState<"en" | "ti">("en");
-  const localT = (key: string, opts?: any) => t(key, { lng: activeLang, ...opts });
+  const localT = (key: string, opts?: any): string => String(t(key, { lng: activeLang, ...opts }));
 
   const canCreate = useMemo(() => {
     return titleEn.trim().length > 0 && String(price).trim().length > 0;

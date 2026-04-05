@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDir = path.dirname(currentFilePath);
@@ -26,7 +31,7 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.paypal.com",
+              "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.paypal.com",
               "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.sandbox.paypal.com",
               `connect-src 'self' https://api.stripe.com https://api.paypal.com https://api.sandbox.paypal.com https://ipapi.co ${BACKEND_URL}`,
               `img-src 'self' data: blob: https://files.cdn.printful.com https://res.cloudinary.com ${BACKEND_URL} https://*.stripe.com`,
@@ -107,4 +112,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

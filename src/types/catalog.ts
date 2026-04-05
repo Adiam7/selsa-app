@@ -11,6 +11,7 @@ export interface CatalogProduct {
   id: number;
   local_product?: number | null; // FK ID
   printful_product?: number | null; // FK ID
+  printful_id?: number | null;
   name: string | I18nField;
   name_display?: string;        // Localized display string from API
   slug?: string | null;
@@ -35,6 +36,9 @@ export interface CatalogProductVariant {
   printful_variant?: number | null; // FK ID
   sku: string;
   price: number;
+  retail_price?: number | null;
+  price_usd?: number | null;
+  product_name_display?: string;
   source: SourceType;
 
   // Options

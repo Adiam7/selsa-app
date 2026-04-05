@@ -91,7 +91,7 @@ export const ProductCardWithWishlist: React.FC<ProductCardWithWishlistProps> = (
             productName={displayName}
             productImage={product.image_url || '/placeholder.png'}
             productPrice={Number(product.variants?.[0]?.price ?? 0)}
-            productRating={product.rating}
+            productRating={product.rating ?? undefined}
             size="md"
             showLabel={false}
           />

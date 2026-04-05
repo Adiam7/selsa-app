@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { searchItems, SearchResult } from "@/lib/api/advanced";
 import ProductFilters from "@/components/ProductFilters";
@@ -153,7 +154,7 @@ export default function SearchPageClient() {
                   >
                     <div className={styles.gridImage}>
                       {product.image_url ? (
-                        <img src={product.image_url} alt={getDisplayName(product)} />
+                        <Image src={product.image_url} alt={getDisplayName(product)} width={200} height={200} />
                       ) : (
                         <span className={styles.gridPlaceholder}>📷</span>
                       )}
@@ -180,7 +181,7 @@ export default function SearchPageClient() {
                   >
                     {result.image && (
                       <div className={styles.resultImage}>
-                        <img src={result.image} alt={result.name} />
+                        <Image src={result.image} alt={result.name} width={64} height={64} />
                       </div>
                     )}
                     <div className={styles.resultContent}>

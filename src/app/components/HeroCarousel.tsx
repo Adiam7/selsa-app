@@ -15,9 +15,14 @@ interface Slide {
 }
 
 export default function HeroCarousel() {
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const slides: Slide[] = [
     {
@@ -82,9 +87,9 @@ export default function HeroCarousel() {
       <div className={styles.carouselContainer}>
         {/* Render Current Slide */}
         <CarouselSlide
-          title={t(slide.titleKey)}
-          description={t(slide.descriptionKey)}
-          buttonText={t(slide.buttonTextKey)}
+          title={mounted ? t(slide.titleKey) : slide.titleKey}
+          description={mounted ? t(slide.descriptionKey) : slide.descriptionKey}
+          buttonText={mounted ? t(slide.buttonTextKey) : slide.buttonTextKey}
           buttonLink={slide.buttonLink}
           image={slide.image}
           slideIndex={currentSlide}

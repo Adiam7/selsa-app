@@ -1,6 +1,10 @@
 "use client";
 
-import { AdminOrdersPanel } from "@/components/admin/AdminOrdersPanel";
+import dynamic from 'next/dynamic';
+const AdminOrdersPanel = dynamic(
+  () => import("@/components/admin/AdminOrdersPanel").then(mod => ({ default: mod.AdminOrdersPanel })),
+  { ssr: false }
+);
 import { useTranslation } from "react-i18next";
 
 export default function AdminOrdersPage() {

@@ -290,10 +290,17 @@ export const authOptions: NextAuthOptions = {
                   token.refreshToken = newRefresh;
                 }
               } else {
-                // Token refresh failed — session will expire naturally
+                // Refresh failed (token revoked/expired) — clear tokens so
+                // the session callback returns no accessToken and the client
+                // is forced to re-authenticate.
+                console.warn('[AUTH] Token refresh failed, clearing tokens. Status:', response.status);
+                token.accessToken = null;
+                token.refreshToken = null;
               }
-            } catch {
-              // Refresh failed — session will expire naturally
+            } catch (refreshError) {
+              console.error('[AUTH] Token refresh error:', refreshError);
+              token.accessToken = null;
+              token.refreshToken = null;
             }
           }
         } catch {

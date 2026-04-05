@@ -67,7 +67,8 @@ export function CategoryDetail({ categoryName }: CategoryDetailProps) {
   useEffect(() => {
     const applyFiltersAndSort = async () => {
       try {
-        let filtered = await getFilteredProducts(filters, sortBy);
+        const result = await getFilteredProducts(filters, sortBy);
+        let filtered = Array.isArray(result) ? result : result.products;
         
         // Apply search query
         if (query) {
