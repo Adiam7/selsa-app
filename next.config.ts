@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
               `connect-src 'self' https://api.stripe.com https://api.paypal.com https://api.sandbox.paypal.com https://ipapi.co ${BACKEND_URL}`,
               `img-src 'self' data: blob: https://files.cdn.printful.com https://res.cloudinary.com ${BACKEND_URL} https://*.stripe.com`,
               "style-src 'self' 'unsafe-inline'",
-              "font-src 'self' data:",
+              "font-src 'self' data: https://d1howb1wwyap5o.cloudfront.net",
             ].join('; '),
           },
           {

@@ -1,8 +1,5 @@
 "use client";
 
-
-
-
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -33,12 +30,12 @@ export default function GiftEventsPage() {
               <h2 className={styles.giftServicesTitle}>{t('Our Gift Services')}</h2>
               <ul className={styles.giftServicesList}>
                 {[
-                  "🎁 Personalized gift wrapping options",
-                  "💌 Custom gift messages and cards",
-                  "📦 Surprise bundle boxes",
-                  "🎉 Event-themed collections",
-                  "🎨 Customization services available",
-                  "⭐ Premium gift packaging",
+                  t("🎁 Personalized gift wrapping options"),
+                  t("💌 Custom gift messages and cards"),
+                  t("📦 Surprise bundle boxes"),
+                  t("🎉 Event-themed collections"),
+                  t("🎨 Customization services available"),
+                  t("⭐ Premium gift packaging"),
                 ].map((item, i) => (
                   <li key={i} className={styles.giftServiceItem}>
                     {item}
@@ -51,10 +48,10 @@ export default function GiftEventsPage() {
               <h2 className={styles.perfectForTitle}>{t('Perfect For')}</h2>
               <div className={styles.perfectForList}>
                 {[
-                  { event: "Birthdays", desc: "Celebrate special days" },
-                  { event: "Anniversaries", desc: "Mark your milestones" },
-                  { event: "Holidays", desc: "Seasonal celebrations" },
-                  { event: "Corporate Gifts", desc: "Professional events" },
+                  { event: t("Birthdays"), desc: t("Celebrate special days") },
+                  { event: t("Anniversaries"), desc: t("Mark your milestones") },
+                  { event: t("Holidays"), desc: t("Seasonal celebrations") },
+                  { event: t("Corporate Gifts"), desc: t("Professional events") },
                 ].map((item, i) => (
                   <div key={i} className={styles.perfectForItem}>
                     <h4 className={styles.perfectForEvent}>{item.event}</h4>
@@ -69,8 +66,8 @@ export default function GiftEventsPage() {
             <h2 className={styles.wrappingTitle}>{t('Gift Wrapping & Packaging Options')}</h2>
             <div className={styles.wrappingGrid}>
               {[
-                { name: "Standard Wrapping", style: "Classic presentation", price: "Free" },
-                { name: "Premium Wrapping", style: "Luxury packaging", price: "$5" },
+                { name: t("Standard Wrapping"), style: t("Classic presentation"), price: t("Free") },
+                { name: t("Premium Wrapping"), style: t("Luxury packaging"), price: "$5" },
               ].map((option, i) => (
                 <div key={i} className={styles.wrappingOption}>
                   <h4 className={styles.wrappingOptionTitle}>{option.name}</h4>

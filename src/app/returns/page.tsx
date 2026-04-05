@@ -29,10 +29,10 @@ export default function ReturnsPage() {
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "20px", letterSpacing: "-0.5px" }}>{t('Return Policy')}</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                 {[
-                  { title: "📅 Return Window", desc: "30 days from purchase date" },
-                  { title: "✨ Condition", desc: "Original packaging, tags attached, unused" },
-                  { title: "📦 Return Shipping", desc: "Prepaid labels included" },
-                  { title: "💰 Refund Timeline", desc: "5-7 business days after receipt" },
+                  { title: t("📅 Return Window"), desc: t("30 days from purchase date") },
+                  { title: t("✨ Condition"), desc: t("Original packaging, tags attached, unused") },
+                  { title: t("📦 Return Shipping"), desc: t("Prepaid labels included") },
+                  { title: t("💰 Refund Timeline"), desc: t("5-7 business days after receipt") },
                 ].map((item, i) => (
                   <div key={i}>
                     <h4 style={{ fontWeight: "700", color: "#000000", margin: "0 0 6px 0" }}>{item.title}</h4>
@@ -46,12 +46,12 @@ export default function ReturnsPage() {
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "20px", letterSpacing: "-0.5px" }}>{t('Why Choose Us?')}</h2>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
                 {[
-                  "✅ 30-day money-back guarantee",
-                  "✅ Free return shipping labels",
-                  "✅ No questions asked policy",
-                  "✅ Instant exchange processing",
-                  "✅ Full refund guarantee",
-                  "✅ Easy online return requests",
+                  t("✅ 30-day money-back guarantee"),
+                  t("✅ Free return shipping labels"),
+                  t("✅ No questions asked policy"),
+                  t("✅ Instant exchange processing"),
+                  t("✅ Full refund guarantee"),
+                  t("✅ Easy online return requests"),
                 ].map((item, i) => (
                   <li key={i} style={{ color: "#555555", fontSize: "16px" }}>
                     {item}

@@ -2,6 +2,7 @@
 
 import CategoryClient from "./CategoryClient";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { cookies } from "next/headers";
 import { Category } from "@/types/category";
 import styles from "../page.module.css";
@@ -112,6 +113,7 @@ export default async function CategoryPage(props: Props) {
       />
     );
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     console.error("Category fetch error:", error);
     redirect(`/shop?category=${encodeURIComponent(fullSlugPath)}`);
     // redirect(`/shop`);

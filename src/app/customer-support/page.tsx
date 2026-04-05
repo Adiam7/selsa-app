@@ -163,11 +163,11 @@ export default function CustomerSupportPage() {
             <h3 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "32px", letterSpacing: "-0.5px" }}>{t('Support Response Times')}</h3>
             <div style={{ display: "grid", gap: "16px" }}>
               {[
-                { channel: "Email Support", time: "Within 24 hours", priority: "Standard" },
-                { channel: "Live Chat", time: "Under 5 minutes", priority: "High" },
-                { channel: "WhatsApp", time: "Under 10 minutes", priority: "High" },
-                { channel: "Phone", time: "Immediate", priority: "Urgent" },
-                { channel: "Emergency (24/7)", time: "Within 1 hour", priority: "Critical" },
+                { channel: t("Email Support"), time: t("Within 24 hours"), priority: t("Standard") },
+                { channel: t("Live Chat"), time: t("Under 5 minutes"), priority: t("High") },
+                { channel: t("WhatsApp"), time: t("Under 10 minutes"), priority: t("High") },
+                { channel: t("Phone"), time: t("Immediate"), priority: t("Urgent") },
+                { channel: t("Emergency (24/7)"), time: t("Within 1 hour"), priority: t("Critical") },
               ].map((item, i) => (
                 <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px", paddingBottom: "16px", borderBottom: "1px solid #e5e5e5", alignItems: "center" }}>
                   <span style={{ fontWeight: "600", color: "#000000" }}>{item.channel}</span>

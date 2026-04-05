@@ -21,7 +21,7 @@ export default function ShippingPage() {
       <section style={{ paddingTop: "60px", paddingBottom: "60px", paddingLeft: "24px", paddingRight: "24px" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <p style={{ fontSize: "18px", color: "#666666", lineHeight: "1.8", marginBottom: "40px" }}>
-            Fast, reliable delivery with real-time tracking to your preferred location worldwide.
+            {t('Fast, reliable delivery with real-time tracking to your preferred location worldwide.')}
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", marginBottom: "60px" }}>
@@ -29,10 +29,10 @@ export default function ShippingPage() {
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "20px", letterSpacing: "-0.5px" }}>{t('Shipping Options')}</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {[
-                  { name: "Local Shipping", time: "2-5 business days", cost: "Free on $50+" },
-                  { name: "Domestic Express", time: "1-2 business days", cost: "$15.99" },
-                  { name: "International Std", time: "7-14 business days", cost: "Calculated" },
-                  { name: "International Express", time: "3-5 business days", cost: "Calculated" },
+                  { name: t("Local Shipping"), time: t("2-5 business days"), cost: t("Free on $50+") },
+                  { name: t("Domestic Express"), time: t("1-2 business days"), cost: "$15.99" },
+                  { name: t("International Std"), time: t("7-14 business days"), cost: t("Calculated") },
+                  { name: t("International Express"), time: t("3-5 business days"), cost: t("Calculated") },
                 ].map((option, i) => (
                   <div key={i} style={{ border: "1px solid #e5e5e5", padding: "16px", borderRadius: "6px" }}>
                     <h4 style={{ fontWeight: "700", color: "#000000", margin: "0 0 8px 0" }}>{option.name}</h4>
@@ -47,12 +47,12 @@ export default function ShippingPage() {
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "20px", letterSpacing: "-0.5px" }}>{t('Our Promise')}</h2>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
                 {[
-                  "✅ Real-time tracking on all orders",
-                  "✅ Transparent, competitive pricing",
-                  "✅ Multiple delivery speed options",
-                  "✅ 150+ countries covered",
-                  "✅ Professional packaging",
-                  "✅ Signature confirmation available",
+                  t("✅ Real-time tracking on all orders"),
+                  t("✅ Transparent, competitive pricing"),
+                  t("✅ Multiple delivery speed options"),
+                  t("✅ 150+ countries covered"),
+                  t("✅ Professional packaging"),
+                  t("✅ Signature confirmation available"),
                 ].map((item, i) => (
                   <li key={i} style={{ color: "#555555", fontSize: "16px" }}>
                     {item}

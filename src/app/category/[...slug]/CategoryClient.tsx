@@ -38,13 +38,13 @@ export default function CategoryClient({
       <div className="category-container">
         <div className="category-header">
           <h1>{category.name_display || (typeof category.name === 'string' ? category.name : category.name?.en || 'Untitled')}</h1>
-          <p>{category.children?.length || 0} {t('subcategories available')}</p>
+          {/* <p>{category.children?.length || 0} {t('subcategories available')}</p> */}
         </div>
         
         <nav className="category-breadcrumb">
           <Link href="/">{t('Home')}</Link>
           <span>/</span>
-          <Link href="/shop">{t('Store')}</Link>
+          <Link href="/category">{t('Store')}</Link>
           {category.ancestors?.map((ancestor, i) => {
             const path = `/category/${[...category.ancestors!.slice(0, i + 1).map(a => a.slug)].join("/")}`;
             return (
@@ -133,7 +133,7 @@ export default function CategoryClient({
       <nav className="category-breadcrumb">
         <Link href="/">{t('Home')}</Link>
         <span>/</span>
-        <Link href="/shop">{t('Store')}</Link>
+        <Link href="/category">{t('Store')}</Link>
         {category.ancestors?.map((ancestor, i) => {
           const path = `/category/${[...category.ancestors!.slice(0, i + 1).map(a => a.slug)].join("/")}`;
           return (

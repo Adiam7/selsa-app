@@ -2,7 +2,7 @@
 'use client';
 
 // Ensure i18n is initialized before any translation hooks are used
-import '../i18n';
+import i18n from '../i18n';
 
 import { SessionProvider } from 'next-auth/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import { CartProvider } from '@/context/cart/CartContext';
 import { FavouritesProvider } from '@/context/FavouritesContext';
 import MergeCartClient from '@/features/cart/components/MergeCartClient';
 import { ToastProvider } from '@/components/Toast';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   // Create QueryClient once for the entire app
@@ -31,6 +31,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       }),
     []
   );
+
+  // After hydration, switch to the user's stored language
+  useEffect(() => {
+    const stored = localStorage.getItem('i18nextLng');
+    if (stored && stored !== i18n.language) {
+      i18n.changeLanguage(stored);
+    }
+  }, []);
 
   return (
     <SessionProvider basePath="/api/auth">

@@ -113,18 +113,19 @@ function ShipForm({
 }) {
   const [tracking, setTracking] = useState("");
   const [carrier, setCarrier] = useState("");
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-2 p-3 bg-muted rounded-md mt-2">
-      <p className="text-sm font-medium">Ship Order #{orderId}</p>
+      <p className="text-sm font-medium">{t("Ship Order")} #{orderId}</p>
       <Input
-        placeholder="Tracking number"
+        placeholder={t("Tracking number")}
         value={tracking}
         onChange={(e) => setTracking(e.target.value)}
         className="h-8 text-sm"
       />
       <Input
-        placeholder="Carrier (e.g., USPS, FedEx, UPS)"
+        placeholder={t("Carrier (e.g., USPS, FedEx, UPS)")}
         value={carrier}
         onChange={(e) => setCarrier(e.target.value)}
         className="h-8 text-sm"
@@ -134,10 +135,10 @@ function ShipForm({
           size="sm"
           onClick={() => onSubmit({ tracking_number: tracking, carrier })}
         >
-          Confirm Ship
+          {t("Confirm Ship")}
         </Button>
         <Button size="sm" variant="outline" onClick={onCancel}>
-          Cancel
+          {t("Cancel")}
         </Button>
       </div>
     </div>
@@ -147,11 +148,12 @@ function ShipForm({
 // ── Printful Detail Panel ────────────────────────────────────────────────────
 
 function PrintfulDetail({ data }: { data: PrintfulStatusResponse }) {
+  const { t } = useTranslation();
   return (
     <div className="p-3 bg-muted rounded-md mt-2 text-sm space-y-2">
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <span className="text-muted-foreground">Sync Status:</span>{" "}
+          <span className="text-muted-foreground">{t("Sync Status:")} </span>{" "}
           <Badge
             className={`${PRINTFUL_SYNC_COLORS[data.printful_status] || "bg-gray-100"} text-xs`}
           >
@@ -160,44 +162,44 @@ function PrintfulDetail({ data }: { data: PrintfulStatusResponse }) {
         </div>
         {data.printful_order_id && (
           <div>
-            <span className="text-muted-foreground">Printful ID:</span>{" "}
+            <span className="text-muted-foreground">{t("Printful ID:")} </span>{" "}
             {data.printful_order_id}
           </div>
         )}
         {data.fulfillment_status && (
           <div>
-            <span className="text-muted-foreground">Fulfillment:</span>{" "}
+            <span className="text-muted-foreground">{t("Fulfillment:")} </span>{" "}
             {data.fulfillment_status}
           </div>
         )}
         {data.tracking_number && (
           <div>
-            <span className="text-muted-foreground">Tracking:</span>{" "}
+            <span className="text-muted-foreground">{t("Tracking:")} </span>{" "}
             {data.tracking_number}
           </div>
         )}
         {data.carrier && (
           <div>
-            <span className="text-muted-foreground">Carrier:</span>{" "}
+            <span className="text-muted-foreground">{t("Carrier:")} </span>{" "}
             {data.carrier}
           </div>
         )}
         {data.error_message && (
           <div className="col-span-2 text-red-600">
-            <span className="text-muted-foreground">Error:</span>{" "}
+            <span className="text-muted-foreground">{t("Error:")} </span>{" "}
             {data.error_message}
           </div>
         )}
         {data.retry_count != null && data.retry_count > 0 && (
           <div>
-            <span className="text-muted-foreground">Retries:</span>{" "}
+            <span className="text-muted-foreground">{t("Retries:")} </span>{" "}
             {data.retry_count}
           </div>
         )}
       </div>
       {data.events && data.events.length > 0 && (
         <div>
-          <p className="font-medium mt-2 mb-1">Recent Events</p>
+          <p className="font-medium mt-2 mb-1">{t("Recent Events")}</p>
           <div className="space-y-1">
             {data.events.slice(0, 5).map((ev, i) => (
               <div key={i} className="flex gap-2 text-xs text-muted-foreground">
@@ -276,7 +278,7 @@ export default function AdminFulfillmentPage() {
       const msg =
         (err as any)?.response?.data?.detail ||
         (err as Error)?.message ||
-        "Failed to load orders.";
+        t("Failed to load orders.");
       showError(msg);
     } finally {
       setLoading(false);
@@ -304,17 +306,17 @@ export default function AdminFulfillmentPage() {
       const result = await submitToPrintful(orderId);
       if (result.status === "submitted") {
         success(
-          `Order #${orderId} submitted to Printful (ID: ${result.printful_order_id})`,
+          t("Order #{{id}} submitted to Printful").replace("{{id}}", String(orderId)),
         );
       } else {
-        showError(result.error || "Printful submission failed");
+        showError(result.error || t("Printful submission failed"));
       }
       refreshAll();
     } catch (err: unknown) {
       showError(
         (err as any)?.response?.data?.error ||
           (err as Error)?.message ||
-          "Submission failed",
+          t("Submission failed"),
       );
     } finally {
       setActionLoading(null);
@@ -326,16 +328,16 @@ export default function AdminFulfillmentPage() {
     try {
       const result = await retryPrintful(orderId);
       if (result.status === "retried" || result.status === "already_confirmed") {
-        success(`Printful retry successful for order #${orderId}`);
+        success(t("Printful retry successful for order #{{id}}").replace("{{id}}", String(orderId)));
       } else {
-        showError(result.error || "Retry failed");
+        showError(result.error || t("Retry failed"));
       }
       refreshAll();
     } catch (err: unknown) {
       showError(
         (err as any)?.response?.data?.error ||
           (err as Error)?.message ||
-          "Retry failed",
+          t("Retry failed"),
       );
     } finally {
       setActionLoading(null);
@@ -349,14 +351,14 @@ export default function AdminFulfillmentPage() {
     setActionLoading(orderId);
     try {
       await markOrderShipped(orderId, data);
-      success(`Order #${orderId} marked as shipped`);
+      success(t("Order #{{id}} marked as shipped").replace("{{id}}", String(orderId)));
       setShipFormOrder(null);
       refreshAll();
     } catch (err: unknown) {
       showError(
         (err as any)?.response?.data?.error ||
           (err as Error)?.message ||
-          "Ship failed",
+          t("Ship failed"),
       );
     } finally {
       setActionLoading(null);
@@ -367,13 +369,13 @@ export default function AdminFulfillmentPage() {
     setActionLoading(orderId);
     try {
       await markOrderDelivered(orderId);
-      success(`Order #${orderId} marked as delivered`);
+      success(t("Order #{{id}} marked as delivered").replace("{{id}}", String(orderId)));
       refreshAll();
     } catch (err: unknown) {
       showError(
         (err as any)?.response?.data?.error ||
           (err as Error)?.message ||
-          "Delivery update failed",
+          t("Delivery update failed"),
       );
     } finally {
       setActionLoading(null);
@@ -383,14 +385,14 @@ export default function AdminFulfillmentPage() {
   const handleBackorder = async (orderId: number) => {
     setActionLoading(orderId);
     try {
-      await markOrderBackordered(orderId, "Marked via admin dashboard");
-      success(`Order #${orderId} marked as backordered`);
+      await markOrderBackordered(orderId, t("Marked via admin dashboard"));
+      success(t("Order #{{id}} marked as backordered").replace("{{id}}", String(orderId)));
       refreshAll();
     } catch (err: unknown) {
       showError(
         (err as any)?.response?.data?.error ||
           (err as Error)?.message ||
-          "Backorder update failed",
+          t("Backorder update failed"),
       );
     } finally {
       setActionLoading(null);
@@ -410,7 +412,7 @@ export default function AdminFulfillmentPage() {
       showError(
         (err as any)?.response?.data?.error ||
           (err as Error)?.message ||
-          "Failed to fetch Printful status",
+          t("Failed to fetch Printful status"),
       );
     } finally {
       setActionLoading(null);
@@ -519,7 +521,7 @@ export default function AdminFulfillmentPage() {
           }}
         >
           <SelectTrigger className="w-[260px]">
-            <SelectValue placeholder="Filter by stage" />
+            <SelectValue placeholder={t("Filter by stage")} />
           </SelectTrigger>
           <SelectContent>
             {STAGE_OPTIONS.map((opt) => (
@@ -595,7 +597,7 @@ export default function AdminFulfillmentPage() {
                           <Badge
                             className={`${STATUS_COLORS[order.status] || "bg-gray-100"} text-xs`}
                           >
-                            {order.status}
+                            {t(order.status)}
                           </Badge>
                         </td>
                         <td className="p-3 text-muted-foreground text-xs">
@@ -612,7 +614,7 @@ export default function AdminFulfillmentPage() {
                               disabled={isActionLoading}
                             >
                               <Eye className="h-3 w-3 mr-1" />
-                              Printful
+                              {t("Printful")}
                             </Button>
 
                             {/* Submit to Printful (PAID or FULFILLMENT_PENDING) */}
@@ -632,7 +634,7 @@ export default function AdminFulfillmentPage() {
                                 ) : (
                                   <Send className="h-3 w-3 mr-1" />
                                 )}
-                                Send to Printful
+                                {t("Send to Printful")}
                               </Button>
                             )}
 
@@ -648,7 +650,7 @@ export default function AdminFulfillmentPage() {
                                 disabled={isActionLoading}
                               >
                                 <RefreshCw className="h-3 w-3 mr-1" />
-                                Retry
+                                {t("Retry")}
                               </Button>
                             )}
 
@@ -667,7 +669,7 @@ export default function AdminFulfillmentPage() {
                                 disabled={isActionLoading}
                               >
                                 <Truck className="h-3 w-3 mr-1" />
-                                Ship
+                                {t("Ship")}
                               </Button>
                             )}
 
@@ -684,7 +686,7 @@ export default function AdminFulfillmentPage() {
                                 ) : (
                                   <CheckCircle className="h-3 w-3 mr-1" />
                                 )}
-                                Delivered
+                                {t("Delivered")}
                               </Button>
                             )}
 
@@ -698,7 +700,7 @@ export default function AdminFulfillmentPage() {
                                 disabled={isActionLoading}
                               >
                                 <AlertTriangle className="h-3 w-3 mr-1" />
-                                Backorder
+                                {t("Backorder")}
                               </Button>
                             )}
                           </div>
@@ -733,7 +735,7 @@ export default function AdminFulfillmentPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
+            {t("Page")} {page} {t("of")} {totalPages}
           </span>
           <div className="flex gap-2">
             <Button

@@ -13,43 +13,43 @@ export default function FAQPage() {
   const faqs = [
     {
       id: 1,
-      question: "How long does shipping take?",
-      answer: "Shipping times vary by location. Local orders typically arrive in 2-5 business days. Domestic express takes 1-2 business days. International orders take 7-14 business days (standard) or 3-5 days (express). You will receive a tracking number via email once your order ships.",
+      question: t("How long does shipping take?"),
+      answer: t("Shipping times vary by location. Local orders typically arrive in 2-5 business days. Domestic express takes 1-2 business days. International orders take 7-14 business days (standard) or 3-5 days (express). You will receive a tracking number via email once your order ships."),
     },
     {
       id: 2,
-      question: "Can I change or cancel my order?",
-      answer: "Yes! You can modify or cancel your order within 1 hour of purchase. After that window, contact our support team immediately. If your order has already shipped, you can still return it within 30 days for a full refund.",
+      question: t("Can I change or cancel my order?"),
+      answer: t("Yes! You can modify or cancel your order within 1 hour of purchase. After that window, contact our support team immediately. If your order has already shipped, you can still return it within 30 days for a full refund."),
     },
     {
       id: 3,
-      question: "What if my item does not fit or is not what I expected?",
-      answer: "No problem! We offer hassle-free exchanges and returns within 30 days. Items must be unused and in original condition. Simply initiate a return through your account, and we will send you a prepaid return shipping label. Refunds are processed within 5-7 business days.",
+      question: t("What if my item does not fit or is not what I expected?"),
+      answer: t("No problem! We offer hassle-free exchanges and returns within 30 days. Items must be unused and in original condition. Simply initiate a return through your account, and we will send you a prepaid return shipping label. Refunds are processed within 5-7 business days."),
     },
     {
       id: 4,
-      question: "Do you ship internationally?",
-      answer: "Absolutely! We ship to over 150 countries worldwide. International shipping costs and delivery times are calculated at checkout based on your location. You can view exact rates before completing your purchase. All international orders include tracking.",
+      question: t("Do you ship internationally?"),
+      answer: t("Absolutely! We ship to over 150 countries worldwide. International shipping costs and delivery times are calculated at checkout based on your location. You can view exact rates before completing your purchase. All international orders include tracking."),
     },
     {
       id: 5,
-      question: "How do I contact customer support?",
-      answer: "We offer multiple support channels for your convenience: email (support@selsa.com), live chat (9 AM - 9 PM EST), WhatsApp (+1 (555) 123-4567), and phone (+1 (800) SELSA-01). We aim to respond to all inquiries within 2 hours during business hours.",
+      question: t("How do I contact customer support?"),
+      answer: t("We offer multiple support channels for your convenience: email (support@selsa.com), live chat (9 AM - 9 PM EST), WhatsApp (+1 (555) 123-4567), and phone (+1 (800) SELSA-01). We aim to respond to all inquiries within 2 hours during business hours."),
     },
     {
       id: 6,
-      question: "What customization options are available?",
-      answer: "We offer custom design services for most products. You can choose custom colors, add personalization, request bulk orders with special pricing, and explore our limited edition collections. Contact our team with your specific requirements for a personalized quote.",
+      question: t("What customization options are available?"),
+      answer: t("We offer custom design services for most products. You can choose custom colors, add personalization, request bulk orders with special pricing, and explore our limited edition collections. Contact our team with your specific requirements for a personalized quote."),
     },
     {
       id: 7,
-      question: "Is my payment information secure?",
-      answer: "Yes, absolutely. We use industry-leading SSL encryption and are PCI DSS compliant. Your payment information is never stored on our servers and is processed securely through trusted payment gateways like Stripe and PayPal.",
+      question: t("Is my payment information secure?"),
+      answer: t("Yes, absolutely. We use industry-leading SSL encryption and are PCI DSS compliant. Your payment information is never stored on our servers and is processed securely through trusted payment gateways like Stripe and PayPal."),
     },
     {
       id: 8,
-      question: "Do you offer bulk order discounts?",
-      answer: "Yes! We offer special pricing for bulk orders. The discount percentage increases based on order volume. Contact our sales team at bulk@selsa.com or through our live chat for a custom quote on your specific order.",
+      question: t("Do you offer bulk order discounts?"),
+      answer: t("Yes! We offer special pricing for bulk orders. The discount percentage increases based on order volume. Contact our sales team at bulk@selsa.com or through our live chat for a custom quote on your specific order."),
     },
   ];
 

@@ -17,7 +17,7 @@
     "backend": "cd ../selsa-backend && ../.venv/bin/python manage.py runserver",
     "backend:ifneeded": "node -e \"const http=require('http');const req=http.request({hostname:'127.0.0.1',port:8000,method:'GET',path:'/'},()=>{console.log('Backend already running on :8000');process.exit(0)});req.on('error',()=>{process.exit(1)});req.end();\" || npm run backend",
     "dev:ifneeded": "node -e \"const http=require('http');const req=http.request({hostname:'127.0.0.1',port:3000,method:'GET',path:'/'},res=>{console.log('Frontend already running on :3000');process.exit(0)});req.on('error',()=>{process.exit(1)});req.end();\" || npm run dev",
-    "dev:stop": "node -e \"const {execSync}=require('child_process');try{execSync('lsof -ti tcp:3000 | xargs kill -9', {stdio:'inherit'});}catch(e){} try{execSync('lsof -ti tcp:8000 | xargs kill -9', {stdio:'inherit'});}catch(e){}\"",
+    "dev:stop": "lsof -ti tcp:3000 | xargs kill -9 2>/dev/null; lsof -ti tcp:8000 | xargs kill -9 2>/dev/null; exit 0",
     "test": "jest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",

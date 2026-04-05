@@ -29,12 +29,12 @@ export default function CustomizationPage() {
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "20px", letterSpacing: "-0.5px" }}>{t('What We Offer')}</h2>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
                 {[
-                  "Custom design services tailored to your vision",
-                  "Bulk order discounts depending on amounts and product items.",
-                  "Premium gift packaging.",
-                  "Limited edition exclusive collections",
-                  "Rush customization available",
-                  "Design consultation included",
+                  t("Custom design services tailored to your vision"),
+                  t("Bulk order discounts depending on amounts and product items."),
+                  t("Premium gift packaging."),
+                  t("Limited edition exclusive collections"),
+                  t("Rush customization available"),
+                  t("Design consultation included"),
                 ].map((item, i) => (
                   <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
                     <span style={{ display: "inline-block", width: "6px", height: "6px", backgroundColor: "#000000", marginTop: "8px", borderRadius: "50%" }}></span>
@@ -48,10 +48,10 @@ export default function CustomizationPage() {
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#000000", marginBottom: "20px", letterSpacing: "-0.5px" }}>{t('How It Works')}</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                 {[
-                  { step: "1", title: "Consultation", desc: "Discuss your vision with our design team" },
-                  { step: "2", title: "Design", desc: "We create custom designs for your approval" },
-                  { step: "3", title: "Production", desc: "Expert craftspeople bring designs to life" },
-                  { step: "4", title: "Delivery", desc: "Your custom items delivered with care" },
+                  { step: "1", title: t("Consultation"), desc: t("Discuss your vision with our design team") },
+                  { step: "2", title: t("Design"), desc: t("We create custom designs for your approval") },
+                  { step: "3", title: t("Production"), desc: t("Expert craftspeople bring designs to life") },
+                  { step: "4", title: t("Delivery"), desc: t("Your custom items delivered with care") },
                 ].map((item, i) => (
                   <div key={i} style={{ display: "flex", gap: "16px" }}>
                     <div style={{ width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#000000", color: "#ffffff", fontWeight: "bold", borderRadius: "50%" }}>

@@ -463,7 +463,7 @@ export default function ProductView({ product, catalogProductId }: { product: Pr
         <ShareProduct productName={displayName} />
 
         {/* Customer Reviews */}
-        <ProductReviews productId={catalogProductId ?? null} />
+        {/* <ProductReviews productId={catalogProductId ?? null} /> */}
       </div>
     </section>
   );

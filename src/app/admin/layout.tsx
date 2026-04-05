@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminAccessDenied } from "@/components/admin/AdminAccessDenied";
 import { authOptions } from "@/lib/auth";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -74,9 +75,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     return (
       <div className="admin-scope flex min-h-full w-full bg-background text-foreground">
         <main className="flex-1 flex items-start justify-center px-6 py-10">
-          <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 text-foreground">
-            You do not have access to this area.
-          </div>
+          <AdminAccessDenied />
         </main>
       </div>
     );

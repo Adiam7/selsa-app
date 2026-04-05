@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,6 +59,7 @@ const PROVIDERS = ["stripe", "paypal"]; // aligned with backend enum values
 
 export default function AdminFinancePage() {
   const { status: sessionStatus } = useSession();
+  const { t } = useTranslation();
   const { success, error: showError } = useToast();
 
   const [loading, setLoading] = useState(false);
@@ -138,7 +140,7 @@ export default function AdminFinancePage() {
       const refundList = await listRefunds({ page_size: 25, provider: provider.trim() || undefined });
       setRefunds(refundList);
     } catch (err: any) {
-      const message = err?.response?.data?.error || err?.message || "Failed to load finance dashboard.";
+      const message = err?.response?.data?.error || err?.message || t("Failed to load finance dashboard.");
       setError(message);
       showError(message);
     } finally {
@@ -168,7 +170,7 @@ export default function AdminFinancePage() {
       })
       .catch((err: any) => {
         if (cancelled) return;
-        const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || "Failed to load drilldown.";
+        const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || t("Failed to load drilldown.");
         setError(message);
         showError(message);
       })
@@ -189,10 +191,10 @@ export default function AdminFinancePage() {
     try {
       const parsed = JSON.parse(eventImportJson);
       const result = await importProviderEvents(parsed);
-      success(`Imported provider events (created: ${result.created}, updated: ${result.updated}).`);
+      success(t("Imported provider events (created: {{created}}, updated: {{updated}}).").replace("{{created}}", String(result.created)).replace("{{updated}}", String(result.updated)));
       await refresh();
     } catch (err: any) {
-      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || "Import failed.";
+      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || t("Import failed.");
       setError(message);
       showError(message);
     } finally {
@@ -202,7 +204,7 @@ export default function AdminFinancePage() {
 
   const handleRunReconciliation = async () => {
     if (!runProvider || !periodStart || !periodEnd) {
-      setError("Provider, period_start and period_end are required.");
+      setError(t("Provider, period_start and period_end are required."));
       return;
     }
 
@@ -210,10 +212,10 @@ export default function AdminFinancePage() {
     setError(null);
     try {
       const created = await runReconciliation({ provider: runProvider, period_start: periodStart, period_end: periodEnd });
-      success(`Reconciliation run #${created.id} created (${created.status}).`);
+      success(t("Reconciliation run #{{id}} created ({{status}}).").replace("{{id}}", String(created.id)).replace("{{status}}", created.status));
       await refresh();
     } catch (err: any) {
-      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || "Reconciliation failed.";
+      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || t("Reconciliation failed.");
       setError(message);
       showError(message);
     } finally {
@@ -233,10 +235,10 @@ export default function AdminFinancePage() {
         resolution_note: (chargebackNoteEdits[caseId] || "").trim() || undefined,
         evidence_reference: (chargebackEvidenceEdits[caseId] || "").trim() || undefined,
       });
-      success("Chargeback updated.");
+      success(t("Chargeback updated."));
       await refresh();
     } catch (err: any) {
-      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || "Update failed.";
+      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || t("Update failed.");
       setError(message);
       showError(message);
     } finally {
@@ -247,7 +249,7 @@ export default function AdminFinancePage() {
   const handleCreateRefund = async () => {
     const orderId = Number(refundOrderId);
     if (!orderId || Number.isNaN(orderId)) {
-      setError("Valid order_id is required.");
+      setError(t("Valid order_id is required."));
       return;
     }
 
@@ -259,11 +261,11 @@ export default function AdminFinancePage() {
         amount: refundAmount.trim() ? refundAmount.trim() : undefined,
         reason: (refundReason || "").trim() || undefined,
       });
-      success("Refund submitted.");
+      success(t("Refund submitted."));
       setRefundAmount("");
       await refresh();
     } catch (err: any) {
-      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || "Refund failed.";
+      const message = err?.response?.data?.detail || err?.response?.data?.error || err?.message || t("Refund failed.");
       setError(message);
       showError(message);
     } finally {
@@ -277,12 +279,12 @@ export default function AdminFinancePage() {
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <CardTitle className="text-3xl">Finance</CardTitle>
-              <CardDescription>Provider events, reconciliation runs, and chargebacks.</CardDescription>
+              <CardTitle className="text-3xl">{t("Finance")}</CardTitle>
+              <CardDescription>{t("Provider events, reconciliation runs, and chargebacks.")}</CardDescription>
             </div>
             <CardAction>
               <Button onClick={refresh} disabled={loading}>
-                Refresh
+                {t("Refresh")}
               </Button>
             </CardAction>
           </div>
@@ -290,22 +292,22 @@ export default function AdminFinancePage() {
         <CardContent>
           {error ? (
             <div className="rounded-xl border border-border bg-muted/30 p-3 text-sm text-foreground">
-              <span className="font-semibold">Error:</span> {error}
+              <span className="font-semibold">{t("Error:")} </span> {error}
             </div>
           ) : null}
 
           <div className="mt-4 grid gap-3 md:grid-cols-3">
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Provider (optional)</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Provider (optional)")}</label>
             <Select
               value={provider || "__all__"}
               onValueChange={(value) => setProvider(value === "__all__" ? "" : value)}
             >
-              <SelectTrigger aria-label="Provider">
-                <SelectValue placeholder="All" />
+              <SelectTrigger aria-label={t("Provider")}>
+                <SelectValue placeholder={t("All")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="__all__">All</SelectItem>
+                <SelectItem value="__all__">{t("All")}</SelectItem>
                 {PROVIDERS.map((p) => (
                   <SelectItem key={p} value={p}>
                     {p}
@@ -315,7 +317,7 @@ export default function AdminFinancePage() {
             </Select>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Start (ISO datetime, optional)</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Start (ISO datetime, optional)")}</label>
             <Input
               value={rangeStart}
               onChange={(e) => setRangeStart(e.target.value)}
@@ -323,7 +325,7 @@ export default function AdminFinancePage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">End (ISO datetime, optional)</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("End (ISO datetime, optional)")}</label>
             <Input
               value={rangeEnd}
               onChange={(e) => setRangeEnd(e.target.value)}
@@ -335,24 +337,24 @@ export default function AdminFinancePage() {
           {overview ? (
             <div className="mt-5 grid gap-3 md:grid-cols-4">
               <div className="rounded-2xl border border-border bg-card p-4">
-                <div className="text-xs text-muted-foreground">Transactions</div>
+                <div className="text-xs text-muted-foreground">{t("Transactions")}</div>
                 <div className="text-lg font-semibold text-foreground">{overview.transactions?.count ?? 0}</div>
-                <div className="text-xs text-muted-foreground">Gross: ${formatMoney(overview.transactions?.gross_amount)}</div>
+                <div className="text-xs text-muted-foreground">{t("Gross:")} ${formatMoney(overview.transactions?.gross_amount)}</div>
               </div>
               <div className="rounded-2xl border border-border bg-card p-4">
-                <div className="text-xs text-muted-foreground">Provider events</div>
+                <div className="text-xs text-muted-foreground">{t("Provider events")}</div>
                 <div className="text-lg font-semibold text-foreground">{overview.provider_events?.count ?? 0}</div>
-                <div className="text-xs text-muted-foreground">Net: ${formatMoney(overview.provider_events?.net_amount)}</div>
+                <div className="text-xs text-muted-foreground">{t("Net:")} ${formatMoney(overview.provider_events?.net_amount)}</div>
               </div>
               <div className="rounded-2xl border border-border bg-card p-4">
-                <div className="text-xs text-muted-foreground">Disputes</div>
+                <div className="text-xs text-muted-foreground">{t("Disputes")}</div>
                 <div className="text-lg font-semibold text-foreground">{overview.disputes?.count ?? 0}</div>
-                <div className="text-xs text-muted-foreground">Amount: ${formatMoney(overview.disputes?.amount)}</div>
+                <div className="text-xs text-muted-foreground">{t("Amount:")} ${formatMoney(overview.disputes?.amount)}</div>
               </div>
               <div className="rounded-2xl border border-border bg-card p-4">
-                <div className="text-xs text-muted-foreground">Chargebacks</div>
+                <div className="text-xs text-muted-foreground">{t("Chargebacks")}</div>
                 <div className="text-lg font-semibold text-foreground">{overview.chargebacks?.count ?? 0}</div>
-                <div className="text-xs text-muted-foreground">Open: {overview.chargebacks?.by_status?.open ?? 0}</div>
+                <div className="text-xs text-muted-foreground">{t("Open:")} {overview.chargebacks?.by_status?.open ?? 0}</div>
               </div>
             </div>
           ) : null}
@@ -361,46 +363,46 @@ export default function AdminFinancePage() {
 
       <Card className="rounded-2xl shadow-none">
         <CardHeader>
-          <CardTitle>Refunds</CardTitle>
-          <CardDescription>Issue full or partial refunds by order ID.</CardDescription>
+          <CardTitle>{t("Refunds")}</CardTitle>
+          <CardDescription>{t("Issue full or partial refunds by order ID.")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Order ID</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Order ID")}</label>
             <Input
               value={refundOrderId}
               onChange={(e) => setRefundOrderId(e.target.value)}
-              placeholder="e.g. 123"
+              placeholder={t("e.g. 123")}
               disabled={loading}
-              aria-label="Refund order id"
+              aria-label={t("Refund order id")}
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Amount (optional)</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Amount (optional)")}</label>
             <Input
               value={refundAmount}
               onChange={(e) => setRefundAmount(e.target.value)}
-              placeholder="Leave blank for remaining balance"
+              placeholder={t("Leave blank for remaining balance")}
               disabled={loading}
-              aria-label="Refund amount"
+              aria-label={t("Refund amount")}
             />
           </div>
           <div className="md:col-span-2">
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Reason</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Reason")}</label>
             <Input
               value={refundReason}
               onChange={(e) => setRefundReason(e.target.value)}
-              placeholder="admin_refund"
+              placeholder={t("admin_refund")}
               disabled={loading}
-              aria-label="Refund reason"
+              aria-label={t("Refund reason")}
             />
           </div>
         </div>
 
         <div className="mt-3 flex items-center gap-2">
           <Button onClick={handleCreateRefund} disabled={loading}>
-            {loading ? "Working..." : "Create refund"}
+            {loading ? t("Working...") : t("Create refund")}
           </Button>
           <Button asChild variant="outline">
             <a
@@ -410,21 +412,21 @@ export default function AdminFinancePage() {
                 end: rangeEnd.trim() || undefined,
               })}
             >
-              Export refunds CSV
+              {t("Export refunds CSV")}
             </a>
           </Button>
         </div>
 
         <div className="mt-4 overflow-auto rounded-2xl border border-border">
-          <div className="px-4 py-3 text-sm font-semibold">Recent refunds</div>
+          <div className="px-4 py-3 text-sm font-semibold">{t("Recent refunds")}</div>
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-muted/40 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                <th className="px-4 py-2 text-left">ID</th>
-                <th className="px-4 py-2 text-left">Order</th>
-                <th className="px-4 py-2 text-left">Provider</th>
-                <th className="px-4 py-2 text-left">Amount</th>
-                <th className="px-4 py-2 text-left">Created</th>
+                <th className="px-4 py-2 text-left">{t("ID")}</th>
+                <th className="px-4 py-2 text-left">{t("Order")}</th>
+                <th className="px-4 py-2 text-left">{t("Provider")}</th>
+                <th className="px-4 py-2 text-left">{t("Amount")}</th>
+                <th className="px-4 py-2 text-left">{t("Created")}</th>
               </tr>
             </thead>
             <tbody>
@@ -440,7 +442,7 @@ export default function AdminFinancePage() {
               {!refunds.length && (
                 <tr>
                   <td colSpan={5} className="px-4 py-3 text-muted-foreground">
-                    No refunds.
+                    {t("No refunds.")}
                   </td>
                 </tr>
               )}
@@ -454,8 +456,8 @@ export default function AdminFinancePage() {
         <CardHeader>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <CardTitle>Provider events</CardTitle>
-              <CardDescription>Latest events (up to 25).</CardDescription>
+              <CardTitle>{t("Provider events")}</CardTitle>
+              <CardDescription>{t("Latest events (up to 25).")}</CardDescription>
             </div>
             <CardAction>
               <Button asChild variant="outline">
@@ -464,7 +466,7 @@ export default function AdminFinancePage() {
                     provider: provider.trim() || undefined,
                   })}
                 >
-                  Export provider events CSV
+                  {t("Export provider events CSV")}
                 </a>
               </Button>
             </CardAction>
@@ -473,27 +475,27 @@ export default function AdminFinancePage() {
         <CardContent>
           <div className="grid gap-3 md:grid-cols-2">
           <div className="rounded-2xl border border-border p-4">
-            <div className="mb-2 text-sm font-semibold">Import events (JSON)</div>
+            <div className="mb-2 text-sm font-semibold">{t("Import events (JSON)")}</div>
             <Textarea
               value={eventImportJson}
               onChange={(e) => setEventImportJson(e.target.value)}
               className="min-h-48 font-mono text-xs"
-              aria-label="Import events JSON"
+              aria-label={t("Import events JSON")}
             />
             <Button onClick={handleImportEvents} className="mt-3" disabled={loading}>
-              {loading ? "Working..." : "Import"}
+              {loading ? t("Working...") : t("Import")}
             </Button>
           </div>
 
           <div className="overflow-auto rounded-2xl border border-border">
-            <div className="px-4 py-3 text-sm font-semibold">Recent events</div>
+            <div className="px-4 py-3 text-sm font-semibold">{t("Recent events")}</div>
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/40 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  <th className="px-4 py-2 text-left">Provider</th>
-                  <th className="px-4 py-2 text-left">Kind</th>
-                  <th className="px-4 py-2 text-left">Amount</th>
-                  <th className="px-4 py-2 text-left">Created</th>
+                  <th className="px-4 py-2 text-left">{t("Provider")}</th>
+                  <th className="px-4 py-2 text-left">{t("Kind")}</th>
+                  <th className="px-4 py-2 text-left">{t("Amount")}</th>
+                  <th className="px-4 py-2 text-left">{t("Created")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -508,7 +510,7 @@ export default function AdminFinancePage() {
                 {!providerEvents.length && (
                   <tr>
                     <td colSpan={4} className="px-4 py-3 text-muted-foreground">
-                      No events.
+                      {t("No events.")}
                     </td>
                   </tr>
                 )}
@@ -521,15 +523,15 @@ export default function AdminFinancePage() {
 
       <Card className="rounded-2xl shadow-none">
         <CardHeader>
-          <CardTitle>Reconciliation</CardTitle>
-          <CardDescription>Create a reconciliation run for a provider + date range.</CardDescription>
+          <CardTitle>{t("Reconciliation")}</CardTitle>
+          <CardDescription>{t("Create a reconciliation run for a provider + date range.")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Provider</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Provider")}</label>
             <Select value={runProvider} onValueChange={setRunProvider}>
-              <SelectTrigger aria-label="Reconciliation provider">
+              <SelectTrigger aria-label={t("Reconciliation provider")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -542,37 +544,37 @@ export default function AdminFinancePage() {
             </Select>
           </div>
           <div className="md:col-span-2">
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Period start (ISO)</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Period start (ISO)")}</label>
             <Input
               value={periodStart}
               onChange={(e) => setPeriodStart(e.target.value)}
-              aria-label="Reconciliation period start"
+              aria-label={t("Reconciliation period start")}
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Period end (ISO)</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">{t("Period end (ISO)")}</label>
             <Input
               value={periodEnd}
               onChange={(e) => setPeriodEnd(e.target.value)}
-              aria-label="Reconciliation period end"
+              aria-label={t("Reconciliation period end")}
             />
           </div>
         </div>
 
         <Button onClick={handleRunReconciliation} className="mt-3" disabled={loading}>
-          {loading ? "Working..." : "Run reconciliation"}
+          {loading ? t("Working...") : t("Run reconciliation")}
         </Button>
 
         <div className="mt-4 overflow-auto rounded-2xl border border-border">
-          <div className="px-4 py-3 text-sm font-semibold">Recent runs</div>
+          <div className="px-4 py-3 text-sm font-semibold">{t("Recent runs")}</div>
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-muted/40 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                <th className="px-4 py-2 text-left">ID</th>
-                <th className="px-4 py-2 text-left">Provider</th>
-                <th className="px-4 py-2 text-left">Status</th>
-                <th className="px-4 py-2 text-left">Period</th>
-                <th className="px-4 py-2 text-right">Action</th>
+                <th className="px-4 py-2 text-left">{t("ID")}</th>
+                <th className="px-4 py-2 text-left">{t("Provider")}</th>
+                <th className="px-4 py-2 text-left">{t("Status")}</th>
+                <th className="px-4 py-2 text-left">{t("Period")}</th>
+                <th className="px-4 py-2 text-right">{t("Action")}</th>
               </tr>
             </thead>
             <tbody>
@@ -591,7 +593,7 @@ export default function AdminFinancePage() {
                       size="sm"
                       disabled={loading}
                     >
-                      View
+                      {t("View")}
                     </Button>
                   </td>
                 </tr>
@@ -599,7 +601,7 @@ export default function AdminFinancePage() {
               {!runs.length && (
                 <tr>
                   <td colSpan={5} className="px-4 py-3 text-muted-foreground">
-                    No runs.
+                    {t("No runs.")}
                   </td>
                 </tr>
               )}
@@ -611,20 +613,20 @@ export default function AdminFinancePage() {
           <div className="mt-4 rounded-2xl border border-border p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-sm font-semibold">Run #{selectedRun.id}</div>
+                <div className="text-sm font-semibold">{t("Run #")} {selectedRun.id}</div>
                 <div className="text-xs text-muted-foreground">
                   {selectedRun.provider} • {formatDateTime(selectedRun.period_start)} → {formatDateTime(selectedRun.period_end)}
                 </div>
               </div>
               <Button onClick={() => setSelectedRun(null)} variant="outline" size="sm">
-                Close
+                {t("Close")}
               </Button>
             </div>
 
             <div className="mt-3 flex flex-wrap gap-2">
               <Button asChild variant="outline" size="sm">
                 <a href={buildExportUrl(`/api/payments/admin-reconciliation-runs/${selectedRun.id}/export/`)}>
-                  Export run CSV
+                  {t("Export run CSV")}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm">
@@ -633,7 +635,7 @@ export default function AdminFinancePage() {
                     limit: 200,
                   })}
                 >
-                  Export missing items CSV
+                  {t("Export missing items CSV")}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm">
@@ -645,7 +647,7 @@ export default function AdminFinancePage() {
                     include_refunded: 1,
                   })}
                 >
-                  Export internal transactions CSV
+                  {t("Export internal transactions CSV")}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm">
@@ -656,7 +658,7 @@ export default function AdminFinancePage() {
                     end: selectedRun.period_end,
                   })}
                 >
-                  Export internal refunds CSV
+                  {t("Export internal refunds CSV")}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm">
@@ -665,22 +667,22 @@ export default function AdminFinancePage() {
                     provider: selectedRun.provider,
                   })}
                 >
-                  Export provider events CSV
+                  {t("Export provider events CSV")}
                 </a>
               </Button>
             </div>
 
             <div className="mt-3 grid gap-3 md:grid-cols-3">
               <div className="rounded-xl border border-border p-3">
-                <div className="text-xs text-muted-foreground">Internal summary</div>
+                <div className="text-xs text-muted-foreground">{t("Internal summary")}</div>
                 <pre className="text-xs whitespace-pre-wrap">{JSON.stringify(selectedRun.internal_summary, null, 2)}</pre>
               </div>
               <div className="rounded-xl border border-border p-3">
-                <div className="text-xs text-muted-foreground">Provider summary</div>
+                <div className="text-xs text-muted-foreground">{t("Provider summary")}</div>
                 <pre className="text-xs whitespace-pre-wrap">{JSON.stringify(selectedRun.provider_summary, null, 2)}</pre>
               </div>
               <div className="rounded-xl border border-border p-3">
-                <div className="text-xs text-muted-foreground">Mismatch summary</div>
+                <div className="text-xs text-muted-foreground">{t("Mismatch summary")}</div>
                 <pre className="text-xs whitespace-pre-wrap">{JSON.stringify(selectedRun.mismatch_summary, null, 2)}</pre>
               </div>
             </div>
@@ -689,36 +691,36 @@ export default function AdminFinancePage() {
               <div className="overflow-auto rounded-xl border border-border p-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <div className="text-sm font-semibold">Missing internal transactions</div>
-                    <div className="text-xs text-muted-foreground">Charges with no matching imported provider charge event.</div>
+                    <div className="text-sm font-semibold">{t("Missing internal transactions")}</div>
+                    <div className="text-xs text-muted-foreground">{t("Charges with no matching imported provider charge event.")}</div>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {missingLoading ? "Loading..." : `${missingItems?.missing_transactions?.count ?? 0}`}
+                    {missingLoading ? t("Loading...") : `${missingItems?.missing_transactions?.count ?? 0}`}
                   </div>
                 </div>
 
                 <table className="w-full text-sm mt-2">
                   <thead>
                     <tr className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      <th className="text-left py-2">Txn</th>
-                      <th className="text-left py-2">Order</th>
-                      <th className="text-left py-2">Amount</th>
-                      <th className="text-left py-2">Created</th>
+                      <th className="text-left py-2">{t("Txn")}</th>
+                      <th className="text-left py-2">{t("Order")}</th>
+                      <th className="text-left py-2">{t("Amount")}</th>
+                      <th className="text-left py-2">{t("Created")}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {(missingItems?.missing_transactions?.items || []).map((t) => (
-                      <tr key={t.payment_transaction_id} className="border-t border-border">
-                        <td className="py-2">#{t.payment_transaction_id}</td>
-                        <td className="py-2">{t.order_id}</td>
-                        <td className="py-2">${formatMoney(t.amount)} {t.currency}</td>
-                        <td className="py-2">{formatDateTime(t.created_at)}</td>
+                    {(missingItems?.missing_transactions?.items || []).map((txn) => (
+                      <tr key={txn.payment_transaction_id} className="border-t border-border">
+                        <td className="py-2">#{txn.payment_transaction_id}</td>
+                        <td className="py-2">{txn.order_id}</td>
+                        <td className="py-2">${formatMoney(txn.amount)} {txn.currency}</td>
+                        <td className="py-2">{formatDateTime(txn.created_at)}</td>
                       </tr>
                     ))}
                     {!missingLoading && !(missingItems?.missing_transactions?.items || []).length && (
                       <tr>
                         <td colSpan={4} className="py-3 text-muted-foreground">
-                          None.
+                          {t("None.")}
                         </td>
                       </tr>
                     )}
@@ -729,21 +731,21 @@ export default function AdminFinancePage() {
               <div className="overflow-auto rounded-xl border border-border p-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <div className="text-sm font-semibold">Missing internal refunds</div>
-                    <div className="text-xs text-muted-foreground">Refunds with no matching imported provider refund event.</div>
+                    <div className="text-sm font-semibold">{t("Missing internal refunds")}</div>
+                    <div className="text-xs text-muted-foreground">{t("Refunds with no matching imported provider refund event.")}</div>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {missingLoading ? "Loading..." : `${missingItems?.missing_refunds?.count ?? 0}`}
+                    {missingLoading ? t("Loading...") : `${missingItems?.missing_refunds?.count ?? 0}`}
                   </div>
                 </div>
 
                 <table className="w-full text-sm mt-2">
                   <thead>
                     <tr className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      <th className="text-left py-2">Refund</th>
-                      <th className="text-left py-2">Order</th>
-                      <th className="text-left py-2">Amount</th>
-                      <th className="text-left py-2">Created</th>
+                      <th className="text-left py-2">{t("Refund")}</th>
+                      <th className="text-left py-2">{t("Order")}</th>
+                      <th className="text-left py-2">{t("Amount")}</th>
+                      <th className="text-left py-2">{t("Created")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -758,7 +760,7 @@ export default function AdminFinancePage() {
                     {!missingLoading && !(missingItems?.missing_refunds?.items || []).length && (
                       <tr>
                         <td colSpan={4} className="py-3 text-muted-foreground">
-                          None.
+                          {t("None.")}
                         </td>
                       </tr>
                     )}
@@ -773,8 +775,8 @@ export default function AdminFinancePage() {
 
       <Card className="rounded-2xl shadow-none">
         <CardHeader>
-          <CardTitle>Chargebacks</CardTitle>
-          <CardDescription>Update status and attach evidence reference / notes.</CardDescription>
+          <CardTitle>{t("Chargebacks")}</CardTitle>
+          <CardDescription>{t("Update status and attach evidence reference / notes.")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3">
@@ -782,12 +784,12 @@ export default function AdminFinancePage() {
             <div key={c.id} className="rounded-2xl border border-border p-4">
               <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                 <div>
-                  <div className="font-semibold">Case #{c.id} • {c.provider} • {c.status}</div>
+                  <div className="font-semibold">{t("Case")} #{c.id} • {c.provider} • {c.status}</div>
                   <div className="text-sm text-muted-foreground">
-                    Dispute: {c.provider_dispute_id} • reason: {c.reason} • amount: ${formatMoney(c.amount)} {c.currency}
+                    {t("Dispute:")} {c.provider_dispute_id} • {t("reason:")} {c.reason} • {t("amount:")} ${formatMoney(c.amount)} {c.currency}
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground">
-                    Order: {c.order_id ?? "-"} • user: {c.user_id ?? "-"} • created: {formatDateTime(c.created_at)}
+                    {t("Order:")} {c.order_id ?? "-"} • {t("user:")} {c.user_id ?? "-"} • {t("created:")} {formatDateTime(c.created_at)}
                   </div>
                 </div>
 
@@ -812,24 +814,24 @@ export default function AdminFinancePage() {
                   <Input
                     value={chargebackEvidenceEdits[c.id] ?? c.evidence_reference ?? ""}
                     onChange={(e) => setChargebackEvidenceEdits((p) => ({ ...p, [c.id]: e.target.value }))}
-                    placeholder="Evidence reference (optional)"
+                    placeholder={t("Evidence reference (optional)")}
                     disabled={loading}
                   />
                   <Input
                     value={chargebackNoteEdits[c.id] ?? c.resolution_note ?? ""}
                     onChange={(e) => setChargebackNoteEdits((p) => ({ ...p, [c.id]: e.target.value }))}
-                    placeholder="Resolution note (optional)"
+                    placeholder={t("Resolution note (optional)")}
                     disabled={loading}
                   />
                   <Button onClick={() => handleSetChargebackStatus(c.id)} disabled={loading}>
-                    Update
+                    {t("Update")}
                   </Button>
                 </div>
               </div>
             </div>
           ))}
 
-          {!chargebacks.length && <div className="text-sm text-muted-foreground">No chargebacks.</div>}
+          {!chargebacks.length && <div className="text-sm text-muted-foreground">{t("No chargebacks.")}</div>}
         </div>
         </CardContent>
       </Card>

@@ -24,7 +24,7 @@ if (!i18n.isInitialized) {
     .init({
       resources,
       fallbackLng: 'en',
-      lng: typeof window !== 'undefined' ? localStorage.getItem('i18nextLng') || 'en' : 'en',
+      lng: 'en',
       debug: false, // Disable debug logs
       interpolation: {
         escapeValue: false,

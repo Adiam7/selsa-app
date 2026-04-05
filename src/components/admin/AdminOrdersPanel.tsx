@@ -315,7 +315,7 @@ export function AdminOrdersPanel({
 
       await loadOrders();
     } catch (err: any) {
-      setError(err?.message || "Bulk action failed.");
+      setError(err?.message || t("Bulk action failed."));
       showError(err?.message || t("Bulk action failed."));
     } finally {
       setLoading(false);
@@ -428,7 +428,7 @@ export function AdminOrdersPanel({
               <SelectContent>
                 {effectiveStatusOptions.map((status) => (
                   <SelectItem key={status} value={status}>
-                    {status === "ALL" ? t("All statuses") : status}
+                    {status === "ALL" ? t("All statuses") : t(status)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -473,7 +473,7 @@ export function AdminOrdersPanel({
                       .filter((status) => status !== "ALL")
                       .map((status) => (
                         <SelectItem key={status} value={status}>
-                          {status}
+                          {t(status)}
                         </SelectItem>
                       ))}
                   </SelectContent>
@@ -612,7 +612,7 @@ export function AdminOrdersPanel({
                   </td>
                   <td className="px-4 py-3 font-semibold">#{order.id}</td>
                   <td className="px-4 py-3">{order.customer_email || t("Guest")}</td>
-                  <td className="px-4 py-3">{order.status}</td>
+                  <td className="px-4 py-3">{t(order.status)}</td>
                   <td className="px-4 py-3">${formatMoney(order.total_amount)}</td>
                   <td className="px-4 py-3">{formatDate(order.created_at)}</td>
                   {enableRowShip && (

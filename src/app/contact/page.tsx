@@ -64,21 +64,21 @@ export default function ContactPage() {
   const contactMethods = [
     {
       icon: <Mail size={28} />,
-      title: "Email",
+      title: t("Email"),
       value: "hello@selsa.com",
-      description: "Reach out via email anytime",
+      description: t("Reach out via email anytime"),
     },
     {
       icon: <Phone size={28} />,
-      title: "Phone",
+      title: t("Phone"),
       value: "+1 (555) 123-4567",
-      description: "Call us for immediate assistance",
+      description: t("Call us for immediate assistance"),
     },
     {
       icon: <MapPin size={28} />,
-      title: "Address",
+      title: t("Address"),
       value: "123 Design Street, NY 10001",
-      description: "Visit our headquarters",
+      description: t("Visit our headquarters"),
     },
   ];
 
@@ -111,12 +111,16 @@ export default function ContactPage() {
                   e.currentTarget.style.borderColor = "#000000";
                   e.currentTarget.style.transform = "translateY(-8px)";
                   e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.1)";
+                  e.currentTarget.querySelectorAll<HTMLElement>('.contact-icon, .contact-title, .contact-value').forEach(el => { el.style.color = '#ffffff'; });
+                  e.currentTarget.querySelectorAll<HTMLElement>('.contact-desc').forEach(el => { el.style.color = '#e5e5e5'; });
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "#ffffff";
                   e.currentTarget.style.borderColor = "#e5e5e5";
                   e.currentTarget.style.transform = "translateY(0)";
                   e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.querySelectorAll<HTMLElement>('.contact-icon, .contact-title, .contact-value').forEach(el => { el.style.color = '#000000'; });
+                  e.currentTarget.querySelectorAll<HTMLElement>('.contact-desc').forEach(el => { el.style.color = '#666666'; });
                 }}
               >
                 <div style={{ color: "#000000", marginBottom: "16px", display: "flex", justifyContent: "center" }} className="contact-icon">
@@ -132,16 +136,7 @@ export default function ContactPage() {
                   {method.description}
                 </p>
 
-                <style>{`
-                  .contact-icon { transition: color 0.4s ease; }
-                  .contact-title { transition: color 0.4s ease; }
-                  .contact-value { transition: color 0.4s ease; }
-                  .contact-desc { transition: color 0.4s ease; }
-                  div:hover .contact-icon { color: #ffffff; }
-                  div:hover .contact-title { color: #ffffff; }
-                  div:hover .contact-value { color: #ffffff; }
-                  div:hover .contact-desc { color: #e5e5e5; }
-                `}</style>
+
               </div>
             ))}
           </div>
